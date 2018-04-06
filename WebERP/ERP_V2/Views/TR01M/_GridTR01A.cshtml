@@ -1,0 +1,298 @@
+﻿@model System.Collections.IEnumerable
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridTR01A";
+        settings.CallbackRouteValues = new { Controller = "TR01M", Action = "GridTR01A" };
+
+        settings.Width = Unit.Percentage(100);
+
+        settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e8e8e8");
+        settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+
+        settings.ClientSideEvents.SelectionChanged = "GridTR01ASelectionChanged";
+        settings.ClientSideEvents.BeginCallback = "GridTR01ABeginCallback";
+
+        settings.CommandColumn.Caption = " ";
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        settings.CommandColumn.Width = 50;
+
+        settings.KeyFieldName = "TR01A_ID";
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CFN_YN";
+            column.Caption = Resources.Resource.TR01M_Status;//"狀態";
+            column.Width = 68;
+            column.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.SetDataItemTemplateContent(c =>
+            {
+                var CFN_YN = DataBinder.Eval(c.DataItem, "CFN_YN") as string;
+
+                Html.DevExpress().Button(b =>
+                {
+                    b.Name = "Status" + c.KeyValue;
+                    b.Enabled = false;
+                    if (CFN_YN == "Y")
+                    {
+                        b.Text = Resources.Resource.CaseClosed;
+                        b.Styles.Style.BackColor = System.Drawing.Color.LightGreen;
+                    }
+                    else if (CFN_YN == "P")
+                    {
+                        b.Text = Resources.Resource.Applying;
+                        b.Styles.Style.BackColor = System.Drawing.Color.LightYellow;
+                    }
+                    else if (CFN_YN == "R")
+                    {
+                        b.Text = Resources.Resource.Reject;// "退回";
+                        b.Styles.Style.BackColor = System.Drawing.Color.LightPink;
+                    }
+                    else
+                    {
+                        b.Text = Resources.Resource.NotClosed;
+                        b.Styles.Style.BackColor = System.Drawing.Color.White;
+                    }
+                    b.Styles.Style.ForeColor = System.Drawing.Color.DimGray;
+                    b.Styles.Style.Paddings.Padding = 0;
+                    b.Styles.Style.Border.BorderStyle = BorderStyle.None;
+                    b.ControlStyle.Wrap = DefaultBoolean.True;
+                }).Render();
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "IsAllReceive";
+            column.Caption = " ";
+            column.Width = 80;
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.SetDataItemTemplateContent(c =>
+            {
+                //var value = c.Grid.GetRowValues(c.VisibleIndex, c.Column.FieldName);
+                var enable = DataBinder.Eval(c.DataItem, "IsAllReceive") as bool?;
+                var CFN_YN = DataBinder.Eval(c.DataItem, "CFN_YN") as string;
+                Html.DevExpress().Button(b =>
+                {
+                    b.Name = "ApplyClose" + c.KeyValue;
+                    b.Text = Resources.Resource.ApplyConfirm;// "申請結案";
+                    b.ClientSideEvents.Click = string.Format(@"function(s, e) {{ ApplyClose(s,'{0}'); }}", c.KeyValue);
+
+                    if (CFN_YN == "Y" || CFN_YN == "P")
+                    {
+                        b.Enabled = false;
+                        b.Styles.Style.BackColor = System.Drawing.Color.White;
+                        b.Styles.Style.ForeColor = System.Drawing.Color.DimGray;
+                    }
+                    else
+                    {
+                        b.Styles.Style.BackColor = System.Drawing.ColorTranslator.FromHtml("#0072C6");
+                        b.Styles.Style.ForeColor = System.Drawing.Color.White;
+                        if (enable.HasValue && enable.Value)
+                        {
+                            b.Text = Resources.Resource.ApplyConfirm;// "申請結案";
+                        }
+                        else
+                        {
+                            b.Text = Resources.Resource.AbnormalConfirm;// "異常結案";
+                            b.Styles.Style.BackColor = System.Drawing.Color.White;
+                            b.Styles.Style.ForeColor = System.Drawing.Color.Red;
+                        }
+                    }
+
+                    b.Styles.Style.Paddings.Padding = 0;
+                    b.ControlStyle.Wrap = DefaultBoolean.True;
+                    b.Attributes.Add("AllReceive", enable.ToString());
+                }).Render();
+            });
+        });
+
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = " ";
+            column.Width = 100;
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+            if (ERP_V2.UserInfo.Permission != "1")
+            {
+                column.Visible = false;
+            }
+
+            column.SetDataItemTemplateContent(c =>
+            {
+                var CFN_YN = DataBinder.Eval(c.DataItem, "CFN_YN") as string;
+                Html.DevExpress().Button(b =>
+                {
+                    b.Name = "Close" + c.KeyValue;
+                    b.Text = Resources.Resource.CaseClose;// "結案";
+                    b.ClientSideEvents.Click = string.Format(@"function(s, e) {{ CloseConfirm(s,'{0}'); }}", c.KeyValue);
+                    if (CFN_YN == "P")
+                    {
+                        //b.Styles.Style.BackColor = System.Drawing.Color.LightSkyBlue;
+                        b.Styles.Style.BackColor = System.Drawing.ColorTranslator.FromHtml("#0072C6");
+                        b.Styles.Style.ForeColor = System.Drawing.Color.White;
+                    }
+                    else
+                    {
+                        b.ClientEnabled = false;
+                        b.Styles.Style.BackColor = System.Drawing.Color.White;
+                        b.Styles.Style.ForeColor = System.Drawing.Color.DimGray;
+                    }
+                    b.EnableClientSideAPI = true;
+                    b.Styles.Style.Paddings.Padding = 0;
+                    b.ControlStyle.Wrap = DefaultBoolean.True;
+                }).Render();
+
+                Html.DevExpress().Button(b =>
+                {
+                    b.Name = "Reject" + c.KeyValue;
+                    b.Text = Resources.Resource.Reject;// "退回";
+                    b.ClientSideEvents.Click = string.Format(@"function(s, e) {{ RejectApply(s,'{0}'); }}", c.KeyValue);
+                    if (CFN_YN == "P")
+                    {
+                        //b.Styles.Style.BackColor = System.Drawing.Color.LightSkyBlue;
+                        b.Styles.Style.BackColor = System.Drawing.ColorTranslator.FromHtml("#0072C6");
+                        b.Styles.Style.ForeColor = System.Drawing.Color.White;
+                    }
+                    else
+                    {
+                        b.ClientEnabled = false;
+                        b.Styles.Style.BackColor = System.Drawing.Color.White;
+                        b.Styles.Style.ForeColor = System.Drawing.Color.DimGray;
+                    }
+                    b.EnableClientSideAPI = true;
+                    b.Styles.Style.Paddings.Padding = 0;
+                    b.ControlStyle.Wrap = DefaultBoolean.True;
+                }).Render();
+            });
+        });
+
+
+        //GridViewHelper.SetColumn(settings, "PUR_NO", Resources.Resource.TR01A_PUR_NO);
+        settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "PUR_NO";
+                    column.Caption = Resources.Resource.TR01A_PUR_NO;
+                    column.Width = 100;
+                });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "BA01A_ID";
+                column.Caption = Resources.Resource.TR01A_BA01A_ID;
+                column.EditorProperties().ComboBox(p =>
+                {
+                    p.ValueField = "BA01A_ID";
+                    p.TextField = "INC_NM";
+                    p.ValueType = typeof(int);
+                    p.DataSource = ERP_V2.CacheCommonDataModule.GetBA01A();
+                });
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "DtPUR_DT";
+                column.Caption = Resources.Resource.TR01A_PUR_DT;
+                column.Width = 80;
+                column.EditorProperties().DateEdit(p =>
+                {
+                    p.DisplayFormatString = "yyyy/MM/dd";
+                });
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "DtEXP_DT";
+                column.Caption = Resources.Resource.TR01A_EXP_DT;
+                column.Width = 80;
+                column.EditorProperties().DateEdit(p =>
+                {
+                    p.DisplayFormatString = "yyyy/MM/dd";
+                });
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "DelayDate";
+                column.Caption = Resources.Resource.FallBackDays;// "落後天數";
+                column.Width = 70;
+                column.SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
+                column.EditorProperties().TextBox(p =>
+                {
+                });
+            });
+
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "CFN_U1";
+                column.Caption = Resources.Resource.ApplyUser;// "申請人";
+                column.Width = 110;
+                column.EditorProperties().TextBox(p =>
+                {
+                });
+            });
+
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "CFN_U2";
+                column.Caption = Resources.Resource.CloseUser;//"結案人";
+                column.Width = 110;
+                column.EditorProperties().TextBox(p =>
+                {
+                });
+            });
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = " ";
+        //    column.Width = 80;
+        //    column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        //    column.SetDataItemTemplateContent(c =>
+        //    {
+        //        var CFN_YN = DataBinder.Eval(c.DataItem, "CFN_YN") as string;
+        //        Html.DevExpress().Button(b =>
+        //        {
+        //            b.Name = "SpecialClose" + c.KeyValue;
+        //            b.Text = "異常結案";
+        //            b.ClientSideEvents.Click = string.Format(@"function(s, e) {{ SpecialClose(s,'{0}'); }}", c.KeyValue);
+        //            if (CFN_YN != "Y")
+        //            {
+        //                b.Styles.Style.BackColor = System.Drawing.Color.Red;
+        //            }
+        //            else
+        //            {
+        //                b.Text = "已結案";
+        //                b.Enabled = false;
+        //                b.Styles.Style.BackColor = System.Drawing.Color.LightYellow;
+        //            }
+        //            if (CFN_YN == "P")
+        //            {
+        //                b.Enabled = false;
+        //                b.Text = "申請中";
+        //                b.Styles.Style.BackColor = System.Drawing.Color.LightYellow;
+        //            }
+        //            b.Styles.Style.ForeColor = System.Drawing.Color.DimGray;
+        //            b.Styles.Style.Paddings.Padding = 0;
+        //            b.ControlStyle.Wrap = DefaultBoolean.True;
+        //        }).Render();
+        //    });
+        //});
+
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.VerticalScrollableHeight = 120;
+        settings.Settings.ShowFooter = false;
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+        settings.Settings.ShowTitlePanel = false;
+
+    }).Bind(Model).GetHtml()

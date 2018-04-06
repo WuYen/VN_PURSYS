@@ -1,0 +1,167 @@
+﻿@model ERP_V2.ViewModels.Login.LoginViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>ERP-Login</title>
+
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout }
+    )
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout }
+    )
+
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <style>
+        div#login_bg {
+            height: 100%;
+            width: 100%;
+            left: 0px;
+            top: 0px;
+            overflow: hidden;
+            position: fixed;
+            z-index: 0;
+            transition: opacity 1s ease 0s;
+            background: none repeat scroll 0 0 white;
+        }
+
+        img#login_bg_image {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+        }
+
+        .login_img {
+            width: 250px;
+            border-width: 0px;
+        }
+
+        div#login_panel {
+            background: none repeat scroll 0 0 #FFFFFF;
+            position: absolute;
+            right: 0px;
+            z-index: 1;
+            width: 500px;
+            height: 100%;
+            min-height: 700px;
+            padding: 20px 40px;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .border-box {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        div#login_data {
+            height: 100%;
+            min-height: 600px;
+            overflow: hidden;
+        }
+
+        div#login_logo {
+            overflow: hidden;
+            padding-bottom: 100px;
+        }
+
+        .login_error {
+            display: inline-block;
+            font-size: medium;
+            font-weight: 600;
+            color: red;
+            margin-bottom: 10px;
+        }
+    </style>
+    <div id="login_bg">
+        <img src="~/Content/Images/Login.jpg" />
+    </div>
+    <form id="main" method="post" action="@Url.Action("Index")">
+        <div id="login_panel" class="border-box">
+            <div id="login_data">
+                <div id="login_logo">
+                    <a class="logo" id="panelT_logoCell" tabindex="-1" target="_blank" href="#">
+                        <img src="~/Content/Images/system.jpg" class="login_img" alt="logo" style="width:30px" />
+                    </a>
+                    <div style="display:inline-block;float:right">
+                        @Html.DevExpress().ComboBox(
+                        settings =>
+                        {
+                            settings.Name = "Lang_TP";
+                            foreach (var item in Language.TypeStr)
+                            {
+                                settings.Properties.Items.Add(item.Value.DisplayName, item.Key);
+                            }
+                            //settings.Properties.Items.Add("Việt Ngữ", "vi-VN");
+                            //settings.Properties.Items.Add("繁體中文", "zh-TW");
+                            //settings.Properties.Items.Add("English", "en-US");
+                            settings.SelectedIndex = 0;
+                            settings.Width = 90;
+                        }).GetHtml()
+                    </div>
+                </div>
+
+                <div style="margin:5px 0px;">
+                    @Html.DevExpress().TextBoxFor(m => m.USR_ID,
+                    settings =>
+                    {
+                        settings.Name = "USR_ID";
+                        settings.ControlStyle.Font.Size = FontUnit.Medium;
+                        settings.Width = Unit.Percentage(100);
+                        settings.Properties.ClientSideEvents.Init = "function(s,e){s.GetInputElement().placeholder = \"My Username\";}";
+                    }).GetHtml()
+                </div>
+                <div style="margin:5px 0px;">
+                    @Html.DevExpress().TextBoxFor(m => m.USR_PW,
+                    settings =>
+                    {
+                        settings.Name = "USR_PW";
+                        settings.ControlStyle.Font.Size = FontUnit.Medium;
+                        settings.Width = Unit.Percentage(100);
+                        settings.Properties.ClientSideEvents.Init = "function(s,e){s.GetInputElement().placeholder = \"My Password\";}";
+                        settings.Properties.Password = true;
+                    }).GetHtml()
+                </div>
+                <div style="margin:5px 0px; float:right">
+                    @Html.DevExpress().Button(
+                    settings =>
+                    {
+                        settings.Name = "BtnLogin";
+                        settings.Text = "Login";
+                        settings.Width = 100;
+                        settings.UseSubmitBehavior = true;
+                    }).GetHtml()
+                </div>
+
+                <div style="margin:5px 0px;">
+                    <div class="login_error">
+                        @if (TempData["LoginMsg"] != null)
+                        {
+                            foreach (var txt in TempData["LoginMsg"] as List<string>)
+                            {
+                                @txt <br />
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+        $(window).load(function () {
+            USR_ID.Focus();
+        });
+    </script>
+</body>
+</html>

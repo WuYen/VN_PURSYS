@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BA01A_ACC_N1" xml:space="preserve">
+    <value>银行名称</value>
+  </data>
+  <data name="BA01A_ADD_DR" xml:space="preserve">
+    <value>地址</value>
+  </data>
+  <data name="BA01A_BA03A" xml:space="preserve">
+    <value>币别</value>
+  </data>
+  <data name="BA01A_BNK_I1" xml:space="preserve">
+    <value>银行帐号</value>
+  </data>
+  <data name="BA01A_EIN_NO" xml:space="preserve">
+    <value>统一编号</value>
+  </data>
+  <data name="BA01A_FAX_NO" xml:space="preserve">
+    <value>传真</value>
+  </data>
+  <data name="BA01A_INC_NM" xml:space="preserve">
+    <value>厂商名称</value>
+  </data>
+  <data name="BA01A_INC_NO" xml:space="preserve">
+    <value>厂商代号</value>
+  </data>
+  <data name="BA01A_PAY_DY" xml:space="preserve">
+    <value>结账天数</value>
+  </data>
+  <data name="BA01A_SRT_NM" xml:space="preserve">
+    <value>厂商简称</value>
+  </data>
+  <data name="BA01A_TEL_NO" xml:space="preserve">
+    <value>电话</value>
+  </data>
+  <data name="BA01B_CNT_NM" xml:space="preserve">
+    <value>联络人</value>
+  </data>
+  <data name="BA01B_EML_DR" xml:space="preserve">
+    <value>电子信箱</value>
+  </data>
+  <data name="BA01B_TEL_EX" xml:space="preserve">
+    <value>分机</value>
+  </data>
+  <data name="BA01B_TEL_NO" xml:space="preserve">
+    <value>电话专线</value>
+  </data>
+  <data name="BA02A_ENG_NM" xml:space="preserve">
+    <value>英文名称</value>
+  </data>
+  <data name="BA02A_ITM_NM" xml:space="preserve">
+    <value>商品名称</value>
+  </data>
+  <data name="BA02A_ITM_NO" xml:space="preserve">
+    <value>商品代号</value>
+  </data>
+  <data name="BA02A_ITM_SP" xml:space="preserve">
+    <value>商品规格</value>
+  </data>
+  <data name="BA02A_UNT_NM" xml:space="preserve">
+    <value>单位</value>
+  </data>
+  <data name="BA02B_PUR_PR" xml:space="preserve">
+    <value>预设价钱</value>
+  </data>
+  <data name="BA03A_CUR_ID" xml:space="preserve">
+    <value>币别代号</value>
+  </data>
+  <data name="BA03A_CUR_NM" xml:space="preserve">
+    <value>币别名称</value>
+  </data>
+  <data name="BA03A_CUR_RT" xml:space="preserve">
+    <value>默认汇率</value>
+  </data>
+  <data name="FailureStr" xml:space="preserve">
+    <value>失败</value>
+  </data>
+  <data name="REM_MM" xml:space="preserve">
+    <value>备注说明</value>
+  </data>
+  <data name="TR01A_ADD_DR" xml:space="preserve">
+    <value>地址</value>
+  </data>
+  <data name="TR01A_BA01A_ID" xml:space="preserve">
+    <value>厂商</value>
+  </data>
+  <data name="TR01A_CPN_NM" xml:space="preserve">
+    <value>公司</value>
+  </data>
+  <data name="TR01A_PUR_DT" xml:space="preserve">
+    <value>采购日期</value>
+  </data>
+  <data name="TR01A_PUR_NO" xml:space="preserve">
+    <value>采购单号</value>
+  </data>
+  <data name="TR01B_PUR_PR" xml:space="preserve">
+    <value>价钱</value>
+  </data>
+  <data name="TR01B_PUR_QT" xml:space="preserve">
+    <value>数量</value>
+  </data>
+  <data name="TR01B_REL_NO" xml:space="preserve">
+    <value>对应资料</value>
+  </data>
+  <data name="TR01B_Sum" xml:space="preserve">
+    <value>合计</value>
+  </data>
+  <data name="TYP_ID" xml:space="preserve">
+    <value>类别</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>你好</value>
+  </data>
+  <data name="DT_From" xml:space="preserve">
+    <value>日期</value>
+  </data>
+  <data name="DT_To" xml:space="preserve">
+    <value>到</value>
+  </data>
+  <data name="TR01A_CUR_RT" xml:space="preserve">
+    <value>汇率</value>
+  </data>
+  <data name="TR01A_RCV_DT" xml:space="preserve">
+    <value>到货日期</value>
+  </data>
+  <data name="TR01A_IVN_NO" xml:space="preserve">
+    <value>发票编号</value>
+  </data>
+  <data name="TaxRate" xml:space="preserve">
+    <value>税率</value>
+  </data>
+  <data name="RequireErrMsg" xml:space="preserve">
+    <value>必填</value>
+  </data>
+  <data name="BA04A_TYP" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="SEQ_NO" xml:space="preserve">
+    <value>显示顺序</value>
+  </data>
+  <data name="TR01A_EXP_DT" xml:space="preserve">
+    <value>预计交期</value>
+  </data>
+  <data name="GreaterThanZero" xml:space="preserve">
+    <value>不可小于零</value>
+  </data>
+  <data name="TR01M_Status" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="TR01M" xml:space="preserve">
+    <value>采购管理</value>
+  </data>
+  <data name="NotConfirm" xml:space="preserve">
+    <value>未结案</value>
+  </data>
+  <data name="AbnormalConfirm" xml:space="preserve">
+    <value>异常结案</value>
+  </data>
+  <data name="ApplyConfirm" xml:space="preserve">
+    <value>申请结案</value>
+  </data>
+  <data name="ConfirmApply" xml:space="preserve">
+    <value>确认申请</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="CaseClose" xml:space="preserve">
+    <value>结案</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>退回</value>
+  </data>
+  <data name="FallBackDays" xml:space="preserve">
+    <value>落后天数</value>
+  </data>
+  <data name="TR01M_ARR_QT" xml:space="preserve">
+    <value>到货数量</value>
+  </data>
+  <data name="TR01M_INV_MY" xml:space="preserve">
+    <value>发票金额</value>
+  </data>
+  <data name="ArriveStatus" xml:space="preserve">
+    <value>到货状态</value>
+  </data>
+  <data name="NotAllArrive" xml:space="preserve">
+    <value>未全数送达</value>
+  </data>
+  <data name="ActArriveDate" xml:space="preserve">
+    <value>实际到货日</value>
+  </data>
+  <data name="TR01M_ArriveQT" xml:space="preserve">
+    <value>到货量</value>
+  </data>
+  <data name="TR01M_INV_NO" xml:space="preserve">
+    <value>发票号码</value>
+  </data>
+  <data name="TR01M_CUR_RT" xml:space="preserve">
+    <value>到货汇率</value>
+  </data>
+  <data name="TRM_INV_MY" xml:space="preserve">
+    <value>发票金额</value>
+  </data>
+  <data name="Applying" xml:space="preserve">
+    <value>申请中</value>
+  </data>
+  <data name="ConfirmClose" xml:space="preserve">
+    <value>确认结案</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="Press" xml:space="preserve">
+    <value>按</value>
+  </data>
+  <data name="CaseClosed" xml:space="preserve">
+    <value>已结案</value>
+  </data>
+  <data name="NotClosed" xml:space="preserve">
+    <value>未结案</value>
+  </data>
+  <data name="AllArrive" xml:space="preserve">
+    <value>全数送达</value>
+  </data>
+  <data name="CloseUser" xml:space="preserve">
+    <value>结案人</value>
+  </data>
+  <data name="ApplyUser" xml:space="preserve">
+    <value>申请者</value>
+  </data>
+  <data name="FillInUser" xml:space="preserve">
+    <value>填写人</value>
+  </data>
+</root>

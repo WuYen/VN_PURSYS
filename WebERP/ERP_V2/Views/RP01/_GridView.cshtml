@@ -1,0 +1,47 @@
+﻿@model System.Data.DataTable
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridView";
+        settings.CallbackRouteValues = new { Controller = "RP01", Action = "GridView" };
+        settings.CustomActionRouteValues= new { Controller = "RP01", Action = "GridViewRefreshData" };
+        settings.ClientSideEvents.BeginCallback = "GridViewBegCallback";
+        settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e9e9e9");
+        settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0076c2");
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "PUR_NO";
+                column.Caption = "採購單號";
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "PUR_DT";
+                column.Caption = "採購日期";
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "INC_NM";
+                column.Caption = "廠商名稱";
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "PUR_PR";
+                column.Caption = "採購單價";
+                column.EditorProperties().SpinEdit(s =>
+                {
+                    s.DecimalPlaces = 2;
+                    s.DisplayFormatString = "N2";
+                });
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "PUR_QT";
+                column.Caption = "採購數量";
+            });
+    }).Bind(Model).GetHtml()

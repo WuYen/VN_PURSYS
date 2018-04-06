@@ -1,0 +1,100 @@
+﻿@model ERP_V2.ViewModels.TR01.IndexViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    table div.dxb {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+</style>
+
+<script type="text/javascript">
+    function UpdateGridHeight() {
+        MasterGrid.SetHeight(0);
+        var containerHeight = ASPx.GetDocumentHeight();
+        if (document.body.scrollHeight > containerHeight)
+            containerHeight = document.body.scrollHeight;
+        MasterGrid.SetHeight(LeftPane.GetHeight());// - $('#Title').outerHeight(true)
+    }
+
+    //delete show message
+    function MasterGridEndCallback(s, e) {
+        if (s.cpEditError != null) {
+            ShowError(s.cpEditError);
+        } else {
+            ShowSuccess();
+        }
+    }
+
+    function MasterGridCustomButtonClick(s, e) {
+        if (e.buttonID == "BtnCmdEdit") {
+            GetEditForm(s.GetRowKey(e.visibleIndex));
+        }
+        else if (e.buttonID == "BtnCmdDelete") {
+            alertify.confirm('Delete', 'Press OK to confirm delete'
+                , function () {
+                    MasterGrid.DeleteRow(e.visibleIndex);
+                }
+                , function () {
+                    alertify.error('Cancel')
+                });
+        }
+    }
+
+    function AddNewClick() {
+        GetEditForm(0);
+    }
+
+    function GetEditForm(key) {
+        var form = $('<form></form>');
+        form.attr("method", "post");
+        form.attr("action", '@Url.Action("Edit", "TR01")');
+        var field = $('<input></input>');
+        field.attr("type", "hidden");
+        field.attr("name", "key");
+        field.attr("value", key);
+        form.append(field);
+        $(document.body).append(form);
+        form.submit();
+    }
+
+    function Print(key) {
+        var form = $('<form></form>');
+        form.attr("target", "_blank");
+        form.attr("method", "post");
+        form.attr("action", '@Url.Action("CreateReport", "Home")');
+        var field = $('<input></input>');
+        field.attr("type", "hidden");
+        field.attr("name", "key");
+        field.attr("value", key);
+        form.append(field);
+        $(document.body).append(form);
+        form.submit();
+    }
+</script>
+
+@{
+    Html.RenderAction("MasterGrid", new { key = Model.FocusKey });
+}
+
+<script type="text/javascript">
+    ASPxClientControl.GetControlCollection().ControlsInitialized.AddHandler(function (s, e) {
+        UpdateGridHeight();
+    });
+    ASPxClientControl.GetControlCollection().BrowserWindowResized.AddHandler(function (s, e) {
+        UpdateGridHeight();
+    });
+
+    var IsSuccess ='@Model.IsSuccess';
+
+    //Edit save success redirect to Index show message
+    $(window).load(function () {
+        if (IsSuccess.toLowerCase() == 'true') {
+            ShowSuccess();
+        }
+    });
+</script>
+

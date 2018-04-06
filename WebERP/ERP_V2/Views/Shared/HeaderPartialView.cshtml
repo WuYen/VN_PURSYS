@@ -1,0 +1,62 @@
+﻿@model HeaderViewRenderMode?
+
+<style>
+    .customItem {
+        color:black !important;
+    }
+</style>
+
+@if (Model == HeaderViewRenderMode.Title)
+{
+    <div class="templateTitle">
+        @Html.ActionLink("CÔNG TY TNHH HENRY HARDWARE INDUSTRY", "Index", "Home")
+    </div>
+}
+else
+{
+    if (Model == HeaderViewRenderMode.Full)
+    {
+        <div class="headerTop"> 
+            <div class="templateTitle">
+                @Html.ActionLink("CÔNG TY TNHH HENRY HARDWARE INDUSTRY", "Index", "Home")
+            </div>
+        </div>
+    }
+
+    <div class="headerMenu" style="margin-top:12px">
+        @* DXCOMMENT: Configure the header menu *@
+        @*@Html.DevExpress().Menu(settings =>
+        {
+            settings.Name = "HeaderMenu";
+            settings.ItemAutoWidth = false;
+            settings.ControlStyle.CssClass = "headerMenu";
+            settings.ControlStyle.Paddings.PaddingTop = 5;
+            settings.ControlStyle.Paddings.PaddingBottom = 5;
+            settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        }).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/TopMenu.xml"), "/items/*").GetHtml()*@
+        <div style="float: right">
+            @Html.DevExpress().Menu(
+            settings =>
+            {
+                settings.Name = "UserMenu";
+                settings.ItemAutoWidth = false;
+                settings.ControlStyle.CssClass = "headerMenu";
+                settings.Items.Add(
+                    i =>
+                    {
+                        i.Text = ERP_V2.UserInfo.Id;
+                        i.ClientEnabled = false;
+                        i.ItemStyle.BackColor = System.Drawing.Color.White;
+                        i.ItemStyle.CssClass = "customItem";
+                        //i.ItemStyle.ForeColor = System.Drawing.Color.Blue;
+                    });
+                settings.Items.Add(
+                    i =>
+                    {
+                        i.Text = "登出";
+                        i.NavigateUrl = "~/Login/Logout";
+                    });
+            }).GetHtml()
+        </div>
+    </div>
+}

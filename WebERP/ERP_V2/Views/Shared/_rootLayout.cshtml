@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>@ViewBag.Title</title>
+
+
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Report },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Chart },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.PivotGrid }
+    )
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new Script { ExtensionSuite = ExtensionSuite.GridView },
+        new Script { ExtensionSuite = ExtensionSuite.Editors },
+        new Script { ExtensionSuite = ExtensionSuite.Report },
+        new Script { ExtensionSuite = ExtensionSuite.Chart },
+        new Script { ExtensionSuite = ExtensionSuite.PivotGrid }
+    )
+
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="~/Content/alertifyjs/alertify.min.css" rel="stylesheet" />
+    <link href="~/Content/alertifyjs/themes/default.min.css" rel="stylesheet" />
+    <script src="~/Scripts/alertify.min.js"></script>
+</head>
+<body>
+    @Html.DevExpress().Panel(settings =>
+{
+    settings.Name = "HeaderPane";
+    settings.FixedPosition = PanelFixedPosition.WindowTop;
+    settings.Collapsible = true;
+    settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 500;
+    settings.ControlStyle.CssClass = "headerPane";
+    settings.Styles.Panel.CssClass = "panel";
+    settings.Styles.ExpandedPanel.CssClass = "expandedPanel";
+    settings.Styles.ExpandBar.CssClass = "bar";
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("HeaderPartialView", HeaderViewRenderMode.Full);
+    });
+    settings.SetExpandBarTemplateContent((c) =>
+    {
+        Html.RenderPartial("HeaderPartialView", HeaderViewRenderMode.Title);
+    });
+}).GetHtml()
+
+    <script type="text/javascript">
+        function updateHeaderMenuOrientation() {
+            if (!window.HeaderMenu) return;
+            var orientation = HeaderPane.IsExpandable() ? 'Vertical' : 'Horizontal';
+            if (orientation !== HeaderMenu.GetOrientation())
+                HeaderMenu.SetOrientation(orientation);
+        }
+        var collection = ASPxClientControl.GetControlCollection();
+        collection.ControlsInitialized.AddHandler(updateHeaderMenuOrientation);
+        collection.BrowserWindowResized.AddHandler(updateHeaderMenuOrientation);
+    </script>
+
+    @Html.DevExpress().Panel(settings =>
+{
+    settings.Name = "MainPane";
+    settings.ControlStyle.CssClass = "mainContentPane";
+    settings.SetContent(RenderBody().ToHtmlString());
+}).GetHtml()
+
+    @Html.DevExpress().Panel(settings =>
+{
+    settings.Name = "FooterPane";
+    settings.FixedPosition = PanelFixedPosition.WindowBottom;
+    settings.SettingsAdaptivity.HideAtWindowInnerWidth = 500;
+    settings.ControlStyle.CssClass = "footerPane";
+    settings.Styles.Panel.CssClass = "panel";
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("FooterPartialView");
+    });
+}).GetHtml()
+
+</body>
+</html>
+@{
+    var conf = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration(System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
+    var section = (System.Web.Configuration.SessionStateSection)conf.GetSection("system.web/sessionState");
+    string timeout = section.Timeout.TotalMinutes.ToString();
+}
+<script>
+          //session 逾時 跳回登入
+        @*var wintimeout;
+
+        //判斷Session 是否timeout 就是遺失了 若是則提醒並跳回登入
+        function SetWinTimeout() {
+            wintimeout = window.setTimeout(SessionWarning, parseInt(@timeout) * 60 * 1000); // In millisecods
+        }*@
+
+        function SessionWarning() {
+            var message = "您的Session已到期，請重新登入";
+            alert(message);
+            window.location.href = '@Url.Action("Index", "Login")';
+        }
+
+        //只要有點選page 就會判斷
+        //$(document).ready(function () {
+        //    $(document).click(function () {
+        //        window.clearTimeout(wintimeout);
+        //        SetWinTimeout();
+        //    });
+        //});
+
+        //setInterval and setTimeout
+        $(function () {
+            window.setTimeout(RenewSession, 10 * 60 * 1000);
+        });
+
+        function RenewSession() {
+            $.ajax({
+               url: '@Url.Action("KeepAlive", "Utility")', 
+			   success: function (result) {
+                   if (result == "Dead") {
+                       SessionWarning()
+                   }
+                   else {
+                       window.setTimeout(RenewSession, 10 * 60 * 1000);
+                   }
+                },
+				error: function() { 
+					SessionWarning();
+				}  
+            });
+        }
+
+
+        //跳轉頁面(包含直接輸入網址)
+        //SetWinTimeout();
+
+        $(function () {
+            alertify.set('notifier', 'position', 'bottom-center');
+            alertify.confirm().set('labels', { ok: '確認', cancel: '取消' });
+            //alertify.set('confirm','reverseButtons', true);
+        });
+
+        function ShowError(msg) {
+            if (msg != null && msg.length > 1) {
+                alertify.error(msg);
+                //document.getElementById("alertify-logs").style.zIndex = "9999999";
+            }
+        }
+
+        function ShowSuccess() {
+            alertify.success("Success");
+            //document.getElementById("alertify-logs").style.zIndex = "9999999";
+        }
+</script>

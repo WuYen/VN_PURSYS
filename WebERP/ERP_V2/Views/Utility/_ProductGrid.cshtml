@@ -1,0 +1,128 @@
+﻿@*@model List<ERP_V2.ViewModels.ProductSelectModel>*@
+
+@Html.DevExpress().GridView(
+settings =>
+{
+    settings.Name = "ProductGridLookUp";
+    settings.Width = Unit.Percentage(100);
+    settings.CallbackRouteValues = new { Controller = "Utility", Action = "ProductGrid" };
+    settings.SettingsPager.PageSize = 15;
+    settings.SettingsPager.NumericButtonCount = 8;//page bar show page number count
+    settings.SettingsPager.Summary.Visible = false;
+
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 350;
+
+    settings.CommandColumn.Caption = " ";
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowSelectCheckbox = true;
+    settings.CommandColumn.Width = 66;
+    settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    settings.SettingsBehavior.AllowEllipsisInText = true;
+    settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+    settings.KeyFieldName = "BA02A_ID";
+    settings.Columns.Add(
+    column =>
+    {
+        column.FieldName = "BA02A_ID";
+        column.Visible = false;
+    });
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TYP_ID";
+        column.Caption = Resources.Resource.TYP_ID;
+        column.EditorProperties().ComboBox(cbo =>
+        {
+            cbo.ValueField = "value";
+            cbo.TextField = "key";
+            cbo.DataSource = ERP_V2.CacheCommonDataModule.GetTypeDic();
+        });
+    });
+    settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "ITM_NM";
+            column.Caption = "商品名稱";
+            column.CellStyle.Wrap = DefaultBoolean.True;
+        });
+    settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "ITM_SP";
+            column.Caption = "規格";
+            column.CellStyle.Wrap = DefaultBoolean.True;
+        });
+    settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "PUR_PR";
+            column.Caption = "預設價錢";
+            column.PropertiesEdit.DisplayFormatString = "G29";
+        });
+    settings.Columns.Add(
+    column =>
+    {
+        column.FieldName = "BA01A_ID";
+        column.Visible = false;
+    });
+    //settings.Columns.Add(
+    //column =>
+    //{
+    //    column.FieldName = "INC_NM";
+    //});
+    settings.SettingsBehavior.FilterRowMode = GridViewFilterRowMode.Auto;
+    settings.CommandColumn.ShowClearFilterButton = true;
+    settings.SettingsCommandButton.ClearFilterButton.Text = "Clear";// Resources.Resource.Clear;
+    settings.CommandColumn.ShowApplyFilterButton = false;
+    settings.SettingsCommandButton.ApplyFilterButton.Text = "Apply";// Resources.Resource.Filter;
+    settings.SettingsCommandButton.RenderMode = GridCommandButtonRenderMode.Button;
+
+    settings.BeforeGetCallbackResult += (s, e) =>
+    {
+        MVCxGridView gridView = (MVCxGridView)s;
+
+        string key = ViewData["selectedItem"] as string;
+        if (key != null && key.Length > 0)
+        {
+            gridView.Selection.UnselectAll();
+            gridView.Selection.SelectRowByKey(key);
+            int index = gridView.FindVisibleIndexByKeyValue(key);
+            if (index > 0)
+            {
+                gridView.PageIndex = index / gridView.SettingsPager.PageSize;
+            }
+        }
+        else
+        {
+            var firstPage = ViewData["FirstPage"] as bool?;
+            if (firstPage.HasValue && firstPage.Value)
+            {
+                gridView.Selection.UnselectAll();
+                gridView.PageIndex = 0;
+            }
+        }
+    };
+
+    settings.AfterPerformCallback = (s, e) =>
+    {
+        if (e.CallbackName == "APPLYCOLUMNFILTER")
+        {
+            ((MVCxGridView)s).PageIndex = 0;
+        }
+    };
+
+    settings.ClientSideEvents.RowDblClick = "function(s,e){ pcProductSearch.Hide(); SetProductTextBox();ProductGridLookUp.ClearFilter();}";
+    settings.ClientSideEvents.BeginCallback = "ProductLookUpBegCall";
+    settings.Init = (s, e) =>
+    {
+        MVCxGridView grid = (MVCxGridView)s;
+
+        grid.ClearSort();
+
+        //grid.GroupBy(grid.Columns["ITM_NO"]);
+
+    };
+}).Bind(Model).GetHtml()

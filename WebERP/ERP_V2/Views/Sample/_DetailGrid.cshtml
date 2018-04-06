@@ -1,0 +1,251 @@
+﻿@model List<ERP_V2.ViewModels.FB01.FB01BViewModel>
+
+@{
+    var isCFN = ViewData["IsConfirm"] as bool?;
+    var isConfirm = isCFN.HasValue ? isCFN.Value : false;
+
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "DetailGrid";
+        settings.KeyFieldName = "FB01B_ID";
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+
+        settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e8e8e8");
+        settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+        settings.CommandColumn.HeaderStyle.BackColor = System.Drawing.Color.White;
+
+        settings.CallbackRouteValues = new { Controller = "Sample", Action = "DetailGrid" };
+        settings.CustomActionRouteValues = new { Controller = "Sample", Action = "DetailGridCustomUpdate" };
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Sample", Action = "DetailGridBatchUpdate" };
+
+        settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+        settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+        settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
+        settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 40;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.CellStyle.Paddings.Padding = 0;
+        settings.CommandColumn.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        settings.CommandColumn.SetHeaderTemplateContent(c =>
+        {
+            Html.DevExpress().Button(btn =>
+            {
+                //EditorSetting.GetButtonDefault(settings, "BtnDetailAddNew", Resources.Resource1.Add);
+                btn.Name = "BtnDetailAddNew";
+                btn.ClientSideEvents.Click = "BtnDetailAddNewClick";
+                btn.Text = "Add";
+                btn.Images.Image.IconID = "actions_add_16x16";//Url.Content("~/Content/Icon/add_circle_outline_grey_18x18.png");
+                btn.Styles.Style.Paddings.PaddingTop = 0;
+                btn.Styles.Style.Paddings.PaddingBottom = 0;
+                btn.Styles.Style.Paddings.PaddingLeft = 0;
+                btn.Styles.Style.Paddings.PaddingRight = 0;
+            }).GetHtml();
+        });
+
+        settings.SettingsCommandButton.DeleteButton.Styles.Style.Paddings.Padding = 0;
+        //settings.SettingsCommandButton.DeleteButton.Image.Url = "~/Content/Icon/delete_grey_18x18.png";
+        //settings.SettingsCommandButton.DeleteButton.Image.IconID = "actions_remove_16x16";
+        settings.SettingsCommandButton.DeleteButton.Text = "Delete";
+
+        settings.SettingsCommandButton.RenderMode = GridCommandButtonRenderMode.Button;
+
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "ITM_NO";
+            column.Caption = ERP_V2.DDMHelper.GetColName("FA11A", "ITM_NO");
+            if (isConfirm == true)
+            {
+                column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            }
+            column.ReadOnly = true;
+            column.EditorProperties().ButtonEdit(
+            p =>
+            {
+                var btn = new EditButton();
+                btn.Image.Url = Url.Content("~/Content/Icon/search_grey_18x18.png");
+                btn.Text = "";
+                p.Buttons.Add(btn);
+
+                p.ClientSideEvents.ButtonClick = "ProductBtnEditClick";
+                p.ButtonStyle.Paddings.PaddingTop = 2;
+                p.ButtonStyle.Paddings.PaddingBottom = 2;
+                p.ButtonStyle.Paddings.PaddingLeft = 4;
+                p.ButtonStyle.Paddings.PaddingRight = 2;
+            });
+        });
+
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "ITM_NM";
+            column.Caption = ERP_V2.DDMHelper.GetColName("FA11A", "ITM_NM");
+            column.Width = 150;
+            column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            column.ReadOnly = true;
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "FA11A_ID";
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.CellStyle.CssClass = "HideColumn";
+            column.HeaderStyle.CssClass = "HideColumn";
+            column.EditCellStyle.CssClass = "HideColumn";
+            column.FilterCellStyle.CssClass = "HideColumn";
+            column.FooterCellStyle.CssClass = "HideColumn";
+            column.GroupFooterCellStyle.CssClass = "HideColumn";
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "TRN_QT";
+            column.Caption = ERP_V2.DDMHelper.GetColName("FB01B", "TRN_QT");
+            if (isConfirm == true)
+            {
+                column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            }
+
+            column.EditorProperties().SpinEdit(
+            p =>
+            {
+            });
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "FA24A_ID";
+            column.Caption = ERP_V2.DDMHelper.GetColName("FA24A", "UNT_NM");
+            column.ReadOnly = true;
+            column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            column.Width = 80;
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.ValueField = "FA24A_ID";
+                p.TextField = "UNT_ID";
+                p.ValueType = typeof(int);
+                p.DataSource = ERP_V2.CacheCommonDataModule.GetFA24A();
+            });
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "UNT_PR";
+            column.Caption = ERP_V2.DDMHelper.GetColName("FB01B", "UNT_PR");
+            if (isConfirm == true)
+            {
+                column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            }
+            column.EditorProperties().SpinEdit(
+            p =>
+            {
+            });
+        });
+        settings.Columns.Add(
+            column =>
+            {
+                column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+                column.FieldName = "Total";
+                column.ReadOnly = true;
+                column.Settings.ShowEditorInBatchEditMode = false;
+                ASPxSummaryItem summaryItem = new ASPxSummaryItem(column.FieldName, DevExpress.Data.SummaryItemType.Sum);
+                summaryItem.Tag = column.FieldName + "_Sum";
+                summaryItem.DisplayFormat = "<strong>{0}</strong>";
+                settings.TotalSummary.Add(summaryItem);
+
+                column.SetFooterTemplateContent(c =>
+                {
+                    Html.DevExpress().Label(lbSettings =>
+                    {
+                        string fieldName = (c.Column as GridViewDataColumn).FieldName;
+                        lbSettings.Name = "label" + fieldName;
+                        lbSettings.Properties.EnableClientSideAPI = true;
+                        ASPxSummaryItem summaryItem1 = c.Grid.TotalSummary.First(i => i.Tag == (fieldName + "_Sum"));
+                        if (c.Grid.GetTotalSummaryValue(summaryItem1) != null)
+                        {
+                            lbSettings.Text = c.Grid.GetTotalSummaryValue(summaryItem1).ToString();
+                        }
+                        else
+                        {
+                            lbSettings.Text = "";
+                        }
+                    }).Render();
+                });
+            });
+        //settings.Columns.Add(
+        //column =>
+        //{
+        //    column.FieldName = "REM_MM";
+        //    column.Caption = ERP_V2.DDMHelper.GetColName("FB01B", "REM_MM");
+        //    column.Width = 100;
+        //    column.EditorProperties().Memo(
+        //    p =>
+        //    {
+        //    });
+        //});
+
+        settings.Columns.Add(column => { column.FieldName = "IsValid"; column.Visible = false; });
+
+        settings.CustomUnboundColumnData = (sender, e) =>
+        {
+            if (e.Column.FieldName == "Total")
+            {
+                decimal price = Convert.ToDecimal(e.GetListSourceFieldValue("UNT_PR"));
+                int quantity = Convert.ToInt32(e.GetListSourceFieldValue("TRN_QT"));
+                e.Value = price * quantity;
+            }
+        };
+
+        settings.Settings.ShowFooter = true;
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.None;
+        };
+
+        settings.ClientSideEvents.BeginCallback = "DetailGridBeginCallback";
+        settings.ClientSideEvents.EndCallback = "DetailGridEndCallBack";
+        settings.ClientSideEvents.Init = "DetailGridInit";
+        //settings.ClientSideEvents.BatchEditStartEditing = "DetailGridStartEditing";
+        //settings.ClientSideEvents.BatchEditEndEditing = "DetailGridEndEditing";
+        //For caculate value on the fly
+        //settings.ClientSideEvents.BatchEditChangesCanceling = "DetailGridChangesCanceling";
+        //settings.ClientSideEvents.BatchEditRowDeleting = "DetailGridRowDeleting";
+        settings.CustomJSProperties += (s, e) =>
+        {
+            e.Properties["cpKey"] = ViewData["Key"];
+            e.Properties["cpErrMsg"] = ViewData["ErrMsg"];
+            e.Properties["cpDeleteIDs"] = ViewData["DeleteIDList"];
+            e.Properties["cpMasterForm"] = ViewData["MasterForm"];
+            e.Properties["cpIsConfirm"] = isConfirm;
+        };
+
+        //隱藏grid footer 的savechange and cancel link text
+        settings.CommandButtonInitialize = (s, e) =>
+        {
+            if (e.ButtonType == ColumnCommandButtonType.Update || e.ButtonType == ColumnCommandButtonType.Cancel)
+            {
+                e.Visible = false;
+            }
+        };
+
+        //settings.Settings.ShowFooter = false;
+        settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+    });
+}
+
+@grid.Bind(Model).GetHtml()
+

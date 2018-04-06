@@ -1,0 +1,81 @@
+﻿@model System.Collections.IEnumerable
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "SearchGrid";
+        settings.CallbackRouteValues = new { Controller = "Sample", Action = "SearchGrid" };
+        settings.ClientSideEvents.BeginCallback = "SearchGridBegCall";
+        settings.ClientSideEvents.EndCallback = "SearchGridEndCall";
+        settings.Width = Unit.Percentage(100);
+
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        settings.ClientSideEvents.RowDblClick = "SearchGridSelect";
+        settings.KeyFieldName = "FB01A_ID";
+        settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e8e8e8");
+        settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+        settings.CommandColumn.Caption = " ";
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+
+
+        settings.Columns.Add(column => { column.FieldName = "TRN_NO";column.Width = 120; column.Caption = ERP_V2.DDMHelper.GetColName("FB01A", "TRN_NO"); });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "DtTRN_DT";
+            column.Caption = ERP_V2.DDMHelper.GetColName("FB01A", "TRN_DT");
+            column.Settings.FilterMode = ColumnFilterMode.DisplayText;
+            column.PropertiesEdit.DisplayFormatString = "yyyy/MM/dd";
+        });
+        settings.Columns.Add(column => { column.FieldName = "CFN_ID"; column.Caption = ERP_V2.DDMHelper.GetColName("FB01A", "CFN_ID"); });
+        settings.Columns.Add(column => { column.FieldName = "SUP_ID"; column.Caption = ERP_V2.DDMHelper.GetColName("FB01A", "SUP_ID"); });
+        settings.Columns.Add(column => { column.FieldName = "SUP_NM"; column.Caption = ERP_V2.DDMHelper.GetColName("FA07A", "SUP_NM"); });
+        settings.Columns.Add(column => { column.FieldName = "STK_NM"; column.Caption = ERP_V2.DDMHelper.GetColName("FA16A", "STK_NM"); });
+        settings.Columns.Add(column => { column.FieldName = "REM_MM"; column.Caption = ERP_V2.DDMHelper.GetColName("FB01A", "REM_MM"); });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "SelectButton";
+        //    column.Caption = " ";
+        //    column.Width = 75;
+        //    column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        //    column.SetDataItemTemplateContent(c =>
+        //    {
+        //        //var value = c.Grid.GetRowValues(c.VisibleIndex, c.Column.FieldName);
+        //        //if (value != null)
+        //        //{
+        //        //    bool valueBoolean = value.ToString() == "Y" ? true : false;
+        //        //}
+        //        Html.DevExpress().Button(b =>
+        //        {
+        //            b.Name = "Select" + c.KeyValue;
+        //            b.Text = "選擇";
+        //            b.Images.Image.IconID = "actions_apply_16x16office2013";
+        //            b.ClientSideEvents.Click = string.Format(@"function(s, e) {{ SearchGridSelect(s,e,'{0}'); }}", c.KeyValue);
+        //            b.Styles.Style.Paddings.Padding = 0;
+        //            b.ControlStyle.Wrap = DefaultBoolean.True;
+        //        }).Render();
+        //    });
+        //});
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.VerticalScrollableHeight = 300;
+        settings.Settings.ShowFooter = false;
+        settings.SettingsPager.AlwaysShowPager = true;
+
+        settings.Settings.ShowTitlePanel = false;
+        settings.SetTitlePanelTemplateContent(
+            c =>
+            {
+                ViewContext.Writer.Write("<div style='float:left'>");
+                ViewContext.Writer.Write("<p>Result</p>");
+                ViewContext.Writer.Write("</div>");
+            });
+
+        //settings.SetPagerBarTemplateContent(
+        //    c =>
+        //    {
+        //        Html.DevExpress().Button(btn => { btn.Name = "Button"; }).Render();
+        //    });
+
+    }).Bind(Model).GetHtml()

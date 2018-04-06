@@ -1,0 +1,244 @@
+﻿@model ERP_V2.ViewModels.TR01V3.TR01AViewModel
+            
+@{ 
+    var IsLock = Model.CFN_YN == "Y" ? true : false;
+}
+@Html.DevExpress().TextBoxFor(x => x.TR01A_ID, s => { s.ClientVisible = false; }).GetHtml()
+@Html.DevExpress().TextBoxFor(x => x.CFN_YN, s => { s.ClientVisible = false; }).GetHtml()
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "EditForm";
+
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+    settings.Styles.LayoutGroup.Cell.Paddings.PaddingRight = Unit.Pixel(0);
+    settings.ColCount = 2;
+    settings.UseDefaultPaddings = false;
+
+    settings.Items.Add(i =>
+    {
+        i.Name = "PUR_NO";
+        i.FieldName = "PUR_NO";
+        i.Caption = Resources.Resource.TR01A_PUR_NO;
+        i.CaptionCellStyle.CssClass = "DisableEditor";
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.NullText = "系統自動產生";
+            s.ReadOnly = true;
+            s.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.Beige;
+            s.Properties.EnableFocusedStyle = false;
+            s.ControlStyle.CssClass = "DisableEditor";
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "CPN_NM";
+        i.FieldName = "CPN_NM";
+        i.Caption = Resources.Resource.TR01A_CPN_NM;
+        i.NestedExtension().ComboBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.Items.Add("劲亨金属表面处理工業有限公司   Công ty Jingheng", "劲亨金属表面处理工業有限公司   Công ty Jingheng");
+            s.Properties.Items.Add("亨利五金工業有限公司   CTY TNHH  HENRY", "亨利五金工業有限公司   CTY TNHH  HENRY");
+            s.ReadOnly = IsLock;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "DtPUR_DT";
+        i.FieldName = "DtPUR_DT";
+        i.Caption = Resources.Resource.TR01A_PUR_DT;
+        i.NestedExtension().DateEdit(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            //s.Date = DateTime.UtcNow.AddHours(07);
+            s.Properties.EditFormat = EditFormat.Custom;
+            s.Properties.EditFormatString = "yyyy/MM/dd";
+            s.Properties.DisplayFormatString = "yyyy/MM/dd";
+            s.Properties.ClientSideEvents.GotFocus = "DtPUR_DTGotFocus";
+            s.ReadOnly = IsLock;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "DtEXP_DT";
+        i.FieldName = "DtEXP_DT";
+        i.Caption = Resources.Resource.TR01A_EXP_DT;
+        i.NestedExtension().DateEdit(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.EditFormat = EditFormat.Custom;
+            s.Properties.EditFormatString = "yyyy/MM/dd";
+            s.Properties.DisplayFormatString = "yyyy/MM/dd";
+            s.Properties.ClientSideEvents.GotFocus = "DtEXP_DTGotFocus";
+            s.ReadOnly = IsLock;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "CbBA01A_ID";
+        i.FieldName = "CbBA01A_ID";
+        i.Caption = Resources.Resource.TR01A_BA01A_ID;
+        i.NestedExtension().ComboBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.ValueField = "BA01A_ID";
+            s.Properties.TextField = "INC_NM";
+            s.Properties.DataSource = ERP_V2.CacheCommonDataModule.GetBA01A();
+            s.Properties.ClientSideEvents.SelectedIndexChanged = "BA01ASelectedChange";
+            s.ReadOnly = IsLock;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "ADD_DR";
+        i.FieldName = "ADD_DR";
+        i.Caption = Resources.Resource.TR01A_ADD_DR;
+        i.NestedExtension().TextBox(s =>
+        {
+            //s.Name = "tbADD_DR";
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.ReadOnly = true;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        //i.Name = "BA01B_ID";
+        //i.FieldName = "BA01B_ID";
+        i.Caption = Resources.Resource.BA01B_CNT_NM;
+        i.SetNestedContent(() =>
+        {
+            Html.RenderPartial("_ComboBoxContact");
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "TEL_NO";
+        i.FieldName = "TEL_NO";
+        i.Caption = Resources.Resource.BA01A_TEL_NO;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.ReadOnly = true;
+        });
+    });
+
+    settings.Items.Add(i =>
+    {
+        i.Name = "TEL_EX";
+        i.FieldName = "TEL_EX";
+        i.Caption = Resources.Resource.BA01B_TEL_EX;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.ReadOnly = true;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "FAX_NO";
+        i.FieldName = "FAX_NO";
+        i.Caption = Resources.Resource.BA01A_FAX_NO;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.ReadOnly = true;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "CbBA03A_ID";
+        i.FieldName = "CbBA03A_ID";
+        i.Caption = Resources.Resource.BA01A_BA03A;
+        i.NestedExtension().ComboBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.ValueField = "BA03A_ID";
+            s.Properties.TextField = "CUR_NM";
+            s.Properties.DataSource = ERP_V2.CacheCommonDataModule.GetBA03A();
+            s.ReadOnly = IsLock;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "CUR_RT";
+        i.FieldName = "CUR_RT";
+        i.Caption = Resources.Resource.TR01A_CUR_RT;
+        i.NestedExtension().SpinEdit(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.DisplayFormatString = "G29";
+            s.Properties.DisplayFormatInEditMode = true;
+            s.Properties.DecimalPlaces = 4;
+            s.ReadOnly = IsLock;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "DtRCV_DT";
+        i.FieldName = "DtRCV_DT";
+        i.Caption = Resources.Resource.TR01A_RCV_DT;
+        i.NestedExtension().DateEdit(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.EditFormat = EditFormat.Custom;
+            s.Properties.EditFormatString = "yyyy/MM/dd";
+            s.Properties.DisplayFormatString = "yyyy/MM/dd";
+            s.Properties.ClientSideEvents.GotFocus = "DtGotFocus";
+            s.ReadOnly = IsLock;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "IVN_NO";
+        i.FieldName = "IVN_NO";
+        i.Caption = Resources.Resource.TR01A_IVN_NO ;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.ReadOnly = IsLock;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "REM_MM";
+        i.FieldName = "REM_MM";
+        i.Caption = Resources.Resource.REM_MM;
+        i.Width = Unit.Percentage(100);
+        i.NestedExtension().Memo(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.Width = Unit.Percentage(100);
+            s.ShowModelErrors = true;
+            s.Properties.Rows = 3;
+        });
+    });
+
+}).Bind(Model).GetHtml()

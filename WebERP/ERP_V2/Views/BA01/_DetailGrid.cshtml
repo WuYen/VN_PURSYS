@@ -1,0 +1,151 @@
+﻿@model List<ERP_V2.ViewModels.BA01.BA01BViewModel>
+
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "DetailGrid";
+        settings.KeyFieldName = "BA01B_ID";
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+
+        settings.CallbackRouteValues = new { Controller = "BA01", Action = "DetailGrid" };
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "BA01", Action = "DetailGridBatchUpdate" };
+        settings.CustomActionRouteValues = new { Controller = "BA01", Action = "DetailGridCustomUpdate" };
+
+        settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+        settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+        settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
+        settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 40;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.CellStyle.Paddings.Padding = 0;
+        settings.CommandColumn.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        settings.CommandColumn.SetHeaderTemplateContent(c =>
+        {
+            Html.DevExpress().Button(btn =>
+            {
+                //EditorSetting.GetButtonDefault(settings, "BtnDetailAddNew", Resources.Resource1.Add);
+                btn.Name = "BtnDetailAddNew";
+                btn.ClientSideEvents.Click = "BtnDetailAddNewClick";
+                btn.Text = "Add";
+                btn.Images.Image.Url = Url.Content("~/Content/Icon/add_circle_outline_grey_18x18.png");
+                btn.Styles.Style.Paddings.PaddingTop = 0;
+                btn.Styles.Style.Paddings.PaddingBottom = 0;
+                btn.Styles.Style.Paddings.PaddingLeft = 0;
+                btn.Styles.Style.Paddings.PaddingRight = 0;
+            }).GetHtml();
+        });
+
+        settings.SettingsCommandButton.DeleteButton.Styles.Style.Paddings.Padding = 0;
+        settings.SettingsCommandButton.DeleteButton.Image.Url = "~/Content/Icon/delete_grey_18x18.png";
+        settings.SettingsCommandButton.DeleteButton.Text = "Del";
+
+        settings.SettingsCommandButton.RenderMode = GridCommandButtonRenderMode.Button;
+
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "BA01B_ID";
+            column.Visible = false;
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.Name = "CNT_NM";
+            column.FieldName = "CNT_NM";
+            column.Caption = Resources.Resource.BA01B_CNT_NM;
+            column.EditorProperties().TextBox(
+            p =>
+            {
+            });
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.Name = "TEL_NO";
+            column.FieldName = "TEL_NO";
+            column.Caption = Resources.Resource.BA01B_TEL_NO;
+            column.EditorProperties().TextBox(
+            p =>
+            {
+            });
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.Name = "TEL_EX";
+            column.FieldName = "TEL_EX";
+            column.Caption = Resources.Resource.BA01B_TEL_EX;
+            column.EditorProperties().TextBox(
+            p =>
+            {
+            });
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.Name = "EML_DR";
+            column.FieldName = "EML_DR";
+            column.Caption = Resources.Resource.BA01B_EML_DR;
+            column.EditorProperties().TextBox(
+            p =>
+            {
+            });
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "REM_MM";
+            column.Caption = Resources.Resource.REM_MM;
+            column.Width = 200;
+            column.EditorProperties().Memo(
+            p =>
+            {
+            });
+        });
+
+        settings.Columns.Add(column => { column.FieldName = "IsValid"; column.Visible = false; });
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.None;
+        };
+
+        settings.ClientSideEvents.BeginCallback = "DetailGridBeginCallback";
+        settings.ClientSideEvents.EndCallback = "DetailGridEndCallBack";
+        settings.ClientSideEvents.Init = "DetailGridInit";
+        settings.ClientSideEvents.BatchEditEndEditing = "DetailGridBatchEndEditing";
+        settings.CustomJSProperties += (s, e) =>
+        {
+            e.Properties["cpEditError"] = ViewData["EditErrorMsg"];
+            e.Properties["cpDeleteIDs"] = ViewData["DeleteIDList"];
+            e.Properties["cpMasterForm"] = ViewData["MasterForm"];
+        };
+
+        //隱藏grid footer 的savechange and cancel link text
+        settings.CommandButtonInitialize = (s, e) =>
+        {
+            if (e.ButtonType == ColumnCommandButtonType.Update || e.ButtonType == ColumnCommandButtonType.Cancel)
+            {
+                e.Visible = false;
+            }
+        };
+
+        settings.Settings.ShowFooter = false;
+        settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+    });
+}
+
+@grid.Bind(Model).GetHtml()
+

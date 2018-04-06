@@ -1,0 +1,211 @@
+﻿@model ERP_V2.ErrorData<ERP_V2.ViewModels.BA03.BA03AViewModel>
+    
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "EditFormLayout";
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+    settings.ColCount = 2;
+    settings.UseDefaultPaddings = false;
+    settings.Items.Add(m => m.Data.CUR_ID, i =>
+    {
+        i.Name = "CUR_ID";
+        i.FieldName = "CUR_ID";
+        i.Caption = Resources.Resource.BA03A_CUR_ID;
+        i.NestedExtension().TextBox(tb =>
+        {
+            tb.ShowModelErrors = true;
+            tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        });
+    });
+
+    settings.Items.Add(m => m.Data.CUR_NM, i =>
+    {
+        i.Name = "CUR_NM";
+        i.FieldName = "CUR_NM";
+        i.Caption = Resources.Resource.BA03A_CUR_NM;
+        i.NestedExtension().TextBox(s =>
+        {
+            //s.ReadOnly = true;
+            //s.Properties.EnableFocusedStyle = false;
+            s.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.Beige;
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(m => m.Data.CUR_RT, i =>
+    {
+        i.Name = "CUR_RT";
+        i.FieldName = "CUR_RT";
+        i.Caption = Resources.Resource.BA03A_CUR_RT;
+        i.NestedExtension().SpinEdit(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.AddEmptyItem();
+    settings.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.Width = Unit.Percentage(100);
+        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+    }).SetNestedContent(() =>
+    {
+        ViewContext.Writer.Write("<div style='float:right;padding-right: 26px;'>");
+        Html.DevExpress().Button(
+            btnSettings =>
+            {
+                btnSettings.Name = "btnUpdate";
+                btnSettings.Text = "Update";
+                btnSettings.ClientSideEvents.Click = "function(s, e){ MasterGrid.UpdateEdit(); }";
+            }).Render();
+        Html.DevExpress().Button(
+            btnSettings =>
+            {
+                btnSettings.Name = "btnCancel";
+                btnSettings.Text = "Cancel";
+                btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                btnSettings.ClientSideEvents.Click = "function(s, e){ MasterGrid.CancelEdit(); }";
+            }).Render();
+        ViewContext.Writer.Write("</div>");
+    });
+
+}).GetHtml()
+
+@*
+    .Bind(Model.Data)
+    @Html.DevExpress().FormLayout(formLayoutSettings =>
+        {
+            formLayoutSettings.Name = "detailFormLayout";
+            formLayoutSettings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            formLayoutSettings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            formLayoutSettings.ColCount = 2;
+            formLayoutSettings.UseDefaultPaddings = false;
+
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "SUP_ID";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "SUP_NM";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "ALL_NM";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "TEL_NO";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "FAX_NO";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "ADD_DR";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "WWW_DR";
+                i.Width = Unit.Percentage(50);
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "EML_DR";
+                i.Width = Unit.Percentage(50);
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "REM_MM";
+                i.Width = Unit.Percentage(100);
+                i.NestedExtension().Memo(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    //s.Properties.ValidationSettings.Display = Display.Dynamic;
+                    s.ShowModelErrors = true;
+                    s.Properties.Rows = 3;
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.ShowCaption = DefaultBoolean.False;
+                i.Width = Unit.Percentage(100);
+                i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+            }).SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write("<div style='float:right;padding-right: 26px;'>");
+                Html.DevExpress().Button(
+                    btnSettings =>
+                    {
+                        btnSettings.Name = "btnUpdate";
+                        btnSettings.Text = "Update";
+                        btnSettings.ClientSideEvents.Click = "function(s, e){ MasterGrid.UpdateEdit(); }";
+                    }).Render();
+                Html.DevExpress().Button(
+                    btnSettings =>
+                    {
+                        btnSettings.Name = "btnCancel";
+                        btnSettings.Text = "Cancel";
+                        btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                        btnSettings.ClientSideEvents.Click = "function(s, e){ MasterGrid.CancelEdit(); }";
+                    }).Render();
+                ViewContext.Writer.Write("</div>");
+            });
+
+        })
+        .Bind(Model)
+        .GetHtml()*@

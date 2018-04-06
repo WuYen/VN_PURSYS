@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "ProductSelectTest";
+}
+<h2>ProductSelectTest</h2>
+<script>
+    var selectBtn = 0;
+
+
+    function ProductSelectClick(s, e) {
+        var arg;
+        if (s.name == "BtnProductSelect") {
+            selectBtn = 0;
+            arg = tb_ITM_NO.GetValue();
+        }
+        else {
+            selectBtn = 1;
+            arg = tb_ITM_NO2.GetValue();
+        }
+
+        ProductGridLookUp.PerformCallback({ selectedItem: arg, GRP_ID: "0", FirstPage: true});
+        //pcProductSearch.Show();
+        pcProductSearch.ShowAtElement(s.GetMainElement());
+
+    }
+
+
+
+    function SetProductTextBox(s, e) {
+        ProductGridLookUp.GetSelectedFieldValues('BA02A_ID;ITM_NO;ITM_NM;ITM_SP', OnGetSelectedFieldValues);
+    }
+
+    function OnGetSelectedFieldValues(selectedValues) {
+        if (selectedValues.length == 0) {
+            return;
+        } else {
+            if (selectBtn == 0) {
+                tb_BA02A_ID.SetText(selectedValues[0][0]);
+                tb_ITM_NO.SetText(selectedValues[0][1]);
+                tb_ITM_NM.SetText(selectedValues[0][2]);
+                tb_ITM_SP.SetText(selectedValues[0][3]);
+            }
+            else {
+                tb_BA02A_ID2.SetText(selectedValues[0][0]);
+                tb_ITM_NO2.SetText(selectedValues[0][1]);
+                tb_ITM_NM2.SetText(selectedValues[0][2]);
+                tb_ITM_SP2.SetText(selectedValues[0][3]);
+            }
+        }
+    }
+
+
+</script>
+@Html.DevExpress().TextBox(s => { s.Name = "tb_BA02A_ID"; }).GetHtml()
+@Html.DevExpress().TextBox(s => { s.Name = "tb_ITM_NO"; }).GetHtml()
+@Html.DevExpress().TextBox(s => { s.Name = "tb_ITM_NM"; }).GetHtml()
+@Html.DevExpress().TextBox(s => { s.Name = "tb_ITM_SP"; }).GetHtml()
+
+@Html.DevExpress().Button(
+    s =>
+    {
+        s.Name = "BtnProductSelect";
+        s.Images.Image.Url = Url.Content("~/Content/Icon/search_grey_18x18.png");
+        s.ClientSideEvents.Click = "ProductSelectClick";
+    }).GetHtml()
+@Html.DevExpress().TextBox(s => { s.Name = "tb_BA02A_ID2"; }).GetHtml()
+@Html.DevExpress().TextBox(s => { s.Name = "tb_ITM_NO2"; }).GetHtml()
+@Html.DevExpress().TextBox(s => { s.Name = "tb_ITM_NM2"; }).GetHtml()
+@Html.DevExpress().TextBox(s => { s.Name = "tb_ITM_SP2"; }).GetHtml()
+
+@Html.DevExpress().Button(
+    s =>
+    {
+        s.Name = "BtnProductSelect2";
+        s.Images.Image.Url = Url.Content("~/Content/Icon/search_grey_18x18.png");
+        s.ClientSideEvents.Click = "ProductSelectClick";
+    }).GetHtml()
+@*@Html.DevExpress().ButtonEdit(
+    settings =>
+    {
+        settings.Name = "BtnProductSelect";
+        var btn = new EditButton();
+        btn.Image.Url = Url.Content("~/Content/Icon/search_grey_18x18.png");
+        btn.Text = "";
+        settings.Properties.Buttons.Add(btn);
+        settings.Properties.ClientSideEvents.ButtonClick = "ProductSelectClick";
+    }).GetHtml()*@
+@{
+    Html.RenderAction("ProductPopup", "Utility", new { popupElementID = "BtnProductSelect" });
+}

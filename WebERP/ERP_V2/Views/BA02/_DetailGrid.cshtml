@@ -1,0 +1,147 @@
+﻿@model List<ERP_V2.ViewModels.BA02.BA02BViewModel>
+
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "DetailGrid";
+        settings.KeyFieldName = "BA02B_ID";
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+
+        settings.CallbackRouteValues = new { Controller = "BA02", Action = "DetailGrid" };
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "BA02", Action = "DetailGridBatchUpdate" };
+        settings.CustomActionRouteValues = new { Controller = "BA02", Action = "DetailGridCustomUpdate" };
+
+        settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+        settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+        settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
+        settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 40;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.CellStyle.Paddings.Padding = 0;
+        settings.CommandColumn.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        settings.CommandColumn.SetHeaderTemplateContent(c =>
+        {
+            Html.DevExpress().Button(btn =>
+            {
+                //EditorSetting.GetButtonDefault(settings, "BtnDetailAddNew", Resources.Resource1.Add);
+                btn.Name = "BtnDetailAddNew";
+                btn.ClientSideEvents.Click = "BtnDetailAddNewClick";
+                btn.Text = "Add";
+                btn.Images.Image.Url = Url.Content("~/Content/Icon/add_circle_outline_grey_18x18.png");
+                btn.Styles.Style.Paddings.PaddingTop = 0;
+                btn.Styles.Style.Paddings.PaddingBottom = 0;
+                btn.Styles.Style.Paddings.PaddingLeft = 0;
+                btn.Styles.Style.Paddings.PaddingRight = 0;
+            }).GetHtml();
+        });
+
+        settings.SettingsCommandButton.DeleteButton.Styles.Style.Paddings.Padding = 0;
+        settings.SettingsCommandButton.DeleteButton.Image.Url = "~/Content/Icon/delete_grey_18x18.png";
+        settings.SettingsCommandButton.DeleteButton.Text = "Del";
+
+        settings.SettingsCommandButton.RenderMode = GridCommandButtonRenderMode.Button;
+
+        //settings.Columns.Add(
+        //column =>
+        //{
+        //    column.FieldName = "FA11A_ID";
+        //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+        //    column.CellStyle.CssClass = "HideColumn";
+        //    column.HeaderStyle.CssClass = "HideColumn";
+        //    column.EditCellStyle.CssClass = "HideColumn";
+        //    column.FilterCellStyle.CssClass = "HideColumn";
+        //    column.FooterCellStyle.CssClass = "HideColumn";
+        //    column.GroupFooterCellStyle.CssClass = "HideColumn";
+        //});
+
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "BA01A_ID";
+            column.Caption = Resources.Resource.BA01A_INC_NM;
+            column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            column.Width = 300;
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.ValueField = "BA01A_ID";
+                p.TextField = "INC_NM";
+                p.ValueType = typeof(int);
+                p.DataSource = ERP_V2.CacheCommonDataModule.GetBA01A();
+            });
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "PUR_PR";
+            column.Caption = Resources.Resource.BA02B_PUR_PR;
+            column.EditorProperties().SpinEdit(
+            p =>
+            {
+                p.MinValue = 0;
+                p.MaxValue = 999999999;
+                p.DisplayFormatString = "G29";
+            });
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "REM_MM";
+            column.Caption = Resources.Resource.REM_MM;
+            column.Width = 200;
+            column.EditorProperties().Memo(
+            p =>
+            {
+            });
+        });
+
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "IsValid";
+                column.Visible = false;
+            });
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.None;
+        };
+
+        settings.ClientSideEvents.BeginCallback = "DetailGridBeginCallback";
+        settings.ClientSideEvents.EndCallback = "DetailGridEndCallBack";
+        settings.ClientSideEvents.Init = "DetailGridInit";
+        settings.ClientSideEvents.BatchEditEndEditing = "DetailGridBatchEndEditing";
+        settings.CustomJSProperties += (s, e) =>
+        {
+            e.Properties["cpEditError"] = ViewData["EditErrorMsg"];
+            e.Properties["cpDeleteIDs"] = ViewData["DeleteIDList"];
+            e.Properties["cpMasterForm"] = ViewData["MasterForm"];
+        };
+
+        //隱藏grid footer 的savechange and cancel link text
+        settings.CommandButtonInitialize = (s, e) =>
+        {
+            if (e.ButtonType == ColumnCommandButtonType.Update || e.ButtonType == ColumnCommandButtonType.Cancel)
+            {
+                e.Visible = false;
+            }
+        };
+
+        settings.Settings.ShowFooter = false;
+        settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+    });
+}
+
+@grid.Bind(Model).GetHtml()
+

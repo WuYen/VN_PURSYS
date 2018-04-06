@@ -1,0 +1,117 @@
+﻿@model System.Collections.IEnumerable
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridTR01B";
+        settings.CallbackRouteValues = new { Controller = "TR01M", Action = "GridTR01B" };
+
+        settings.Width = Unit.Percentage(100);
+
+        settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e8e8e8");
+        settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+
+        settings.ClientSideEvents.BeginCallback = "GridTR01BBeginCallback";
+        settings.ClientSideEvents.SelectionChanged = "GridTR01BSelectionChanged";
+
+        settings.CommandColumn.Caption = " ";
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        settings.CommandColumn.Width = 50;
+
+        settings.KeyFieldName = "TR01B_ID";
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ITM_NM";
+            column.Caption = Resources.Resource.BA02A_ITM_NM;
+            column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            column.ReadOnly = true;
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ITM_SP";
+            column.Caption = Resources.Resource.BA02A_ITM_SP;
+            column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            column.ReadOnly = true;
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "PUR_QT";
+            column.Caption = Resources.Resource.TR01B_PUR_QT;
+            column.PropertiesEdit.DisplayFormatString = "G29";
+            column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            column.ReadOnly = true;
+            column.EditorProperties().SpinEdit(
+            p =>
+            {
+                p.DisplayFormatString = "G29";
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ARR_QT_Sum";
+            column.Caption = Resources.Resource.TR01M_ARR_QT;// "到貨數量";
+            column.PropertiesEdit.DisplayFormatString = "G29";
+            column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            column.ReadOnly = true;
+            column.EditorProperties().SpinEdit(
+            p =>
+            {
+                p.DisplayFormatString = "G29";
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ReceiveMY";
+            column.Caption = Resources.Resource.TR01M_INV_MY;// "發票金額";
+            column.PropertiesEdit.DisplayFormatString = "G29";
+            column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            column.ReadOnly = true;
+            column.EditorProperties().SpinEdit(
+            p =>
+            {
+                p.DisplayFormatString = "G29";
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ARR_ST";
+            column.Caption = Resources.Resource.ArriveStatus;// "到貨狀態";
+            column.CellStyle.BackColor = System.Drawing.Color.Beige;
+            column.ReadOnly = true;
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+        settings.CustomColumnDisplayText = (s, e) =>
+        {
+            if (e.Column.FieldName == "ARR_ST")
+            {
+                if (e.Value.ToString() == "1")
+                {
+                    e.DisplayText = Resources.Resource.AllArrive;// "全數送達";
+                }
+                else
+                {
+                    e.DisplayText = Resources.Resource.NotAllArrive;// "未全數送達";
+                }
+            }
+        };
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.VerticalScrollableHeight = 120;
+        settings.Settings.ShowFooter = false;
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+        settings.Settings.ShowTitlePanel = false;
+
+    }).Bind(Model).GetHtml()

@@ -1,0 +1,54 @@
+﻿@model ERP_V2.ViewModels.ProductSelectViewModel
+
+@Html.DevExpress().PopupControl(
+settings =>
+{
+    settings.Name = "pcProductSearch";
+    settings.Width = 600;
+    if (Model.PopupElementID == "")
+    {
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    }
+    else
+    {
+        settings.PopupElementID = Model.PopupElementID;
+        settings.PopupVerticalAlign = PopupVerticalAlign.BottomSides;
+        settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.LeftSides;
+    }
+
+    settings.AllowDragging = true;
+    settings.ShowOnPageLoad = false;
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.ShowHeader = false;
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("_ProductGrid", Model.BA02AList);
+    });
+
+    settings.ShowFooter = true;
+    settings.Styles.Footer.Paddings.PaddingRight = 12;
+    settings.SetFooterContentTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div style=\"padding: 0px 0px 6px 0px; float: right\">");
+        Html.DevExpress().Button(
+        btnSettings =>
+        {
+            btnSettings.Name = "BtnProductConfirm";
+            btnSettings.Text = "Confirm";
+            btnSettings.ClientSideEvents.Click = "function(s,e){ pcProductSearch.Hide(); SetProductTextBox();ProductGridLookUp.ClearFilter();}";
+        }).GetHtml();
+        ViewContext.Writer.Write("&nbsp");
+        Html.DevExpress().Button(
+        btnSettings =>
+        {
+            btnSettings.Name = "BtnProductCancel";
+            btnSettings.Text = "Cancel";
+
+            btnSettings.ClientSideEvents.Click = "function(s,e){ pcProductSearch.Hide();ProductGridLookUp.ClearFilter();}";
+        }).GetHtml();
+
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()

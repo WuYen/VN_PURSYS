@@ -1,0 +1,253 @@
+﻿@model ERP_V2.ViewModels.TR01M.TR01CModel
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "EditFormLayout";
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+    settings.ColCount = 3;
+    settings.UseDefaultPaddings = false;
+    settings.Items.Add(m => m.DtARR_DT, i =>
+    {
+        i.Name = "DtARR_DT";
+        i.FieldName = "DtARR_DT";
+        i.Caption = Resources.Resource.ActArriveDate;// "實際到貨日";
+        i.NestedExtension().DateEdit(tb =>
+        {
+            tb.ShowModelErrors = true;
+            tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            tb.Properties.EditFormatString = "yyyy/MM/dd";
+            tb.Properties.DisplayFormatString = "yyyy/MM/dd";
+        });
+    });
+    settings.Items.Add(m => m.ARR_QT, i =>
+    {
+        i.Name = "ARR_QT";
+        i.FieldName = "ARR_QT";
+        i.Caption = Resources.Resource.TR01M_ArriveQT;// "到貨量";
+        i.NestedExtension().SpinEdit(s =>
+        {
+            s.ShowModelErrors = true;
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.Properties.MinValue = 0;
+            s.Properties.MaxValue = 99999;
+            s.Properties.DisplayFormatString = "G29";
+        });
+    });
+
+    settings.Items.Add(m => m.INV_NO, i =>
+    {
+        i.Name = "INV_NO";
+        i.FieldName = "INV_NO";
+        i.Caption = Resources.Resource.TR01M_INV_NO;// "發票號碼";
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(m => m.CUR_RT, i =>
+    {
+        i.Name = "CUR_RT";
+        i.FieldName = "CUR_RT";
+        i.Caption = Resources.Resource.BA03A_CUR_RT;
+        i.NestedExtension().SpinEdit(s =>
+        {
+            s.ShowModelErrors = true;
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.Properties.MinValue = 0;
+            s.Properties.MaxValue = 999999;
+            s.Properties.DisplayFormatString = "G29";
+        });
+    });
+    settings.Items.Add(m => m.INV_MY, i =>
+    {
+        i.Name = "INV_MY";
+        i.FieldName = "INV_MY";
+        i.Caption = Resources.Resource.TR01M_INV_MY;// "發票金額";
+        i.NestedExtension().SpinEdit(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.MinValue = 0;
+            s.Properties.MaxValue = 999999999;
+            s.Properties.DisplayFormatString = "G29";
+        });
+    });
+    settings.Items.Add(m => m.REM_MM, i =>
+    {
+        i.Name = "REM_MM";
+        i.FieldName = "REM_MM";
+        i.Caption = Resources.Resource.REM_MM;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.AddEmptyItem();
+    settings.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.Width = Unit.Percentage(100);
+        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+    }).SetNestedContent(() =>
+    {
+        ViewContext.Writer.Write("<div style='float:right;padding-right: 26px;'>");
+        Html.DevExpress().Button(
+            btnSettings =>
+            {
+                btnSettings.Name = "btnUpdate";
+                btnSettings.Text = "Update";
+                btnSettings.ClientSideEvents.Click = "function(s, e){ GridTR01C.UpdateEdit(); }";
+            }).Render();
+        Html.DevExpress().Button(
+            btnSettings =>
+            {
+                btnSettings.Name = "btnCancel";
+                btnSettings.Text = "Cancel";
+                btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                btnSettings.ClientSideEvents.Click = "function(s, e){ GridTR01C.CancelEdit(); }";
+            }).Render();
+        ViewContext.Writer.Write("</div>");
+    });
+
+}).GetHtml()
+
+@*
+    .Bind(Model.Data)
+    @Html.DevExpress().FormLayout(formLayoutSettings =>
+        {
+            formLayoutSettings.Name = "detailFormLayout";
+            formLayoutSettings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            formLayoutSettings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            formLayoutSettings.ColCount = 2;
+            formLayoutSettings.UseDefaultPaddings = false;
+
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "SUP_ID";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "SUP_NM";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "ALL_NM";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "TEL_NO";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "FAX_NO";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "ADD_DR";
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "WWW_DR";
+                i.Width = Unit.Percentage(50);
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "EML_DR";
+                i.Width = Unit.Percentage(50);
+                i.NestedExtension().TextBox(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    s.ShowModelErrors = true;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.FieldName = "REM_MM";
+                i.Width = Unit.Percentage(100);
+                i.NestedExtension().Memo(s =>
+                {
+                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    //s.Properties.ValidationSettings.Display = Display.Dynamic;
+                    s.ShowModelErrors = true;
+                    s.Properties.Rows = 3;
+                });
+            });
+            formLayoutSettings.Items.Add(i =>
+            {
+                i.ShowCaption = DefaultBoolean.False;
+                i.Width = Unit.Percentage(100);
+                i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+            }).SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write("<div style='float:right;padding-right: 26px;'>");
+                Html.DevExpress().Button(
+                    btnSettings =>
+                    {
+                        btnSettings.Name = "btnUpdate";
+                        btnSettings.Text = "Update";
+                        btnSettings.ClientSideEvents.Click = "function(s, e){ MasterGrid.UpdateEdit(); }";
+                    }).Render();
+                Html.DevExpress().Button(
+                    btnSettings =>
+                    {
+                        btnSettings.Name = "btnCancel";
+                        btnSettings.Text = "Cancel";
+                        btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                        btnSettings.ClientSideEvents.Click = "function(s, e){ MasterGrid.CancelEdit(); }";
+                    }).Render();
+                ViewContext.Writer.Write("</div>");
+            });
+
+        })
+        .Bind(Model)
+        .GetHtml()*@

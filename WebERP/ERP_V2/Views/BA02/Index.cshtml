@@ -1,0 +1,131 @@
+﻿@model ERP_V2.ViewModels.BA02.IndexViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    table div.dxb {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+
+    .Activate {
+        background-color: #0072c6 !important;
+        color: #ffffff !important;
+    }
+</style>
+
+<script type="text/javascript">
+    function UpdateGridHeight() {
+        MasterGrid.SetHeight(0);
+        var containerHeight = ASPx.GetDocumentHeight();
+        if (document.body.scrollHeight > containerHeight)
+            containerHeight = document.body.scrollHeight;
+        MasterGrid.SetHeight(LeftPane.GetHeight());// - $('#Title').outerHeight(true)
+    }
+
+    //delete show message
+    function MasterGridEndCallback(s, e) {
+        if (s.cpIsSuccess) {
+            ShowSuccess();
+        } else {
+            ShowError(s.cpEditError);//顯示刪除錯誤
+        }
+    }
+
+    function MasterGridCustomButtonClick(s, e) {
+        if (e.buttonID == "BtnCmdEdit") {
+            GetEditForm(s.GetRowKey(e.visibleIndex));
+        }
+        else if (e.buttonID == "BtnCmdDelete") {
+            alertify.confirm('Delete', 'Press OK to confirm delete'
+                , function () {
+                    MasterGrid.DeleteRow(e.visibleIndex);
+                }
+                , function () {
+                    alertify.error('Cancel')
+                });
+        }
+    }
+
+    function AddNewClick() {
+        GetEditForm(0);
+    }
+
+    function GetEditForm(key) {
+        var form = $('<form></form>');
+        form.attr("method", "post");
+        form.attr("action", '@Url.Action("Edit", "BA02")');
+        var field = $('<input></input>');
+        field.attr("type", "hidden");
+        field.attr("name", "key");
+        field.attr("value", key);
+        form.append(field);
+        $(document.body).append(form);
+        form.submit();
+    }
+    var type = "";
+    function ChangeType(s, e) {
+        //alert(s.name);
+        $(".TypeColor.Activate").removeClass("Activate")
+        s.GetMainElement().className = s.GetMainElement().className.replace("TypeColor", "TypeColor Activate");
+        type = s.name.substr(4, 4);
+        MasterGrid.PerformCallback();
+    }
+    function MasterGridBeginCallback(s, e) {
+        e.customArgs["type"] = type;
+    }
+</script>
+<div style="margin-top:10px;margin-bottom:10px">
+    @*<div style="display:inline-block">
+            @Html.DevExpress().Button(
+                settings =>
+                {
+                    settings.Name = "Type0";
+                    settings.Text = "全部";
+                    settings.ClientSideEvents.Click = "ChangeType";
+                    settings.ControlStyle.CssClass = "TypeColor Activate";
+                }).GetHtml()
+        </div>*@
+
+    @foreach (var item in ERP_V2.CacheCommonDataModule.GetBA04A(ERP_V2.UserInfo.LanguageType))
+    {
+        <div style="display:inline-block">
+            @Html.DevExpress().Button(
+                settings =>
+                {
+                    settings.Name = "Type" + item.Value.ToString();
+                    settings.Text = item.Key;
+                    settings.ClientSideEvents.Click = "ChangeType";
+                    settings.ControlStyle.CssClass = "TypeColor";
+                    if (item.Value == 0)
+                    {
+                        settings.ControlStyle.CssClass = "TypeColor Activate";
+                    }
+                }).GetHtml()
+        </div>
+    }
+</div>
+@{
+    Html.RenderAction("MasterGrid", new { key = Model.FocusKey });
+}
+
+<script type="text/javascript">
+    ASPxClientControl.GetControlCollection().ControlsInitialized.AddHandler(function (s, e) {
+        UpdateGridHeight();
+    });
+    ASPxClientControl.GetControlCollection().BrowserWindowResized.AddHandler(function (s, e) {
+        UpdateGridHeight();
+    });
+
+    var IsSuccess ='@Model.IsSuccess';
+
+    //Edit save success redirect to Index show message
+    $(window).load(function () {
+        if (IsSuccess.toLowerCase() == 'true') {
+            ShowSuccess();
+        }
+    });
+</script>
+

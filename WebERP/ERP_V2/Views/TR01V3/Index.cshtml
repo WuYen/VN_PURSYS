@@ -1,0 +1,395 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<script>
+    var keyOnPage = "";
+    var ReloadMaster = false;//不是DetailGrid的主動CallBack都是True
+    var formSave = false; //DetailGridBeginCallback要先去抓主表單資料，EndCallBack重新標註刪除的detail
+    var ShowAlert = false;//DetailGridEndCallBack控制是否要顯示alert，Save & Delete時候為True
+
+    //==================SearchClick=======================
+    function SearchClick(s, e) {
+        SearchGrid.PerformCallback();
+    }
+    function SearchGridEndCall(s, e) {
+        PopSearch.ShowAtElementByID("BtnSearch");
+    }
+
+    function SearchGridSelect(s, e) {
+        keyOnPage = "";
+        if (SearchGrid.GetSelectedKeysOnPage().length > 0) {
+            keyOnPage = SearchGrid.GetSelectedKeysOnPage()[0];
+        }
+        PopSearch.Hide();
+        ReloadMaster = true;
+        DetailGrid.callbackCustomArgs["Reload_TF"] = "T";
+        DetailGrid.PerformCallback();
+    }
+    //==================AddNew========================
+    function AddNewClick(s, e) {
+        keyOnPage = "0";
+        ReloadMaster = true;
+        DetailGrid.callbackCustomArgs["Reload_TF"] = "T";
+        DetailGrid.PerformCallback();
+    }
+    //==================ToolBar=======================
+    function ToolBarClick(s, e) {
+        ReloadMaster = true;
+        if (e.item.name == "Save") {
+            formSave = true;
+            ShowAlert = true;
+
+            $.validator.unobtrusive.parse("#MasterForm");
+            //alert("123");
+            if ($("#MasterForm").valid()) {
+                if (DetailGrid.batchEditApi.HasChanges()) {
+                    //alert("456");
+                    DetailGrid.UpdateEdit();
+                }
+                else {
+                    //alert("789");
+                    DetailGrid.PerformCallback();
+                }
+            }
+        }
+        else if (e.item.name == "Print") {
+            if (keyOnPage>0) {
+                Print(keyOnPage);
+            }
+            else {
+                ShowError("Save first!");
+            }
+        }
+        else if (e.item.name == "Lock")
+        {
+            DetailGrid.callbackCustomArgs["Reload_TF"] = "T";
+            DetailGrid.callbackCustomArgs["Lock"] = CFN_YN.GetValue();
+            DetailGrid.PerformCallback();
+        }
+        else {
+            if (e.item.name == "Cancel") {
+                DetailGrid.CancelEdit();
+                DetailGrid.callbackCustomArgs["Reload_TF"] = "T";
+                DetailGrid.PerformCallback();
+            }
+            else if (e.item.name == "Delete") {
+                ShowAlert = true;
+                alertify.confirm('Delete', 'Press OK to confirm delete'
+                    , function () {
+                        DetailGrid.callbackCustomArgs["Deletekey"] = keyOnPage;
+                        DetailGrid.PerformCallback();
+
+                    }
+                    , function () {
+                        alertify.error('Cancel')
+                    });
+            }
+        }
+    }
+
+    //==================DetailGrid=======================
+    function DetailGridInit(s, e) {
+        SetHideColumn();
+    }
+    function DetailGridBeginCallback(s, e) {
+        DetailGrid.callbackCustomArgs["key"] = keyOnPage;
+        if (formSave) {
+            DetailGrid.callbackCustomArgs["master"] = $.extend(DetailGrid.callbackCustomArgs["master"], MVCxClientUtils.GetSerializedEditorValuesInContainer("MasterForm", true));
+            DetailGrid.callbackCustomArgs["DateBeg"] = DtPUR_DT.GetText();
+            DetailGrid.callbackCustomArgs["DateEnd"] = DtEXP_DT.GetText();
+        }
+    }
+    function DetailGridEndCallBack(s, e) {
+        if (s.cpIsConfirm == true) {
+            ToolBar.GetItemByName('Lock').SetText('Lock = True');
+        } else {
+            ToolBar.GetItemByName('Lock').SetText('Lock = False');
+        }
+        SetHideColumn();
+        if (formSave) {
+            formSave = false;
+            keyOnPage = s.cpKey;
+            if (s.cpDeleteIDs != undefined) {
+                var key = s.cpDeleteIDs.split(",");//把刪除的row重新標記刪除
+                for (var i = 0; i < key.length - 1; i++) {
+                    DetailGrid.DeleteRowByKey(key[i].toString());
+                }
+            }
+        }
+        if (ReloadMaster) {
+            ReloadMaster = false;
+            $("#MasterFormDiv").html(s.cpMasterForm);//reload content of master form
+        }
+        if (ShowAlert) { //Save delete回來要顯示alert
+            ShowAlert = false;
+            if (s.cpErrMsg == null || s.cpErrMsg.length < 1) {
+                ShowSuccess();
+            }
+            else {
+                ShowError(s.cpErrMsg);//operation for save fail
+            }
+        }
+    }
+    function BtnDetailAddNewClick(s, e) {
+        DetailGrid.AddNewRow();
+    }
+
+    function DetailGridEndEditing(s, e) {
+        var PriceColIndex = s.GetColumnByField("PUR_PR").index;
+        var QuantityColIndex = s.GetColumnByField("PUR_QT").index;
+        var priceValue = e.rowValues[PriceColIndex].value;
+        var quantityValue = e.rowValues[QuantityColIndex].value;
+        s.batchEditApi.SetCellValue(e.visibleIndex, "Sum", priceValue * quantityValue, null, true);
+    }
+
+    function SetHideColumn() {
+        $('td.HideColumn').css('display', 'none');
+    }
+    //===========================Product Select===========================
+    var index;
+    function ProductBtnEditClick(s, e) {
+        index = DetailGrid.batchEditApi.GetEditCellInfo().rowVisibleIndex;
+        var ITM_NO = DetailGrid.batchEditApi.GetCellValue(index, "ITM_NO", false);
+        ProductGridLookUp.PerformCallback({ selectedItem: ITM_NO, FirstPage: true });
+        pcProductSearch.ShowAtElement(s.GetMainElement());
+        //CbBA01A_ID
+    }
+    function ProductLookUpBegCall(s, e) {
+        e.customArgs["BA01A_ID"] = CbBA01A_ID.GetValue();
+    }
+    function SetProductTextBox(s, e) {
+        ProductGridLookUp.GetSelectedFieldValues('BA02A_ID;ITM_NO;ITM_NM;PUR_PR', OnGetSelectedFieldValues);
+    }
+    function OnGetSelectedFieldValues(selectedValues) {
+        if (selectedValues.length == 0) {
+            return;
+        } else {
+            DetailGrid.batchEditApi.SetCellValue(index, "BA02A_ID", selectedValues[0][0], selectedValues[0][0]);
+            DetailGrid.batchEditApi.SetCellValue(index, "ITM_NO", selectedValues[0][1], selectedValues[0][1]);//value,displayText
+            DetailGrid.batchEditApi.SetCellValue(index, "ITM_NM", selectedValues[0][2], selectedValues[0][2]);
+            DetailGrid.batchEditApi.SetCellValue(index, "PUR_PR", selectedValues[0][3], selectedValues[0][3]);
+            DetailGrid.batchEditApi.EndEdit();
+        }
+    }
+
+    //=======================廠商 BA01ASelectedChange==============
+    function BA01ASelectedChange(s, e) {
+        //alert(s.name);
+        var value = s.GetValue();
+        CbBA01B_ID.PerformCallback();
+    }
+    function CboContactBegCall(s, e) {
+        e.customArgs["key"] = CbBA01A_ID.GetValue();
+    }
+    function CboContactEndCall(s, e) {
+        CbBA03A_ID.SetValue(CbBA01B_ID.cpBA03A_ID);
+        ADD_DR.SetValue(CbBA01B_ID.cpADD_DR);
+        FAX_NO.SetText(CbBA01B_ID.cpFAX_NO);
+        CUR_RT.SetValue(CbBA01B_ID.cpCUR_RT);
+        TEL_NO.SetText(CbBA01B_ID.cpTEL_NO);
+        TEL_EX.SetText(CbBA01B_ID.cpTEL_EX);
+
+        s.SetSelectedIndex(0);
+        //alert(s.cpADD_DR + "," + s.cpFAX_NO + "," + s.cpBA03A_ID);
+    }
+    function CBOContactSelectChanged(s, e) {
+        TEL_NO.SetText(s.GetSelectedItem().texts[1])
+        TEL_EX.SetText(s.GetSelectedItem().texts[2])
+    }
+
+    //
+    function Print(key) {
+        var form = $('<form></form>');
+        form.attr("target", "_blank");
+        form.attr("method", "post");
+        form.attr("action", '@Url.Action("CreateReport", "Home")');
+        var field = $('<input></input>');
+        field.attr("type", "hidden");
+        field.attr("name", "key");
+        field.attr("value", key);
+        form.append(field);
+        $(document.body).append(form);
+        form.submit();
+    }
+
+    function DtPUR_DTGotFocus(s, e) {
+        DtPUR_DT.ShowDropDown();
+    }
+    function DtEXP_DTGotFocus(s, e) {
+        DtEXP_DT.ShowDropDown();
+    }
+    function DtGotFocus(s, e) {
+        s.ShowDropDown();
+    }
+
+</script>
+
+<div style="margin-top:5px;margin-left:10px">
+    <div style="display:inline-block">
+        @Html.DevExpress().Button(s =>
+        {
+            s.Name = "BtnTitle";
+            s.Text = "採購";
+            s.Height = 35;
+            s.Styles.Style.Font.Size = FontUnit.Medium;
+            s.Styles.Style.Font.Bold = true;
+            s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+            s.ControlStyle.BorderLeft.BorderStyle = BorderStyle.Solid;
+            s.ControlStyle.BorderLeft.BorderColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+            s.ControlStyle.BorderLeft.BorderWidth = 4;
+            s.ClientEnabled = false;
+            s.Styles.Style.DisabledStyle.ForeColor = System.Drawing.Color.Black;
+        }).GetHtml()
+    </div>
+    <div style="display:inline-block">
+        @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "BtnSearch";
+            s.Text = "Search";
+            s.Height = 35;
+            s.Images.Image.Url = "~/Content/Icon/Search.png";
+            s.ClientSideEvents.Click = "SearchClick";
+        }).GetHtml()
+
+    </div>
+    <div style="display:inline-block">
+        @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "BtnAddNew";
+            s.Text = "Add";
+            s.Height = 35;
+            s.Images.Image.IconID = "actions_additem_16x16";
+            s.ClientSideEvents.Click = "AddNewClick";
+        }).GetHtml()
+    </div>
+    <div style="display:inline-block">
+        @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "BtnReload";
+            s.Text = "";
+            s.Height = 35;
+            s.Images.Image.IconID = "actions_refresh2_16x16";
+            s.ClientSideEvents.Click = "function(){location.reload();}";
+        }).GetHtml()
+    </div>
+</div>
+
+<div style="margin-top:15px;margin-left:10px; margin-right:10px">
+    @Html.DevExpress().Menu(settings =>
+{
+    settings.Name = "ToolBar";
+    settings.Width = Unit.Percentage(100);
+    settings.ItemAutoWidth = false;
+    settings.EnableAnimation = true;
+    settings.Styles.Style.BackColor = System.Drawing.Color.White;
+    settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+    settings.ControlStyle.Border.BorderColor = System.Drawing.Color.Gray;
+    settings.ControlStyle.Border.BorderWidth = 1;
+    settings.Styles.Item.BackColor = System.Drawing.Color.White;
+    settings.Styles.Item.HoverStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+    settings.Styles.Item.HoverStyle.ForeColor = System.Drawing.Color.White;
+    settings.ControlStyle.Paddings.PaddingTop = 5;
+    settings.ControlStyle.Paddings.PaddingBottom = 5;
+    settings.ClientSideEvents.ItemClick = "ToolBarClick";
+    settings.Items.Add(i =>
+    {
+        i.Text = "Save";
+        i.Name = "Save";
+        i.Image.IconID = "actions_save_16x16devav";
+    });
+    settings.Items.Add(i =>
+    {
+        i.Text = "Cancel";
+        i.Name = "Cancel";
+        i.Image.IconID = "actions_cancel_16x16";
+    });
+    settings.Items.Add(i =>
+    {
+        i.Text = "Delete";
+        i.Name = "Delete";
+        i.Image.IconID = "actions_deletelist_16x16";
+    });
+    settings.Items.Add(i =>
+    {
+        i.Text = "Print";
+        i.Name = "Print";
+        i.Image.IconID = "actions_print_16x16devav";
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "Lock";
+        i.Text = "Lock";
+        i.Image.Url = "~/Content/Icon/lock.png";
+        if (ERP_V2.UserInfo.Permission == "1")
+        {
+            i.ClientVisible = true;
+        }
+        else
+        {
+            i.ClientVisible = false;
+        }
+    });
+}).GetHtml()
+</div>
+
+@Html.DevExpress().PopupControl(
+settings =>
+{
+    settings.Name = "PopSearch";
+    settings.Width = 760;
+
+    settings.PopupVerticalAlign = PopupVerticalAlign.BottomSides;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.LeftSides;
+
+    settings.AllowDragging = true;
+    settings.ShowOnPageLoad = false;
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.ShowHeader = true;
+    settings.HeaderText = "Search";
+    settings.Styles.Content.Paddings.PaddingTop = 0;
+    settings.Styles.Content.Paddings.PaddingBottom = 0;
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("_SearchPanel");
+    });
+
+    settings.ShowFooter = true;
+    settings.Styles.Footer.Paddings.PaddingRight = 12;
+    settings.SetFooterContentTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div style=\"padding: 0px 0px 6px 0px; float: right\">");
+        Html.DevExpress().Button(
+        btnSettings =>
+        {
+            btnSettings.Name = "BtnSelectConfirm";
+            btnSettings.Text = "確認";
+            btnSettings.Width = 120;
+            btnSettings.Images.Image.IconID = "actions_apply_16x16office2013";
+            btnSettings.ClientSideEvents.Click = "SearchGridSelect";
+        }).GetHtml();
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+
+
+<form id="MasterForm" style="margin:10px">
+    <div id="MasterFormDiv">
+        @{
+            Html.RenderPartial("_MasterForm", new ERP_V2.ViewModels.TR01V3.TR01AViewModel() { DtPUR_DT = DateTime.UtcNow.AddHours(07), CPN_NM = "劲亨金属表面处理工業有限公司   Công ty Jingheng" });
+        }
+    </div>
+</form>
+<div style="margin-left:10px;margin-right:10px">
+    @{
+        Html.RenderPartial("_DetailGrid", new List<ERP_V2.ViewModels.TR01V3.TR01BViewModel>());
+    }
+</div>
+@{
+    Html.RenderAction("ProductPopup", "Utility", new { popupElementID = "BtnProductSelect" });
+}

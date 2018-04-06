@@ -1,0 +1,88 @@
+﻿@model System.Collections.IEnumerable
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "MasterGrid";
+        settings.CallbackRouteValues = new { Controller = "BA04", Action = "MasterGrid" };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+
+        settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.BorderTop.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+        settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 770;
+
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.Styles.FocusedRow.BackColor = System.Drawing.Color.Gray;
+
+        settings.SettingsPager.PageSize = 50;
+        settings.SettingsPager.NumericButtonCount = 8;//page bar show page number count
+
+        settings.KeyFieldName = "BA04A_ID";
+
+        GridViewHelper.SetColumn(settings, "TYP_VN", Resources.Resource.BA04A_TYP + "(Việt Ngữ)");
+        GridViewHelper.SetColumn(settings, "TYP_CN", Resources.Resource.BA04A_TYP + "(中文)");
+        //GridViewHelper.SetColumn(settings, "TYP_CN", Resources.Resource.BA04A_TYP + "(繁中)");
+        GridViewHelper.SetColumn(settings, "TYP_US", Resources.Resource.BA04A_TYP + "(English)");
+        GridViewHelper.SetColumn(settings, "SEQ_NO", Resources.Resource.SEQ_NO);
+
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsSearchPanel.ShowApplyButton = true;
+        settings.SettingsSearchPanel.AllowTextInputTimer = false;
+        settings.SettingsCommandButton.SearchPanelApplyButton.Image.Url = "~/Content/Icon/search_grey_18x18.png";
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 130;
+        settings.CommandColumn.CellStyle.Paddings.Padding = 0;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.Caption = "";
+        settings.SettingsCommandButton.RenderMode = GridCommandButtonRenderMode.Button;
+
+        settings.SettingsCommandButton.EditButton.Styles.Style.Paddings.Padding = 0;
+        settings.SettingsCommandButton.EditButton.Image.Url = "~/Content/Icon/edit_grey_18x18.png";
+
+        settings.SettingsCommandButton.NewButton.Styles.Style.Paddings.Padding = 0;
+        settings.SettingsCommandButton.NewButton.Image.Url = "~/Content/Icon/add_circle_outline_grey_18x18.png";
+
+        GridViewCommandColumnCustomButton btn = new GridViewCommandColumnCustomButton();
+        btn.ID = "BtnCmdDelete";
+        btn.Text = "Del";
+        btn.Image.Url = "~/Content/Icon/delete_grey_18x18.png";
+        btn.Styles.Style.Paddings.Padding = 0;
+        settings.CommandColumn.CustomButtons.Add(btn);
+        settings.CommandColumn.ButtonRenderMode = GridCommandButtonRenderMode.Button;
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "BA04", Action = "Update" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "BA04", Action = "Update" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "BA04", Action = "Delete" };
+
+        settings.SetEditFormTemplateContent(c =>
+        {
+            if (ViewData["ErrorData"] != null)
+            {
+                Html.RenderPartial("_EditForm", ViewData["ErrorData"]);
+            }
+            else
+            {
+                var item = c.Grid.GetRow(c.VisibleIndex) as ERP_V2.ViewModels.BA04.BA04AModel;
+                Html.RenderAction("EditForm", item);
+            }
+        });
+
+        settings.CustomJSProperties += (s, e) =>
+        {
+            e.Properties["cpIsSuccess"] = ViewData["IsSuccess"];
+            e.Properties["cpEditError"] = ViewData["EditError"];
+        };
+
+        settings.ClientSideEvents.EndCallback = "MasterGridEndCallback";
+        settings.ClientSideEvents.CustomButtonClick = "MasterGridCustomButtonClick";
+
+    }).Bind(Model).GetHtml()

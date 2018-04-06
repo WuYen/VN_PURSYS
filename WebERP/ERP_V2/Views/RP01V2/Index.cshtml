@@ -1,0 +1,135 @@
+﻿@model System.Data.DataTable
+@{
+    ViewBag.Title = "採購紀錄";
+}
+<script>
+    function BtnSearchClick(s, e) {
+        GridView.PerformCallback();
+    }
+    function GridViewBegCallback(s, e) {
+        e.customArgs["BA02A_ID"] = CboProduct.GetValue();
+        e.customArgs["DateBeg"] = DateBeg.GetText();
+        e.customArgs["DateEnd"] = DateEnd.GetText();
+    }
+    function BtnSearch2Click(s, e) {
+        GridView2.PerformCallback();
+    }
+    function GridView2BegCallback(s, e) {
+        e.customArgs["TYP_ID"] = TYP_ID.GetValue();
+        e.customArgs["DateBeg"] = DateBeg2.GetText();
+        e.customArgs["DateEnd"] = DateEnd2.GetText();
+    }
+    function GridView2EndCallback(s, e) {
+        chart.PerformCallback();
+    }
+
+</script>
+<div style="margin-left:10px">
+    <div style="margin-top:10px;height:30px">
+        <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().ComboBox(settings =>
+       {
+           settings.Name = "CboProduct";
+           settings.Properties.Caption = "商品";
+           settings.Properties.TextField = "ITM_NM";
+           settings.Properties.ValueField = "BA02A_ID";
+           settings.SelectedIndex = 0;
+       }).BindList(ERP_V2.CacheCommonDataModule.GetBA02A()).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().DateEdit(settings =>
+       {
+           settings.Name = "DateBeg";
+           settings.Properties.Caption = "日期";
+           settings.Date = DateTime.Now.AddMonths(-1);
+           settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+       }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().DateEdit(settings =>
+       {
+           settings.Name = "DateEnd";
+           settings.Properties.Caption = "到";
+           settings.Date = DateTime.Now;
+           settings.Properties.CaptionSettings.ShowColon = false;
+           settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+       }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "BtnSearch";
+           settings.Text = "Search";
+           settings.Images.Image.Url = "~/Content/Icon/search.png";
+           settings.ClientSideEvents.Click = "BtnSearchClick";
+       }).GetHtml()
+        </div>
+    </div>
+    <div>
+        @{
+            Html.RenderPartial("_GridView", Model);
+        }
+    </div>
+</div>
+<br />
+<div style="margin-left:10px">
+    <div style="margin-top:10px;height:30px">
+        <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().ComboBox(
+            settings =>
+            {
+                settings.Name = "TYP_ID";
+                settings.Properties.ValueField = "value";
+                settings.Properties.TextField = "key";
+                settings.SelectedIndex = 1;
+            }).BindList(ERP_V2.CacheCommonDataModule.GetTypeDic()).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().DateEdit(settings =>
+            {
+                settings.Name = "DateBeg2";
+                settings.Properties.Caption = "日期";
+                settings.Date = DateTime.Now.AddMonths(-1);
+                settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+            }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().DateEdit(settings =>
+            {
+                settings.Name = "DateEnd2";
+                settings.Properties.Caption = "到";
+                settings.Date = DateTime.Now;
+                settings.Properties.CaptionSettings.ShowColon = false;
+                settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+            }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "BtnSearch2";
+           settings.Text = "Search";
+           settings.Images.Image.Url = "~/Content/Icon/search.png";
+           settings.ClientSideEvents.Click = "BtnSearch2Click";
+       }).GetHtml()
+        </div>
+    </div>
+    <div style="height:520px">
+        <div style="display:inline-block; float:left">
+            @{
+                Html.RenderAction("GridView2");
+            }
+        </div>
+        <div style="display:inline-block; float:left; ">
+            @{
+                Html.RenderAction("ChartPartial");
+            }
+        </div>
+    </div>
+</div>
+<br />
+<div style="margin-left:10px">
+    @{
+        Html.RenderAction("PivotGridPartial");
+    }
+</div>
+<br />

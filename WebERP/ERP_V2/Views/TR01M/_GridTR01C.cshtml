@@ -1,0 +1,227 @@
+﻿@model List<ERP_V2.ViewModels.TR01M.TR01CModel>
+
+@{
+    var enable = ViewBag.Enable as bool?;
+}
+
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridTR01C";
+
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+
+        settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e8e8e8");
+        settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+        settings.CommandColumn.HeaderStyle.BackColor = System.Drawing.Color.White;
+
+        settings.CallbackRouteValues = new { Controller = "TR01M", Action = "GridTR01C" };
+        //settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "TR01M", Action = "GridTR01CBatchUpdate" };
+
+        settings.ClientSideEvents.BeginCallback = "GridTR01CBeginCallback";
+        settings.ClientSideEvents.EndCallback = "GridTR01CEndCallback";
+        settings.ClientSideEvents.CustomButtonClick = "GridTR01CCustomButtonClick";
+
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditForm;
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+        settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+        settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
+        settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 40;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.CellStyle.Paddings.Padding = 0;
+        settings.CommandColumn.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        settings.CommandColumn.SetHeaderTemplateContent(c =>
+        {
+            Html.DevExpress().Button(btn =>
+            {
+                //EditorSetting.GetButtonDefault(settings, "BtnDetailAddNew", Resources.Resource1.Add);
+                btn.Name = "BtnDetailAddNew";
+                btn.ClientSideEvents.Click = "GridTR01CAddNewClick";
+                btn.Text = "Add";
+                btn.Images.Image.Url = Url.Content("~/Content/Icon/add_circle_outline_grey_18x18.png");
+                btn.Styles.Style.Paddings.PaddingTop = 0;
+                btn.Styles.Style.Paddings.PaddingBottom = 0;
+                btn.Styles.Style.Paddings.PaddingLeft = 0;
+                btn.Styles.Style.Paddings.PaddingRight = 0;
+            }).GetHtml();
+        });
+        settings.SettingsCommandButton.EditButton.Styles.Style.Paddings.Padding = 0;
+        settings.SettingsCommandButton.EditButton.Image.Url = "~/Content/Icon/edit_grey_18x18.png";
+        GridViewCommandColumnCustomButton btnDelete = new GridViewCommandColumnCustomButton();
+        btnDelete.ID = "BtnCmdDelete";
+        btnDelete.Text = "Del";
+        btnDelete.Image.Url = "~/Content/Icon/delete_grey_18x18.png";
+        btnDelete.Styles.Style.Paddings.Padding = 0;
+        settings.CommandColumn.CustomButtons.Add(btnDelete);
+        settings.CommandColumn.ButtonRenderMode = GridCommandButtonRenderMode.Button;
+
+        settings.SettingsCommandButton.RenderMode = GridCommandButtonRenderMode.Button;
+
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "TR01M", Action = "TR01CUpdate" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "TR01M", Action = "TR01CUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "TR01M", Action = "TR01CDelete" };
+
+        settings.KeyFieldName = "TR01C_ID";
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ARR_DT";
+            column.Caption = Resources.Resource.ActArriveDate;
+            column.EditorProperties().DateEdit(
+            p =>
+            {
+                p.EditFormatString = "yyyy/MM/dd";
+                p.DisplayFormatString = "yyyy/MM/dd";
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ARR_QT";
+            column.Caption = Resources.Resource.TR01M_ArriveQT;//"到貨量";
+            column.PropertiesEdit.DisplayFormatString = "G29";
+            column.EditorProperties().SpinEdit(
+            p =>
+            {
+                p.MinValue = 0;
+                p.MaxValue = 99999;
+                p.DisplayFormatString = "G29";
+            });
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.Name = "INV_NO";
+            column.FieldName = "INV_NO";
+            column.Caption = Resources.Resource.TR01M_INV_NO;// "發票號碼";
+            column.EditorProperties().TextBox(
+            p =>
+            {
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CUR_RT";
+            column.Caption = Resources.Resource.TR01M_CUR_RT;// "到貨匯率";
+            column.PropertiesEdit.DisplayFormatString = "G29";
+            column.EditorProperties().SpinEdit(
+            p =>
+            {
+                p.MinValue = 0;
+                p.MaxValue = 99999;
+                p.DisplayFormatString = "G29";
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "INV_MY";
+            column.Caption = Resources.Resource.TR01M_INV_MY;// "發票金額";
+            column.PropertiesEdit.DisplayFormatString = "G29";
+            column.EditorProperties().SpinEdit(
+            p =>
+            {
+                p.MinValue = 0;
+                p.MaxValue = 999999999;
+                p.DisplayFormatString = "G29";
+            });
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.Name = "UPDATE_USER";
+            column.FieldName = "UPDATE_USER";
+            column.Caption = Resources.Resource.FillInUser;// "填寫人";
+            column.EditorProperties().TextBox(
+            p =>
+            {
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "REM_MM";
+            column.Caption = Resources.Resource.REM_MM;
+            column.Width = 200;
+            column.EditorProperties().Memo(
+            p =>
+            {
+            });
+        });
+
+        settings.Columns.Add(column => { column.FieldName = "IsValid"; column.Visible = false; });
+
+        settings.SetEditFormTemplateContent(c =>
+        {
+            if (ViewData["ErrorData"] != null)
+            {
+                Html.RenderPartial("_EditForm", ViewData["ErrorData"]);
+            }
+            else
+            {
+                var item = c.Grid.GetRow(c.VisibleIndex) as ERP_V2.ViewModels.TR01M.TR01CModel;
+                Html.RenderAction("EditForm", item);
+            }
+        });
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.None;
+        };
+
+        //settings.ClientSideEvents.BeginCallback = "DetailGridBeginCallback";
+        //settings.ClientSideEvents.EndCallback = "DetailGridEndCallBack";
+        //settings.ClientSideEvents.BatchEditEndEditing = "DetailGridEndEditing";
+
+        settings.CustomJSProperties += (s, e) =>
+        {
+            e.Properties["cpKey"] = ViewData["Key"];
+            e.Properties["cpErrMsg"] = ViewData["ErrMsg"];
+            e.Properties["cpIsEdit"] = ViewData["IsEdit"];
+            if (enable.HasValue)
+            {
+                e.Properties["cpEditable"] = enable.Value;
+            }
+            else
+            {
+                e.Properties["cpEditable"] = false;
+            }
+        };
+
+        //隱藏grid footer 的savechange and cancel link text
+        settings.CommandButtonInitialize = (s, e) =>
+        {
+            if (e.ButtonType == ColumnCommandButtonType.Update || e.ButtonType == ColumnCommandButtonType.Cancel)
+            {
+                e.Visible = false;
+            }
+        };
+
+        settings.Settings.ShowFooter = true;
+        settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+        settings.AfterPerformCallback = (s, e) =>
+        {
+            if (enable.HasValue)
+            {
+                var gridview = s as MVCxGridView;
+                gridview.Enabled = enable.Value;
+            }
+        };
+    });
+}
+
+@grid.Bind(Model).GetHtml()
+
+

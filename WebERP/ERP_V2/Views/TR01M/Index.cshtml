@@ -1,0 +1,256 @@
+﻿
+@{
+    ViewBag.Title = Resources.Resource.TR01M;
+}
+<style>
+    .ajs-cancel {
+        color: red !important;
+    }
+
+    .FilterButton .dxb {
+        height: 20px !important;
+        padding: 0px !important;
+    }
+</style>
+<script>
+    function ApplyFilterlick(s, e) {
+        GridTR01A.PerformCallback();
+    }
+    function GridTR01ABeginCallback(s, e) {
+        GridTR01A.callbackCustomArgs["search"] = $.extend(GridTR01A.callbackCustomArgs["search"], MVCxClientUtils.GetSerializedEditorValuesInContainer("SearchForm", true));
+    }
+    function GridTR01ASelectionChanged(s, e) {
+        if (GridTR01A.GetSelectedKeysOnPage().length == 1) {
+            GridTR01B.UnselectAllRowsOnPage();
+            GridTR01B.PerformCallback();
+            GridTR01C.PerformCallback();
+        }
+    }
+
+    function ApplyClose(s, key) {
+        var contentText = "@Resources.Resource.AbnormalConfirm";
+        if (s.GetMainElement().getAttribute("AllReceive") == "True") {
+            contentText = "@Resources.Resource.ApplyConfirm";
+        }
+        //alertify.confirm('申請結案', contentText
+        //    , function () {
+        //        if (s.GetMainElement().getAttribute("AllReceive") == "true") {
+        //            SendApplyCloseAjax(s, key);
+        //        } else {
+        //            alertify.error('商品未全數抵達');
+        //        }
+        //    }
+        //    , function () {
+        //        SendApplyCloseAjax(s,key)
+        //    }).set('labels', { ok: '正常結案', cancel: '異常結案' });
+
+        alertify.confirm('@Resources.Resource.ApplyConfirm', contentText
+            , function () {
+                SendApplyCloseAjax(s, key);
+            }
+            , function () {
+
+            }).set('labels', { ok: '@Resources.Resource.ConfirmApply', cancel: '@Resources.Resource.Cancel' });
+    }
+
+    function SendApplyCloseAjax(s,key) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ApplyCloseAjax", "TR01M")',
+            data: { TR01A_ID: key },
+            success: function (Data) {
+                alertify.success('Sucess');
+                var editor1 = ASPxClientControl.GetControlCollection().GetByName("Status" + key);
+                editor1.SetText("@Resources.Resource.Applying");
+                editor1.GetMainElement().style.background = 'LightYellow';
+
+                s.SetEnabled(false);
+                s.GetMainElement().style.color = 'DimGray';
+                s.GetMainElement().style.background = 'White';
+
+                var editor2 = ASPxClientControl.GetControlCollection().GetByName("Close" + key);
+                if (editor2 != null) {
+                    editor2.GetMainElement().style.color = 'White';
+                    editor2.GetMainElement().style.background = '#0072C6';
+                    editor2.SetEnabled(true);
+                }
+
+                var editor3 = ASPxClientControl.GetControlCollection().GetByName("Reject" + key);
+                if (editor3 != null) {
+                    editor3.GetMainElement().style.color = 'White';
+                    editor3.GetMainElement().style.background = '#0072C6';
+                    editor3.SetEnabled(true);
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alertify.alert('Fail');
+            }
+        });
+
+    }
+
+    function CloseConfirm(s, key) {
+        alertify.confirm('@Resources.Resource.CaseClose', '@Resources.Resource.Press@Resources.Resource.Confirm'+'@Resources.Resource.ConfirmClose'
+            , function () {
+                 $.ajax({
+                      type: "POST",
+                      url: '@Url.Action("CloseConfirmAjax", "TR01M")',
+                      data: { TR01A_ID: key },
+                      success: function (Data) {
+                          var editor1 = ASPxClientControl.GetControlCollection().GetByName("Status" + key);
+                          editor1.SetText("@Resources.Resource.CaseClose");
+                          editor1.GetMainElement().style.background = 'LightGreen';
+
+                          s.SetEnabled(false);
+                          s.GetMainElement().style.color = 'DimGray';
+                          s.GetMainElement().style.background = 'White';
+
+                          var editor3 = ASPxClientControl.GetControlCollection().GetByName("Reject" + key);
+                          if (editor3 != null) {
+                              editor3.GetMainElement().style.color = 'DimGray';
+                              editor3.GetMainElement().style.background = 'White';
+                              editor3.SetEnabled(false);
+                          }
+                      },
+                      error: function (xhr, ajaxOptions, thrownError) {
+                          alertify.alert('Fail');
+                      }
+                  });
+            }
+            , function () {
+                alertify.error('Cancel');
+            }).set('labels', { ok: '@Resources.Resource.Confirm', cancel: '@Resources.Resource.Cancel' });
+    }
+    function RejectApply(s, key) {
+        alertify.confirm('@Resources.Resource.Reject', '@Resources.Resource.Press OK @Resources.Resource.Confirm@Resources.Resource.Reject'
+            , function () {
+                 $.ajax({
+                      type: "POST",
+                      url: '@Url.Action("RejectApplyAjax", "TR01M")',
+                      data: { TR01A_ID: key },
+                      success: function (Data) {
+                          var editor1 = ASPxClientControl.GetControlCollection().GetByName("Status" + key);
+                          editor1.SetText("@Resources.Resource.Reject");
+                          editor1.GetMainElement().style.background = 'LightPink';
+
+                          var editor2 = ASPxClientControl.GetControlCollection().GetByName("Close" + key);
+                          if (editor2 != null) {
+                              editor2.GetMainElement().style.color = 'DimGray';
+                              editor2.GetMainElement().style.background = 'White';
+                              editor2.SetEnabled(false);
+                          }
+
+                          var editor3 = ASPxClientControl.GetControlCollection().GetByName("Reject" + key);
+                          if (editor3 != null) {
+                              editor3.GetMainElement().style.color = 'DimGray';
+                              editor3.GetMainElement().style.background = 'White';
+                              editor3.SetEnabled(false);
+                          }
+
+                          var editor3 = ASPxClientControl.GetControlCollection().GetByName("ApplyClose" + key);
+                          if (editor3 != null) {
+                              editor3.GetMainElement().style.color = 'White';
+                              editor3.GetMainElement().style.background = '#0072C6';
+                              editor3.SetEnabled(true);
+                          }
+                       },
+                      error: function (xhr, ajaxOptions, thrownError) {
+                          alertify.error('Fail')
+                      }
+                  });
+            }
+            , function () {
+                alertify.error('Cancel')
+            }).set('labels', { ok: 'OK', cancel: 'Cancel' });
+    }
+    @*function SpecialClose(s, key) {
+        alertify.confirm('異常結案', '按 OK 確認結案'
+            , function () {
+                 $.ajax({
+                      type: "POST",
+                      url: '@Url.Action("ApplyCloseAjax", "TR01M")',
+                      data: { TR01A_ID: key },
+                      success: function (Data) {
+                          var btn = "ApplyClose" + key;
+                          var editor = ASPxClientControl.GetControlCollection().GetByName(btn);
+                          editor.SetText("申請中");
+                          editor.GetMainElement().style.background = 'LightYellow';
+                          editor.SetEnabled(false);
+                          s.SetText("申請中")
+                          s.SetEnabled(false);
+                          s.GetMainElement().style.background = 'LightYellow';
+                       },
+                      error: function (xhr, ajaxOptions, thrownError) {
+                          alertify.error('Fail')
+                      }
+                  });
+            }
+            , function () {
+                alertify.error('Cancel')
+            }).setHeader('<b style ="color:red"> 異常結案 </b> '); ;
+    }*@
+</script>
+
+<div style="margin-top:10px;">
+    @{
+        Html.RenderPartial("_SearchForm");
+    }
+</div>
+
+
+<div style="margin-top:10px;">
+    @{
+        Html.RenderAction("GridTR01A");
+    }
+</div>
+
+<script>
+    function GridTR01BBeginCallback(s, e) {
+        e.customArgs["TR01A_ID"] = GridTR01A.GetSelectedKeysOnPage()[0];
+    }
+    function GridTR01BSelectionChanged(s, e) {
+        if (GridTR01B.GetSelectedKeysOnPage().length == 1) {
+            GridTR01C.PerformCallback();
+        }
+    }
+</script>
+<div style="margin-top:10px;">
+    @{
+        Html.RenderAction("GridTR01B");
+    }
+</div>
+
+<script>
+    function GridTR01CAddNewClick(s, e) {
+        if (GridTR01B.GetSelectedKeysOnPage().length == 1 && GridTR01C.cpEditable) {
+            GridTR01C.AddNewRow();
+        }
+    }
+    function GridTR01CBeginCallback(s, e) {
+        e.customArgs["TR01B_ID"] = GridTR01B.GetSelectedKeysOnPage()[0];
+    }
+    function GridTR01CEndCallback(s, e) {
+        BtnDetailAddNew.SetEnabled(GridTR01C.cpEditable);
+        if (s.cpIsEdit) {
+            GridTR01B.PerformCallback();
+            GridTR01A.PerformCallback();
+        }
+    }
+
+    function GridTR01CCustomButtonClick(s, e) {
+        if (e.buttonID == "BtnCmdDelete") {
+            alertify.confirm('Delete', 'Press OK to confirm delete'
+                , function () {
+                    GridTR01C.DeleteRow(e.visibleIndex);
+                }
+                , function () {
+                    alertify.error('Cancel')
+                });
+        }
+    }
+</script>
+<div style="margin-top:10px;">
+    @{
+        Html.RenderAction("GridTR01C");
+    }
+</div>

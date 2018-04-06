@@ -1,0 +1,108 @@
+﻿<script>
+    function ApplyFilterlick(s, e) {
+        SearchGrid.PerformCallback();
+    }
+    function SearchGridBegCall(s, e) {
+        e.customArgs = $.extend(e.customArgs, GetEditorValues());  //get SearchForm data
+    }
+    function GetEditorValues() {
+        return MVCxClientUtils.GetSerializedEditorValuesInContainer("SearchForm", true);
+    }
+</script>
+<div>
+    <form id="SearchForm" style="margin-right:2px">
+        @Html.DevExpress().FormLayout(
+         settings =>
+         {
+             settings.Name = "Search";
+             settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+             settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+             settings.Styles.Style.Paddings.Padding = 0;
+             settings.ControlStyle.Border.BorderWidth = 1;
+             settings.ControlStyle.Border.BorderColor = System.Drawing.ColorTranslator.FromHtml("#c0c0c0");
+             settings.ControlStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#f9f9f9");
+             //settings.ControlStyle.BackColor = System.Drawing.Color.Honeydew;
+
+             settings.ColCount = 3;
+             settings.Items.Add(i =>
+             {
+                 i.Name = "S_PUR_NO";
+                 i.Caption = Resources.Resource.TR01A_PUR_NO;
+                 i.NestedExtension().TextBox(s =>
+                 {
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 });
+             });
+             settings.Items.Add(i =>
+             {
+                 i.Name = "S_BA01A_ID";
+                 i.Caption = Resources.Resource.TR01A_BA01A_ID;
+                 i.NestedExtension().ComboBox(s =>
+                 {
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                     s.Width = Unit.Percentage(100);
+                     s.Properties.ValueField = "BA01A_ID";
+                     s.Properties.TextField = "INC_NM";
+                     s.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+                     s.Properties.DataSource = ERP_V2.CacheCommonDataModule.GetBA01A();
+                 });
+             });
+             if (ERP_V2.UserInfo.Permission == "1")
+             {
+                 settings.Items.Add(i =>
+                 {
+                     i.Name = "S_CFN_YN";
+                     i.Caption = "結案狀態";
+                     i.NestedExtension().RadioButtonList(s =>
+                     {
+                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                         s.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                         s.Properties.Items.Add(new ListEditItem() { Text = "未結案", Value = "N" });
+                         s.Properties.Items.Add(new ListEditItem() { Text = "已結案", Value = "Y" });
+                     });
+                 });
+             }
+             else
+             {
+                 settings.Items.AddEmptyItem();
+             }
+             settings.Items.Add(i =>
+             {
+                 i.Name = "DTBeg";
+                 i.Caption = Resources.Resource.DT_From;
+                 i.NestedExtension().DateEdit(s =>
+                 {
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 });
+             });
+             settings.Items.Add(i =>
+             {
+                 i.Name = "DTEnd";
+                 i.Caption = Resources.Resource.DT_To;
+                 i.NestedExtension().DateEdit(s =>
+                 {
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 });
+             });
+         }).GetHtml()
+    </form>
+    <div style="height:32px">
+        <div style="margin-top:5px;float:right;">
+            @Html.DevExpress().Button(
+        settings =>
+        {
+            settings.Name = "ApplyFilter";
+            settings.Text = "Filter";
+            settings.Width = 120;
+            settings.ClientSideEvents.Click = "ApplyFilterlick";
+            settings.Images.Image.IconID = "filter_filter_16x16office2013";
+        }).GetHtml()
+        </div>
+    </div>
+</div>
+
+<div style="margin-top:10px">
+    @{
+        Html.RenderAction("SearchGrid");
+    }
+</div>

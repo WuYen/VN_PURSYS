@@ -1,0 +1,276 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Scripts/Shares/Product.js" GRP_ID=''></script>
+<script>
+    var keyOnPage = "";
+    var ReloadMaster = false;//不是DetailGrid的主動CallBack都是True
+    var formSave = false; //DetailGridBeginCallback要先去抓主表單資料，EndCallBack重新標註刪除的detail
+    var ShowAlert = false;//DetailGridEndCallBack控制是否要顯示alert，Save & Delete時候為True
+
+    //==================SearchClick=======================
+    function SearchClick(s, e) {
+        SearchGrid.PerformCallback();
+    }
+    function SearchGridEndCall(s, e) {
+        PopSearch.ShowAtElementByID("BtnSearch");
+    }
+
+    function SearchGridSelect(s, e) {
+        keyOnPage = "";
+        if (SearchGrid.GetSelectedKeysOnPage().length > 0) {
+            keyOnPage = SearchGrid.GetSelectedKeysOnPage()[0];
+        }
+        PopSearch.Hide();
+        ReloadMaster = true;
+        DetailGrid.callbackCustomArgs["Reload_TF"] = "T";
+        DetailGrid.PerformCallback();
+    }
+    //==================AddNew========================
+    function AddNewClick(s, e) {
+        keyOnPage = "0";
+        ReloadMaster = true;
+        DetailGrid.callbackCustomArgs["Reload_TF"] = "T";
+        DetailGrid.PerformCallback();
+    }
+    //==================ToolBar=======================
+    function ToolBarClick(s, e) {
+        ReloadMaster = true;
+        if (e.item.name == "Save") {
+            formSave = true;
+            ShowAlert = true;
+
+            $.validator.unobtrusive.parse("#MasterForm");
+
+            if ($("#MasterForm").valid()) {
+                if (DetailGrid.batchEditApi.HasChanges()) {
+                    DetailGrid.UpdateEdit();
+                }
+                else {
+                    DetailGrid.PerformCallback();
+                }
+            }
+        }
+        else {
+            if (e.item.name == "Cancel") {
+                DetailGrid.CancelEdit();
+                DetailGrid.callbackCustomArgs["Reload_TF"] = "T";
+            }
+            else if (e.item.name == "Delete") {
+                ShowAlert = true;
+                DetailGrid.callbackCustomArgs["Deletekey"] = keyOnPage;
+            }
+            DetailGrid.PerformCallback();
+        }
+    }
+
+    //==================DetailGrid=======================
+    function DetailGridInit(s, e) {
+        SetHideColumn();
+    }
+    var argTemp;
+    function DetailGridBeginCallback(s, e) {
+        DetailGrid.callbackCustomArgs["key"] = keyOnPage;
+        if (formSave) {
+            e.customArgs = $.extend(e.customArgs, MVCxClientUtils.GetSerializedEditorValuesInContainer("MasterForm", true));
+        }
+        //alert(DetailGrid.callbackCustomArgs["REM_MM"]);
+    }
+    function DetailGridEndCallBack(s, e) {
+        SetHideColumn();
+        if (formSave) {
+            formSave = false;
+            keyOnPage = s.cpKey;
+            if (s.cpDeleteIDs != undefined) {
+                var key = s.cpDeleteIDs.split(",");//把刪除的row重新標記刪除
+                for (var i = 0; i < key.length - 1; i++) {
+                    DetailGrid.DeleteRowByKey(key[i].toString());
+                }
+            }
+        }
+        if (ReloadMaster) {
+            ReloadMaster = false;
+            $("#MasterFormDiv").html(s.cpMasterForm);//reload content of master form
+        }
+        if (ShowAlert) { //Save delete回來要顯示alert
+            ShowAlert = false;
+            if (s.cpErrMsg == null || s.cpErrMsg.length < 1) {
+                ShowSuccess();
+            }
+            else {
+                ShowError(s.cpErrMsg);//operation for save fail
+            }
+        }
+    }
+    function BtnDetailAddNewClick(s, e) {
+        DetailGrid.AddNewRow();
+        //if (isConfirm) {
+        //    alertify.alert('Can not Add new detail record');
+        //}
+        //else {
+        //    DetailGrid.AddNewRow();
+        //}
+    }
+
+    function SetHideColumn() {
+        $('td.HideColumn').css('display', 'none');
+    }
+
+
+</script>
+
+<div style="margin-top:5px;margin-left:10px">
+    <div style="display:inline-block">
+        @Html.DevExpress().Button(s =>
+        {
+            s.Name = "BtnTitle";
+            s.Text = "庫存管理 廠商進貨";
+            s.Height = 35;
+            s.Styles.Style.Font.Size = FontUnit.Medium;
+            s.Styles.Style.Font.Bold = true;
+            s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+            s.ControlStyle.BorderLeft.BorderStyle = BorderStyle.Solid;
+            s.ControlStyle.BorderLeft.BorderColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+            s.ControlStyle.BorderLeft.BorderWidth = 4;
+            s.ClientEnabled = false;
+            s.Styles.Style.DisabledStyle.ForeColor = System.Drawing.Color.Black;
+        }).GetHtml()
+    </div>
+    <div style="display:inline-block">
+        @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "BtnSearch";
+            s.Text = "Search";
+            s.Height = 35;
+            s.Images.Image.Url = "~/Content/Icon/Search.png";
+            s.ClientSideEvents.Click = "SearchClick";
+        }).GetHtml()
+
+    </div>
+    <div style="display:inline-block">
+        @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "BtnAddNew";
+            s.Text = "Add";
+            s.Height = 35;
+            s.Images.Image.IconID = "actions_additem_16x16";
+            s.ClientSideEvents.Click = "AddNewClick";
+        }).GetHtml()
+    </div>
+    <div style="display:inline-block">
+        @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "BtnReload";
+            s.Text = "";
+            s.Height = 35;
+            s.Images.Image.IconID = "actions_refresh2_16x16";
+            s.ClientSideEvents.Click = "function(){location.reload();}";
+        }).GetHtml()
+    </div>
+</div>
+
+<div style="margin-top:15px;margin-left:10px; margin-right:10px">
+    @Html.DevExpress().Menu(settings =>
+{
+    settings.Name = "ToolBar";
+    settings.Width = Unit.Percentage(100);
+    settings.ItemAutoWidth = false;
+    settings.EnableAnimation = true;
+    settings.Styles.Style.BackColor = System.Drawing.Color.White;
+    //settings.AutoSeparators = AutoSeparatorMode.All;
+    //settings.ControlStyle.SeparatorColor = System.Drawing.Color.Black;
+    settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+    settings.ControlStyle.Border.BorderColor = System.Drawing.Color.Gray;
+    settings.ControlStyle.Border.BorderWidth = 1;
+    settings.Styles.Item.BackColor = System.Drawing.Color.White;
+    settings.Styles.Item.HoverStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+    settings.Styles.Item.HoverStyle.ForeColor = System.Drawing.Color.White;
+    settings.ControlStyle.Paddings.PaddingTop = 5;
+    settings.ControlStyle.Paddings.PaddingBottom = 5;
+    settings.ClientSideEvents.ItemClick = "ToolBarClick";
+    settings.Items.Add(i =>
+    {
+        i.Text = "Save";
+        i.Name = "Save";
+        //i.Image.Url = "~/Content/Icon/save_grey_18x18.png";
+        i.Image.IconID = "actions_save_16x16devav";
+    });
+    settings.Items.Add(i =>
+    {
+        i.Text = "Cancel";
+        i.Name = "Cancel";
+        //i.Image.Url = "~/Content/Icon/cancel_grey_18x18.png";
+        i.Image.IconID = "actions_cancel_16x16";
+    });
+    settings.Items.Add(i =>
+    {
+        i.Text = "Delete";
+        i.Name = "Delete";
+        //i.Image.Url = "~/Content/Icon/delete_grey_18x18.png";
+        i.Image.IconID = "actions_deletelist_16x16";
+    });
+}).GetHtml()
+</div>
+
+@Html.DevExpress().PopupControl(
+settings =>
+{
+    settings.Name = "PopSearch";
+    settings.Width = 720;
+
+    //settings.PopupElementID = "BtnSearch";
+    settings.PopupVerticalAlign = PopupVerticalAlign.BottomSides;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.LeftSides;
+
+
+    settings.AllowDragging = true;
+    settings.ShowOnPageLoad = false;
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.ShowHeader = true;
+    settings.HeaderText = "Search";
+    settings.Styles.Content.Paddings.PaddingTop = 0;
+    settings.Styles.Content.Paddings.PaddingBottom = 0;
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("_SearchPanel");
+    });
+
+    settings.ShowFooter = true;
+    settings.Styles.Footer.Paddings.PaddingRight = 12;
+    settings.SetFooterContentTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div style=\"padding: 0px 0px 6px 0px; float: right\">");
+        Html.DevExpress().Button(
+        btnSettings =>
+        {
+            btnSettings.Name = "BtnSelectConfirm";
+            btnSettings.Text = Resources.Resource.BtnConfirm;
+            btnSettings.Width = 120;
+            btnSettings.Images.Image.IconID = "actions_apply_16x16office2013";
+            btnSettings.ClientSideEvents.Click = "SearchGridSelect";
+        }).GetHtml();
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+
+
+<form id="MasterForm" style="margin:10px">
+    <div id="MasterFormDiv">
+        @{
+            Html.RenderPartial("_MasterForm", new ERP_V2.ViewModels.FB01.FB01AViewModel());
+        }
+    </div>
+</form>
+<div style="margin-left:10px;margin-right:10px">
+    @{
+        Html.RenderPartial("_DetailGrid", new List<ERP_V2.ViewModels.FB01.FB01BViewModel>());
+    }
+</div>
+@{
+    Html.RenderAction("ProductPopup", "Utility", new { popupElementID = "BtnProductSelect" });
+}

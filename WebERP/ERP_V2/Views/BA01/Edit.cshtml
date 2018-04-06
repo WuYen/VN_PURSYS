@@ -1,0 +1,134 @@
+﻿@model ERP_V2.ViewModels.BA01.Edit
+
+@{
+    ViewBag.Title = "Edit";
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+<script>
+    var formSave = false;
+    var currentKey = '@Model.MasterKey';
+
+    function SaveClick(s, e) {
+        $.validator.unobtrusive.parse("#MasterForm");
+        var f = $("#MasterForm");
+        if (f.valid()) {
+            formSave = true;
+            if (DetailGrid.batchEditApi.HasChanges()){
+                DetailGrid.UpdateEdit();
+            }
+            else{
+                DetailGrid.PerformCallback();
+            }
+        }
+    }
+
+    function CancelClick(s, e) {
+        DetailGrid.CancelEdit();
+        FormSubmit('@Url.Action("Index", "BA01")')
+    }
+
+    function ReloadClick(s, e) {
+         DetailGrid.CancelEdit();
+        FormSubmit('@Url.Action("Edit", "BA01")')
+    }
+
+    //=======================DetailGrid========================
+    function DetailGridInit(s, e) {
+        SetHideColumn();
+    }
+
+    function DetailGridBeginCallback(s, e) {
+        DetailGrid.callbackCustomArgs["key"] = currentKey;
+        if (formSave) {
+            DetailGrid.callbackCustomArgs["master"] = $.extend(DetailGrid.callbackCustomArgs["master"], MVCxClientUtils.GetSerializedEditorValuesInContainer("MasterForm", true));
+        }
+    }
+
+    function DetailGridEndCallBack(s, e) {
+        SetHideColumn();
+        if (formSave) {
+            ShowError(s.cpEditError);//operation for save fail
+            formSave = false;
+            $("#MasterFormDiv").html(s.cpMasterForm);//reload content of master form
+            if (s.cpDeleteIDs != undefined) {
+                var key = s.cpDeleteIDs.split(",");//把刪除的row重新標記刪除
+                for (var i = 0; i < key.length - 1; i++) {
+                    DetailGrid.DeleteRowByKey(key[i].toString());
+                }
+            }
+        }
+    }
+
+    function BtnDetailAddNewClick(s, e) {
+        DetailGrid.AddNewRow();
+    }
+
+    function DetailGridBatchEndEditing(s, e) {
+        SetHideColumn();
+    }
+
+    function GetEditorValues() {
+        return MVCxClientUtils.GetSerializedEditorValuesInContainer("MasterForm", true);
+    }
+
+    function SetHideColumn() {
+        $('td.HideColumn').css('display', 'none');
+    }
+
+    function FormSubmit(url) {
+        var form = $('<form></form>');
+        form.attr("method", "post");
+        form.attr("action", url);
+        var field = $('<input></input>');
+        field.attr("type", "hidden");
+        field.attr("name", "key");
+        field.attr("value", currentKey);
+        form.append(field);
+        $(document.body).append(form);
+        form.submit();
+    }
+</script>
+
+<div style="margin:10px">
+    @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "BtnSave";
+            s.Text = "Save";
+            s.Images.Image.Url = "~/Content/Icon/save_grey_18x18.png";
+            s.ClientSideEvents.Click = "SaveClick";
+        }).GetHtml()
+    @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "BtnCancel";
+            s.Text = "Cancel";
+            s.Images.Image.Url = "~/Content/Icon/cancel_grey_18x18.png";
+            s.ClientSideEvents.Click = "CancelClick";
+        }).GetHtml()
+    @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "BtnReload";
+            s.Text = "Reload";
+            s.Images.Image.Url = "~/Content/Icon/autorenew_grey_18x18.png";
+            s.ClientSideEvents.Click = "ReloadClick";
+        }).GetHtml()
+</div>
+
+<form id="MasterForm" style="margin:10px">
+    <div id="MasterFormDiv">
+        @{
+            Html.RenderPartial("_MasterForm", Model.Master);
+        }
+    </div>
+</form>
+
+<div style="margin:10px;padding-right:26px">
+    @using (Html.BeginForm())
+    {
+        Html.RenderPartial("_DetailGrid", Model.DetailList);
+    }
+</div>

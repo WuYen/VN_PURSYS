@@ -1,0 +1,89 @@
+﻿@model System.Collections.IEnumerable
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "SearchGrid";
+        settings.CallbackRouteValues = new { Controller = "TR01V3", Action = "SearchGrid" };
+        settings.ClientSideEvents.BeginCallback= "SearchGridBegCall";
+        settings.ClientSideEvents.EndCallback = "SearchGridEndCall";
+        settings.Width = Unit.Percentage(100);
+
+
+        settings.ClientSideEvents.RowDblClick = "SearchGridSelect";
+        settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e8e8e8");
+        settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+        settings.CommandColumn.Caption = " ";
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        settings.CommandColumn.Width = 50;
+
+        settings.KeyFieldName = "TR01A_ID";
+        GridViewHelper.SetColumn(settings, "PUR_NO", Resources.Resource.TR01A_PUR_NO);
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "DtPUR_DT";
+                column.Caption = Resources.Resource.TR01A_PUR_DT;
+                column.Width = 110;
+                column.EditorProperties().DateEdit(p =>
+                {
+                    p.DisplayFormatString = "yyyy/MM/dd";
+                });
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "DtEXP_DT";
+                column.Caption = Resources.Resource.TR01A_EXP_DT;
+                column.Width = 110;
+                column.EditorProperties().DateEdit(p =>
+                {
+                    p.DisplayFormatString = "yyyy/MM/dd";
+                });
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "BA01A_ID";
+                column.Caption = Resources.Resource.TR01A_BA01A_ID;
+                column.EditorProperties().ComboBox(p =>
+                {
+                    p.ValueField = "BA01A_ID";
+                    p.TextField = "INC_NM";
+                    p.ValueType = typeof(int);
+                    p.DataSource = ERP_V2.CacheCommonDataModule.GetBA01A();
+                });
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "BA03A_ID";
+                column.Caption = Resources.Resource.BA01A_BA03A;
+                column.EditorProperties().ComboBox(p =>
+                {
+                    p.ValueField = "BA03A_ID";
+                    p.TextField = "CUR_NM";
+                    p.ValueType = typeof(int);
+                    p.DataSource = ERP_V2.CacheCommonDataModule.GetBA03A();
+                });
+            });
+
+        GridViewHelper.SetColumn(settings, "REM_MM", Resources.Resource.REM_MM);
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.VerticalScrollableHeight = 300;
+        settings.Settings.ShowFooter = false;
+        settings.SettingsPager.AlwaysShowPager = true;
+
+        settings.Settings.ShowTitlePanel = false;
+        settings.SetTitlePanelTemplateContent(
+            c =>
+            {
+                ViewContext.Writer.Write("<div style='float:left'>");
+                ViewContext.Writer.Write("<p>Result</p>");
+                ViewContext.Writer.Write("</div>");
+            });
+    }).Bind(Model).GetHtml()

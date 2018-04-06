@@ -1,0 +1,111 @@
+@model System.Collections.IEnumerable
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        GridViewHelper.GetBasicSetting(settings, "MasterGrid", "TR01", "MasterGrid");
+        GridViewHelper.SetSearchPanel(settings, true);
+        GridViewHelper.SetCommandButton(this.Html, settings);
+        GridViewHelper.SetCommandColumn(settings, true);
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "TR01", Action = "MasterDelete" };
+
+        settings.KeyFieldName = "TR01A_ID";
+        settings.Columns.Add(column =>
+        {
+            column.Width = 80;
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.SetDataItemTemplateContent(c =>
+            {
+                var value = c.Grid.GetRowValues(c.VisibleIndex, c.Column.FieldName);
+                Html.DevExpress().Button(b =>
+                {
+                    b.Name = "BtnPrint" + c.KeyValue;
+                    b.Text = "Print";
+                    //b.ControlStyle.Font
+                    b.ClientSideEvents.Click = string.Format(@"function(s, e) {{ Print('{0}'); }}", c.KeyValue);
+                    //b.EnableTheming = false;
+                    //b.ControlStyle.CssClass = "btn btn-custom";
+                    b.Images.Image.Url = Url.Content("~/Content/Icon/print_grey_18x18.png");
+                    b.Styles.Style.Paddings.Padding = 0;
+                    //b.Width = 113;
+                    b.ControlStyle.Wrap = DefaultBoolean.True;
+                }).Render();
+            });
+        });
+        GridViewHelper.SetColumn(settings, "PUR_NO", Resources.Resource.TR01A_PUR_NO);
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "DtPUR_DT";
+                column.Caption = Resources.Resource.TR01A_PUR_DT;
+                column.EditorProperties().DateEdit(p =>
+                {
+                    p.DisplayFormatString = "yyyy/MM/dd";
+                });
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "DtEXP_DT";
+                column.Caption = Resources.Resource.TR01A_EXP_DT;
+                column.EditorProperties().DateEdit(p =>
+                {
+                    p.DisplayFormatString = "yyyy/MM/dd";
+                });
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "BA01A_ID";
+                column.Caption = Resources.Resource.TR01A_BA01A_ID;
+                column.EditorProperties().ComboBox(p =>
+                {
+                    p.ValueField = "BA01A_ID";
+                    p.TextField = "INC_NM";
+                    p.ValueType = typeof(int);
+                    p.DataSource = ERP_V2.CacheCommonDataModule.GetBA01A();
+                });
+            });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "BA03A_ID";
+                column.Caption = Resources.Resource.BA01A_BA03A;
+                column.EditorProperties().ComboBox(p =>
+                {
+                    p.ValueField = "BA03A_ID";
+                    p.TextField = "CUR_NM";
+                    p.ValueType = typeof(int);
+                    p.DataSource = ERP_V2.CacheCommonDataModule.GetBA03A();
+                });
+            });
+        //settings.Columns.Add("TOT_MY");
+        //GridViewHelper.SetColumn(settings, "TOT_MY", Resources.Resource.REM_MM);
+        GridViewHelper.SetColumn(settings, "REM_MM", Resources.Resource.REM_MM);
+
+        settings.CustomJSProperties += (s, e) =>
+        {
+            e.Properties["cpIsSuccess"] = ViewData["IsSuccess"];
+            e.Properties["cpEditError"] = ViewData["EditError"];
+        };
+
+        settings.PreRender += (s, e) =>
+        {
+            MVCxGridView gridView = (MVCxGridView)s;
+            if (ViewData["selectedItem"] != null)
+            {
+                var rowIndex = gridView.FindVisibleIndexByKeyValue(ViewData["selectedItem"]);
+                if (rowIndex > -1)
+                {
+                    gridView.FocusedRowIndex = rowIndex;
+                    int pageIndex = 0;
+                    pageIndex = rowIndex / gridView.SettingsPager.PageSize;
+                    gridView.PageIndex = pageIndex;
+                }
+            }
+        };
+
+        settings.ClientSideEvents.EndCallback = "MasterGridEndCallback";
+        settings.ClientSideEvents.CustomButtonClick = "MasterGridCustomButtonClick";
+
+    }).Bind(Model).GetHtml()

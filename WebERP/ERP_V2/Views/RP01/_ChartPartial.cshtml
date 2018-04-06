@@ -1,0 +1,81 @@
+﻿@model System.Data.DataTable
+
+
+@Html.DevExpress().Chart(settings =>
+{
+    settings.Name = "chart";
+    settings.CallbackRouteValues = new { Controller = "RP01", Action = "ChartPartial" };
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 700;
+    settings.SaveStateOnCallbacks = false;
+    settings.Legends.Default(l =>
+    {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.Top;
+        l.Direction = LegendDirection.LeftToRight;
+        //l.MaxHorizontalPercentage = 50;
+        l.Border.Visibility = DefaultBoolean.False;
+    });
+
+
+    Series series = new Series("Product", DevExpress.XtraCharts.ViewType.Pie);
+    //series.Label.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+    ((PieSeriesLabel)series.Label).ResolveOverlappingMode = ResolveOverlappingMode.Default;
+    //((PieSeriesLabel)series.Label).ResolveOverlappingMinIndent = 15;
+    ((PieSeriesLabel)series.Label).LineVisibility = DefaultBoolean.False;
+
+    if (Model != null)
+    {
+        //foreach (System.Data.DataRow row in Model.Rows)
+        //{
+        //    var item = ERP_V2.CacheCommonDataModule.GetBA02A().FirstOrDefault(x => x.BA02A_ID == Convert.ToInt16(row["BA02A_ID"].ToString()));
+        //    if (item != null)
+        //    {
+        //        series.Points.Add(new SeriesPoint(item.ITM_NM, row["TOT_PR"]));
+        //    }
+        //}
+        var otherTotalValue = new decimal();
+        for (int i = 0; i < Model.Rows.Count; i++)
+        {
+            if (i < 7)
+            {
+                var item = ERP_V2.CacheCommonDataModule.GetBA02A().FirstOrDefault(x => x.BA02A_ID == Convert.ToInt16(Model.Rows[i]["BA02A_ID"].ToString()));
+                if (item != null)
+                {
+                    series.Points.Add(new SeriesPoint(item.ITM_NM, Model.Rows[i]["TOT_PR"]));
+                }
+            }
+            else
+            {
+                otherTotalValue += Convert.ToDecimal(Model.Rows[i]["TOT_PR"].ToString());
+            }
+        }
+        if (otherTotalValue > 1)
+        {
+            series.Points.Add(new SeriesPoint("其他", otherTotalValue));
+        }
+
+        var seriesView = (series.View) as PieSeriesView;
+        seriesView.SeriesLabel(
+            labelAction =>
+            {
+                //labelAction.Position = PieSeriesLabelPosition.Outside;
+                labelAction.Position = PieSeriesLabelPosition.TwoColumns;
+                labelAction.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+                labelAction.TextPattern = "{A}: {VP:P2}";//{VP:P0}
+                labelAction.TextColor = System.Drawing.Color.Black;
+                labelAction.LineVisibility = DefaultBoolean.True;
+                labelAction.Border.Visibility = DefaultBoolean.False;
+            });
+        settings.Series.Add(series);
+
+        settings.Titles.Add(new ChartTitle()
+        {
+            Text = "採購占比",
+            Font = new System.Drawing.Font("Arial Unicode MS", 16)
+        });
+    }
+
+
+}).Bind(Model).GetHtml()

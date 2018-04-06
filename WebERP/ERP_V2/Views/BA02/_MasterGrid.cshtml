@@ -1,0 +1,114 @@
+﻿@model System.Collections.IEnumerable
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "MasterGrid";
+        settings.CallbackRouteValues = new { Controller = "BA02", Action = "MasterGrid" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "BA02", Action = "MasterDelete" };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditForm;
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 770;
+
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsPager.PageSize = 50;
+        settings.SettingsPager.NumericButtonCount = 8;//page bar show page number count
+
+        settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.BorderTop.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+        settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+
+        settings.KeyFieldName = "BA02A_ID";
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "TYP_ID";
+            column.Caption = Resources.Resource.TYP_ID;
+            column.EditorProperties().ComboBox(cbo =>
+            {
+                cbo.ValueField = "value";
+                cbo.TextField = "key";
+                cbo.DataSource = ERP_V2.CacheCommonDataModule.GetTypeDic();
+            });
+        });
+        //GridViewHelper.SetColumn(settings, "ITM_NO", Resources.Resource.BA02A_ITM_NO);
+        GridViewHelper.SetColumn(settings, "ITM_NM", Resources.Resource.BA02A_ITM_NM);
+        //GridViewHelper.SetColumn(settings, "PIC_NO", "圖號");
+        GridViewHelper.SetColumn(settings, "ITM_SP", Resources.Resource.BA02A_ITM_SP);
+        GridViewHelper.SetColumn(settings, "UNT_NM", Resources.Resource.BA02A_UNT_NM);
+        GridViewHelper.SetColumn(settings, "REM_MM", Resources.Resource.REM_MM);
+
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsSearchPanel.ShowApplyButton = true;
+        settings.SettingsSearchPanel.AllowTextInputTimer = false;
+        settings.SettingsCommandButton.SearchPanelApplyButton.Image.Url = "~/Content/Icon/search_grey_18x18.png";
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 130;
+        settings.CommandColumn.CellStyle.Paddings.Padding = 0;
+
+        settings.CommandColumn.Caption = "";
+        settings.CommandColumn.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+        settings.SettingsCommandButton.RenderMode = GridCommandButtonRenderMode.Button;
+
+        settings.CommandColumn.SetHeaderCaptionTemplateContent(c =>
+        {
+            Html.DevExpress().Button(button =>
+            {
+                button.Name = "BtnCmdNew";
+                button.Text = "New";
+                button.Styles.Style.Paddings.PaddingTop = 0;
+                button.Styles.Style.Paddings.PaddingBottom = 0;
+                button.Images.Image.Url = "~/Content/Icon/add_circle_outline_grey_18x18.png";
+                button.ClientSideEvents.Click = "AddNewClick";
+            }).GetHtml();
+        });
+
+        GridViewCommandColumnCustomButton btnEdit = new GridViewCommandColumnCustomButton();
+        btnEdit.ID = "BtnCmdEdit";
+        btnEdit.Text = "Edit";
+        btnEdit.Image.Url = "~/Content/Icon/edit_grey_18x18.png";
+        btnEdit.Styles.Style.Paddings.Padding = 0;
+        settings.CommandColumn.CustomButtons.Add(btnEdit);
+        settings.CommandColumn.ButtonRenderMode = GridCommandButtonRenderMode.Button;
+
+        GridViewCommandColumnCustomButton btnDelete = new GridViewCommandColumnCustomButton();
+        btnDelete.ID = "BtnCmdDelete";
+        btnDelete.Text = "Del";
+        btnDelete.Image.Url = "~/Content/Icon/delete_grey_18x18.png";
+        btnDelete.Styles.Style.Paddings.Padding = 0;
+        settings.CommandColumn.CustomButtons.Add(btnDelete);
+        settings.CommandColumn.ButtonRenderMode = GridCommandButtonRenderMode.Button;
+
+        settings.CustomJSProperties += (s, e) =>
+        {
+            e.Properties["cpEditError"] = ViewData["EditError"];
+        };
+
+        settings.PreRender += (s, e) =>
+        {
+            MVCxGridView gridView = (MVCxGridView)s;
+            if (ViewData["selectedItem"] != null)
+            {
+                var rowIndex = gridView.FindVisibleIndexByKeyValue(ViewData["selectedItem"]);
+                if (rowIndex > -1)
+                {
+                    gridView.FocusedRowIndex = rowIndex;
+                    int pageIndex = 0;
+                    pageIndex = rowIndex / gridView.SettingsPager.PageSize;
+                    gridView.PageIndex = pageIndex;
+                }
+            }
+        };
+        settings.ClientSideEvents.BeginCallback = "MasterGridBeginCallback";
+        settings.ClientSideEvents.EndCallback = "MasterGridEndCallback";
+        settings.ClientSideEvents.CustomButtonClick = "MasterGridCustomButtonClick";
+
+    }).Bind(Model).GetHtml()

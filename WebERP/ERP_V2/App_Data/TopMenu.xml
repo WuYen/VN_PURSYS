@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<items>
+  <item Text="基本資料" NavigateUrl="@" />
+  <item Text="庫存管理" NavigateUrl="#"  />
+</items>

@@ -1,0 +1,57 @@
+﻿<div class="leftPanel">
+    @* DXCOMMENT: Configure the left panel's menu *@
+    @Html.DevExpress().NavBar(settings =>
+{
+    settings.Name = "LeftNavBar";
+    settings.AutoCollapse = true;
+    settings.EnableAnimation = true;
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+    ERP_V2.Models.PURSysEntities entity = new ERP_V2.Models.PURSysEntities();
+    var list = entity.FN01.ToList();
+    foreach (var item in list.Where(x => x.PAR_ID == 0).ToList())
+    {
+        string text = "";
+        switch (ERP_V2.UserInfo.LanguageType)
+        {
+            case Language.Type.VN:
+                text = item.NAM_VN;
+                break;
+            case Language.Type.CN:
+                text = item.NAM_CN;
+                break;
+            case Language.Type.TW:
+                text = item.NAM_TW;
+                break;
+            case Language.Type.EN:
+                text = item.NAM_US;
+                break;
+        }
+        var group = settings.Groups.Add(text);
+        foreach (var subItem in list.Where(x => x.PAR_ID == item.FN01_ID).ToList())
+        {
+            switch (ERP_V2.UserInfo.LanguageType)
+            {
+                case Language.Type.VN:
+                    text = subItem.NAM_VN;
+                    break;
+                case Language.Type.CN:
+                    text = subItem.NAM_CN;
+                    break;
+                case Language.Type.TW:
+                    text = subItem.NAM_TW;
+                    break;
+                case Language.Type.EN:
+                    text = subItem.NAM_US;
+                    break;
+            }
+            group.Items.Add(text, text, null, subItem.ACT_RF);
+            //group.Items.Add("Text", "Name", "Image","Navigate");
+        }
+    }
+}).GetHtml()
+
+</div>
+
+@*}).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/SideMenu.xml"), "/menu/*").GetHtml()*@

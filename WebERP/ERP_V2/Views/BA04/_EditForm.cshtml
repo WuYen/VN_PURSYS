@@ -1,0 +1,100 @@
+﻿@model ERP_V2.ViewModels.BA04.BA04AModel
+
+@Html.HiddenFor(x=>x.BA04A_ID)
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "EditFormLayout";
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+    settings.ColCount = 3;
+    settings.UseDefaultPaddings = false;
+    settings.Items.Add(m => m.TYP_VN, i =>
+    {
+        i.Name = "TYP_VN";
+        i.FieldName = "TYP_VN";
+        i.Caption = Resources.Resource.BA04A_TYP + "(Việt Ngữ)";
+        i.NestedExtension().TextBox(s =>
+        {
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        });
+    });
+    settings.Items.Add(m => m.TYP_CN, i =>
+    {
+        i.Name = "TYP_CN";
+        i.FieldName = "TYP_CN";
+        i.Caption = Resources.Resource.BA04A_TYP + "(中文)";
+        i.NestedExtension().TextBox(s =>
+        {
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        });
+    });
+    //settings.Items.Add(m => m.TYP_TW, i =>
+    //{
+    //    i.Name = "TYP_TW";
+    //    i.FieldName = "TYP_TW";
+    //    i.Caption = Resources.Resource.BA04A_TYP + "(繁中)";
+    //    i.NestedExtension().TextBox(s =>
+    //    {
+    //        s.ShowModelErrors = true;
+    //        s.Width = Unit.Percentage(100);
+    //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //    });
+    //});
+    settings.Items.Add(m => m.TYP_US, i =>
+    {
+        i.Name = "TYP_US";
+        i.FieldName = "TYP_US";
+        i.Caption = Resources.Resource.BA04A_TYP + "(English)";
+        i.NestedExtension().TextBox(s =>
+        {
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        });
+    });
+
+    settings.Items.Add(m => m.SEQ_NO, i =>
+    {
+        i.Name = "SEQ_NO";
+        i.FieldName = "SEQ_NO";
+        i.Caption = Resources.Resource.SEQ_NO;
+        i.NestedExtension().SpinEdit(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+
+    settings.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.Width = Unit.Percentage(100);
+        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+    }).SetNestedContent(() =>
+    {
+        ViewContext.Writer.Write("<div style='float:right;padding-right: 26px;'>");
+        Html.DevExpress().Button(
+            btnSettings =>
+            {
+                btnSettings.Name = "btnUpdate";
+                btnSettings.Text = "Update";
+                btnSettings.ClientSideEvents.Click = "function(s, e){ MasterGrid.UpdateEdit(); }";
+            }).Render();
+        Html.DevExpress().Button(
+            btnSettings =>
+            {
+                btnSettings.Name = "btnCancel";
+                btnSettings.Text = "Cancel";
+                btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                btnSettings.ClientSideEvents.Click = "function(s, e){ MasterGrid.CancelEdit(); }";
+            }).Render();
+        ViewContext.Writer.Write("</div>");
+    });
+
+}).GetHtml()

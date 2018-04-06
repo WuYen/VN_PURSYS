@@ -1,0 +1,88 @@
+﻿<form id="SearchForm" style="margin-right:2px">
+    @Html.DevExpress().FormLayout(
+         settings =>
+         {
+             settings.Name = "Search";
+             settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+             settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+             settings.Styles.Style.Paddings.Padding = 0;
+             settings.ControlStyle.Border.BorderWidth = 1;
+             settings.ControlStyle.Border.BorderColor = System.Drawing.ColorTranslator.FromHtml("#c0c0c0");
+             settings.ControlStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#f9f9f9");
+             //settings.ControlStyle.BackColor = System.Drawing.Color.Honeydew;
+
+             settings.ColCount = 3;
+             settings.Items.Add(i =>
+             {
+                 i.Name = "S_PUR_NO";
+                 i.Caption = Resources.Resource.TR01A_PUR_NO;
+                 i.NestedExtension().TextBox(s =>
+                 {
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 });
+             });
+             settings.Items.Add(i =>
+             {
+                 i.Name = "S_BA01A_ID";
+                 i.Caption = Resources.Resource.TR01A_BA01A_ID;
+                 i.NestedExtension().ComboBox(s =>
+                 {
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                     s.Width = Unit.Percentage(100);
+                     s.Properties.ValueField = "BA01A_ID";
+                     s.Properties.TextField = "INC_NM";
+                     s.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+                     s.Properties.DataSource = ERP_V2.CacheCommonDataModule.GetBA01A();
+                 });
+             });
+             settings.Items.Add(i =>
+             {
+                 i.Name = "ConfirmStatus";
+                 i.Caption = Resources.Resource.TR01M_Status;
+                 i.NestedExtension().ComboBox(s =>
+                 {
+                     s.Properties.Items.Add(Resources.Resource.Applying, "P");
+                     s.Properties.Items.Add(Resources.Resource.CaseClosed, "Y");
+                     s.Properties.Items.Add(Resources.Resource.NotClosed, "N");
+                     s.Properties.Items.Add(Resources.Resource.Reject, "R");
+                     s.Width = Unit.Percentage(100);
+                     s.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 });
+             });
+             settings.Items.Add(i =>
+             {
+                 i.Name = "DTBeg";
+                 i.Caption = Resources.Resource.DT_From;
+                 i.NestedExtension().DateEdit(s =>
+                 {
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 });
+             });
+             settings.Items.Add(i =>
+             {
+                 i.Name = "DTEnd";
+                 i.Caption = Resources.Resource.DT_To;
+                 i.NestedExtension().DateEdit(s =>
+                 {
+                     s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                 });
+             });
+
+             settings.Items.Add(i =>
+             {
+                 i.Name = "ApplyFilter";
+                 i.ShowCaption = DefaultBoolean.False;
+                 i.NestedExtension().Button(s =>
+                 {
+                     s.Name = "ApplyFilter";
+                     s.Text = "Filter";
+                     s.Width = Unit.Percentage(100);
+                     s.Styles.Style.Paddings.Padding = 0;
+                     s.ClientSideEvents.Click = "ApplyFilterlick";
+                     s.Images.Image.IconID = "filter_filter_16x16office2013";
+                     s.Styles.Style.CssClass = "FilterButton";
+                 });
+             });
+         }).GetHtml()
+</form>

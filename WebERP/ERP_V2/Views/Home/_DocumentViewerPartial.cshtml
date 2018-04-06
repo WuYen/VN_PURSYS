@@ -1,0 +1,9 @@
+@Html.DevExpress().DocumentViewer(settings =>
+{
+    settings.Name = "DocumentViewer";
+    settings.CallbackRouteValues = new { Controller = "Home", Action = "DocumentViewerPartial" };
+    settings.ExportRouteValues = new { Controller = "Home", Action = "DocumentViewerPartialExport" };
+    settings.Report = (XtraReport)Model;
+    //settings.Report.DataSource = ERP_V2.Controllers.HomeController.GetData();
+    settings.ToolbarMode = DocumentViewerToolbarMode.StandardToolbar;
+}).GetHtml()

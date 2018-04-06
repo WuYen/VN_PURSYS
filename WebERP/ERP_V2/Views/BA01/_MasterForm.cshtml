@@ -1,0 +1,165 @@
+﻿@model ERP_V2.ViewModels.BA01.BA01AViewModel
+
+@Html.DevExpress().TextBoxFor(x => x.BA01A_ID, s => { s.ClientVisible = false; }).GetHtml()
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "EditForm";
+
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+    settings.Styles.LayoutGroup.Cell.Paddings.PaddingRight = Unit.Pixel(0);
+    settings.ColCount = 2;
+    settings.UseDefaultPaddings = false;
+
+    settings.Items.Add(i =>
+    {
+        i.Name = "INC_NO";
+        i.FieldName = "INC_NO";
+        i.Caption = Resources.Resource.BA01A_INC_NO;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "INC_NM";
+        i.FieldName = "INC_NM";
+        i.Caption = Resources.Resource.BA01A_INC_NM;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "SRT_NM";
+        i.FieldName = "SRT_NM";
+        i.Caption = Resources.Resource.BA01A_SRT_NM;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "TEL_NO";
+        i.FieldName = "TEL_NO";
+        i.Caption = Resources.Resource.BA01A_TEL_NO;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "FAX_NO";
+        i.FieldName = "FAX_NO";
+        i.Caption = Resources.Resource.BA01A_FAX_NO;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "ADD_DR";
+        i.FieldName = "ADD_DR";
+        i.Caption = Resources.Resource.BA01A_ADD_DR;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "BA03A_ID";
+        i.FieldName = "BA03A_ID";
+        i.Caption = Resources.Resource.BA01A_BA03A;
+        i.NestedExtension().ComboBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+            s.Properties.ValueField = "BA03A_ID";
+            s.Properties.TextField = "CUR_NM";
+            s.Properties.ValueType = typeof(int);
+            s.Properties.DataSource = ERP_V2.CacheCommonDataModule.GetBA03A();
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "BNK_I1";
+        i.FieldName = "BNK_I1";
+        i.Caption = Resources.Resource.BA01A_BNK_I1;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "ACC_N1";
+        i.FieldName = "ACC_N1";
+        i.Caption = Resources.Resource.BA01A_ACC_N1;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "PAY_DY";
+        i.FieldName = "PAY_DY";
+        i.Caption = Resources.Resource.BA01A_PAY_DY;
+        i.NestedExtension().SpinEdit(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "EIN_NO";
+        i.FieldName = "EIN_NO";
+        i.Caption = Resources.Resource.BA01A_EIN_NO;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.ShowModelErrors = true;
+            s.Width = Unit.Percentage(100);
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "REM_MM";
+        i.FieldName = "REM_MM";
+        i.Caption = Resources.Resource.REM_MM;
+        i.Width = Unit.Percentage(100);
+        i.NestedExtension().Memo(s =>
+        {
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.Width = Unit.Percentage(100);
+            s.ShowModelErrors = true;
+            s.Properties.Rows = 3;
+        });
+    });
+
+}).Bind(Model).GetHtml()

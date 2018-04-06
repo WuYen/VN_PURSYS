@@ -1,0 +1,32 @@
+﻿@model ERP_V2.ViewModels.TR01V3.TR01AViewModel
+                
+@Html.DevExpress().ComboBoxFor(m=>m.CbBA01B_ID,settings =>
+{
+    settings.Name = "CbBA01B_ID";
+    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+    settings.CallbackRouteValues = new { Controller = "TR01V2", Action = "ComboBoxContact" };
+    settings.Properties.ClientSideEvents.BeginCallback = "CboContactBegCall";
+    settings.Properties.ClientSideEvents.EndCallback = "CboContactEndCall";
+    settings.Properties.ClientSideEvents.TextChanged = "CBOContactSelectChanged";
+    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+    settings.Properties.CallbackPageSize = 10;
+
+    settings.Properties.TextField = "CNT_NM";
+    settings.Properties.ValueField = "BA01B_ID";
+
+    settings.Properties.TextFormatString = "{0}";
+    settings.Properties.Columns.Add("CNT_NM");
+    settings.Properties.Columns.Add("TEL_NO");
+    settings.Properties.Columns.Add("TEL_EX");
+    settings.ReadOnly = Model.CFN_YN == "Y" ? true : false;
+    settings.CustomJSProperties = (s, e) =>
+    {
+        e.Properties["cpADD_DR"] = ViewData["ADD_DR"];
+        e.Properties["cpFAX_NO"] = ViewData["FAX_NO"];
+        e.Properties["cpBA03A_ID"] = ViewData["BA03A_ID"];
+        e.Properties["cpCUR_RT"] = ViewData["CUR_RT"];
+        e.Properties["cpTEL_NO"] = ViewData["TEL_NO"];
+        e.Properties["cpTEL_EX"] = ViewData["TEL_EX"];
+    };
+
+}).BindList(ViewBag.Data).GetHtml()

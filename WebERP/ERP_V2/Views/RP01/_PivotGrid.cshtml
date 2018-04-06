@@ -1,0 +1,109 @@
+﻿
+@Html.DevExpress().PivotGrid(settings =>
+{
+    settings.Name = "PivotGrid";
+    settings.CallbackRouteValues = new { Controller = "RP01", Action = "PivotGridPartial" };
+    //settings.ClientSideEvents.BeginCallback = "PivotGridBeginCallback";
+    settings.OptionsView.ShowFilterHeaders = true;
+    settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    //settings.CustomizationFieldsLeft = 600;
+    //settings.CustomizationFieldsTop = 400;
+    settings.Width = 1000;
+    settings.OptionsPager.Visible = false;
+    settings.OptionsView.ShowFilterHeaders = false;
+    settings.OptionsView.ShowColumnTotals = false;
+    settings.OptionsView.ShowColumnGrandTotals = false;
+    settings.OptionsView.ShowRowTotals = false;
+    settings.OptionsView.ShowRowGrandTotals = false;
+
+    settings.Styles.ColumnFieldValuesAreaStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#9a9a9a");
+    settings.Styles.ColumnFieldValuesAreaStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml("#ffffff");
+    settings.Styles.ColumnFieldValuesAreaStyle.Font.Size = FontUnit.Small;
+    settings.Styles.RowFieldValuesAreaStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#fcfcfc");
+
+    settings.Styles.ColumnAreaStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#ffffff");
+    settings.Styles.RowAreaStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#ffffff");
+    settings.Styles.DataAreaStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#ffffff");
+
+    //settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#808080");
+    //settings.Styles.Header.ForeColor = System.Drawing.Color.Honeydew;
+
+    //settings.Groups.Add("Year - Month - Date");
+
+    settings.Fields.Add(field =>
+    {
+        field.Area = PivotArea.RowArea;
+        field.AreaIndex = 1;
+        field.Caption = "類別";
+        field.FieldName = "TYP_NM";
+        field.CustomTotals.Add(PivotSummaryType.Average);
+        field.CustomTotals.Add(PivotSummaryType.Min);
+        field.CustomTotals.Add(PivotSummaryType.Max);
+    });
+
+    //settings.Fields.Add(field =>
+    //{
+    //    field.Area = PivotArea.RowArea;
+    //    field.AreaIndex = 2;
+    //    field.Caption = "Product";
+    //    field.FieldName = "ITM_NM";
+    //    field.Visible = false;
+    //});
+
+    settings.Fields.Add(field =>
+    {
+        field.Area = PivotArea.ColumnArea;
+        field.AreaIndex = 2;
+        field.Caption = "Year";
+        field.FieldName = "DT";
+        //field.GroupInterval = PivotGroupInterval.DateYear;
+
+        //field.GroupIndex = 0;
+        //field.InnerGroupIndex = 2;
+        //field.UnboundFieldName = "Year";
+        field.SortOrder = PivotSortOrder.Descending;
+    });
+
+    //settings.Fields.Add(field =>
+    //{
+    //    field.Area = PivotArea.ColumnArea;
+    //    field.AreaIndex = 2;
+    //    field.Caption = "Year";
+    //    field.FieldName = "DT";
+    //    field.GroupInterval = PivotGroupInterval.DateYear;
+
+    //    //field.GroupIndex = 0;
+    //    //field.InnerGroupIndex = 2;
+    //    field.UnboundFieldName = "Year";
+    //    field.SortOrder = PivotSortOrder.Descending;
+    //});
+    //System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+    //settings.Fields.Add(field =>
+    //{
+    //    field.Area = PivotArea.ColumnArea;
+    //    field.AreaIndex = 0;
+    //    field.Caption = "Month";
+    //    field.FieldName = "DT";
+    //    field.GroupInterval = PivotGroupInterval.DateMonth;
+    //    field.ValueFormat.FormatString = "MMM";
+    //    field.ValueFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+    //    field.UseNativeFormat = DevExpress.Utils.DefaultBoolean.False;
+    //    //field.GroupIndex = 0;
+    //    //field.InnerGroupIndex = 1;
+    //    field.UnboundFieldName = "Month";
+    //});
+
+    settings.Fields.Add(field =>
+    {
+        field.Area = PivotArea.DataArea;
+        //field.UnboundFieldName = "Money";
+        //field.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+        field.CellFormat.FormatType = FormatType.Custom;
+        field.CellFormat.FormatString = "#,0";
+        field.AreaIndex = 0;
+        field.Caption = "金額";
+        field.FieldName = "MonthTotal";
+    });
+
+}).Bind(Model).GetHtml()
+
