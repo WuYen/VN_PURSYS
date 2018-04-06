@@ -160,7 +160,7 @@ namespace ERP_V2.Controllers
                         + " left join TR01B as B on A.TR01A_ID = B.TR01A_ID"
                         + " left join TR01C as D on D.TR01B_ID = B.TR01B_ID"
                         + " left join BA02A as C on C.BA02A_ID = B.BA02A_ID"
-                        + $" where A.PUR_DT >= '{DateBeg}' and A.PUR_DT <= '{DateEnd}' and C.TYP_ID = {TYP_ID} and D.INV_MY > 0"
+                        + $" where D.ARR_DT >= '{DateBeg}' and D.ARR_DT <= '{DateEnd}' and C.TYP_ID = {TYP_ID} and D.INV_MY > 0"
                         + " group by B.BA02A_ID";
             SQLCommandReader(command, ds);
             return ds.Tables[0];

@@ -17,10 +17,13 @@
       <publishTime>09/11/2017 11:43:36</publishTime>
     </File>
     <File Include="App_GlobalResources/Resource.resx">
-      <publishTime>04/04/2018 01:45:39</publishTime>
+      <publishTime>04/06/2018 10:27:24</publishTime>
     </File>
     <File Include="App_GlobalResources/Resource.vi-VN.resx">
-      <publishTime>04/04/2018 01:45:39</publishTime>
+      <publishTime>04/06/2018 10:27:24</publishTime>
+    </File>
+    <File Include="App_GlobalResources/Resource.zh-CN.resx">
+      <publishTime>04/06/2018 10:27:54</publishTime>
     </File>
     <File Include="bin/ar/InternationalNumericFormatter.resources.dll">
       <publishTime>10/14/2009 10:03:46</publishTime>
@@ -194,7 +197,7 @@
       <publishTime>09/26/2017 15:13:27</publishTime>
     </File>
     <File Include="bin/en-US/ERP_V2.resources.dll">
-      <publishTime>04/05/2018 21:53:33</publishTime>
+      <publishTime>04/06/2018 21:09:24</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>03/02/2015 09:32:26</publishTime>
@@ -203,10 +206,10 @@
       <publishTime>03/02/2015 09:32:26</publishTime>
     </File>
     <File Include="bin/ERP_V2.dll">
-      <publishTime>04/05/2018 21:53:33</publishTime>
+      <publishTime>04/06/2018 21:09:24</publishTime>
     </File>
     <File Include="bin/ERP_V2.pdb">
-      <publishTime>04/05/2018 21:53:33</publishTime>
+      <publishTime>04/06/2018 21:09:24</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Data.v17.1.resources.dll">
       <publishTime>09/26/2017 15:12:04</publishTime>
@@ -875,13 +878,13 @@
       <publishTime>12/01/2017 00:01:39</publishTime>
     </File>
     <File Include="Views/RP01V2/Index.cshtml">
-      <publishTime>04/05/2018 20:20:31</publishTime>
+      <publishTime>04/06/2018 20:57:02</publishTime>
     </File>
     <File Include="Views/RP01V2/_ChartPartial.cshtml">
       <publishTime>04/05/2018 00:21:36</publishTime>
     </File>
     <File Include="Views/RP01V2/_GridView.cshtml">
-      <publishTime>04/01/2018 17:06:05</publishTime>
+      <publishTime>04/06/2018 20:57:02</publishTime>
     </File>
     <File Include="Views/RP01V2/_GridView2.cshtml">
       <publishTime>04/05/2018 00:27:50</publishTime>
@@ -956,13 +959,13 @@
       <publishTime>04/04/2018 02:10:21</publishTime>
     </File>
     <File Include="Views/TR01M/_GridTR01A.cshtml">
-      <publishTime>04/05/2018 20:27:27</publishTime>
+      <publishTime>04/06/2018 20:57:02</publishTime>
     </File>
     <File Include="Views/TR01M/_GridTR01B.cshtml">
-      <publishTime>04/04/2018 01:54:13</publishTime>
+      <publishTime>04/06/2018 20:57:02</publishTime>
     </File>
     <File Include="Views/TR01M/_GridTR01C.cshtml">
-      <publishTime>04/05/2018 21:53:10</publishTime>
+      <publishTime>04/06/2018 10:29:27</publishTime>
     </File>
     <File Include="Views/TR01M/_SearchForm.cshtml">
       <publishTime>04/04/2018 01:52:20</publishTime>
@@ -998,7 +1001,7 @@
       <publishTime>09/11/2017 11:14:21</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>03/20/2018 22:58:56</publishTime>
+      <publishTime>04/06/2018 21:09:50</publishTime>
     </File>
   </ItemGroup>
 </Project>
