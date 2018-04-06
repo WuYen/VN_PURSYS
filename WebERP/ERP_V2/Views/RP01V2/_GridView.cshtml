@@ -71,6 +71,32 @@
                     s.DisplayFormatString = "G29";
                 });
             });
+        settings.Columns.Add(
+            column =>
+            {
+                column.FieldName = "DIF_QT";
+                column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+                //column.UnboundExpression = "[PUR_QT]-[TOT_QT]";
+                column.Caption = "缺交數量";
+                column.EditorProperties().SpinEdit(s =>
+                {
+                    //s.DisplayFormatString = "#,#.#";
+                    s.DisplayFormatString = "G29";
+                });
+            });
+        settings.CustomUnboundColumnData = (s, e) =>
+        {
+            if (e.Column.FieldName == "DIF_QT")
+            {
+                decimal PUR_QT = (decimal)e.GetListSourceFieldValue("PUR_QT");
+                decimal? TOT_QT = e.GetListSourceFieldValue("TOT_QT") as decimal?;
+                if (!TOT_QT.HasValue)
+                {
+                    TOT_QT = 0;
+                }
+                e.Value = PUR_QT - TOT_QT;
+            }
+        };
         settings.HtmlDataCellPrepared = (s, e) =>
         {
             if (e.DataColumn.FieldName == "TOT_QT")
@@ -81,6 +107,31 @@
                 if (cellValue.HasValue && currentCell.HasValue)
                 {
                     if (Decimal.Compare(cellValue.Value, currentCell.Value) != 0)
+                    {
+                        e.Cell.ForeColor = System.Drawing.Color.Red;
+                    }
+                }
+            }
+            else if (e.DataColumn.FieldName == "DIF_QT")
+            {
+                var currentCell = e.CellValue as decimal?;
+                if (currentCell.HasValue && currentCell.Value>0)
+                {
+                    e.Cell.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+            else if (e.DataColumn.FieldName == "Each_PR")
+            {
+                var ss = s as MVCxGridView;
+                var cellValue = ss.GetRowValues(e.VisibleIndex, "PUR_PR") as decimal?;
+                var currentCell = e.CellValue as decimal?;
+                if (currentCell.HasValue)
+                {
+                    if (Decimal.Compare(cellValue.Value, currentCell.Value) == 0)
+                    {
+                        e.Cell.ForeColor = System.Drawing.Color.Green;
+                    }
+                    else
                     {
                         e.Cell.ForeColor = System.Drawing.Color.Red;
                     }

@@ -179,13 +179,14 @@
                 {
                     column.FieldName = "PUR_NO";
                     column.Caption = Resources.Resource.TR01A_PUR_NO;
-                    column.Width = 100;
+                    column.Width = 90;
                 });
         settings.Columns.Add(
             column =>
             {
                 column.FieldName = "BA01A_ID";
                 column.Caption = Resources.Resource.TR01A_BA01A_ID;
+                column.Width = 230;
                 column.EditorProperties().ComboBox(p =>
                 {
                     p.ValueField = "BA01A_ID";
@@ -199,7 +200,7 @@
             {
                 column.FieldName = "DtPUR_DT";
                 column.Caption = Resources.Resource.TR01A_PUR_DT;
-                column.Width = 80;
+                //column.Width = 100;
                 column.EditorProperties().DateEdit(p =>
                 {
                     p.DisplayFormatString = "yyyy/MM/dd";
@@ -210,7 +211,7 @@
             {
                 column.FieldName = "DtEXP_DT";
                 column.Caption = Resources.Resource.TR01A_EXP_DT;
-                column.Width = 80;
+                //column.Width = 100;
                 column.EditorProperties().DateEdit(p =>
                 {
                     p.DisplayFormatString = "yyyy/MM/dd";
@@ -221,7 +222,7 @@
             {
                 column.FieldName = "DelayDate";
                 column.Caption = Resources.Resource.FallBackDays;// "落後天數";
-                column.Width = 70;
+                //column.Width = 85;
                 column.SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
                 column.EditorProperties().TextBox(p =>
                 {
@@ -233,7 +234,7 @@
             {
                 column.FieldName = "CFN_U1";
                 column.Caption = Resources.Resource.ApplyUser;// "申請人";
-                column.Width = 110;
+                column.Width = 100;
                 column.EditorProperties().TextBox(p =>
                 {
                 });
@@ -244,7 +245,7 @@
             {
                 column.FieldName = "CFN_U2";
                 column.Caption = Resources.Resource.CloseUser;//"結案人";
-                column.Width = 110;
+                column.Width = 100;
                 column.EditorProperties().TextBox(p =>
                 {
                 });

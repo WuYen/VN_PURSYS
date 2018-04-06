@@ -27,14 +27,14 @@
 <div style="margin-left:10px">
     <div style="margin-top:10px;height:30px">
         <div style="float:left;display:inline-block;margin-right:5px">
-            @Html.DevExpress().ComboBox(settings =>
-       {
-           settings.Name = "CboProduct";
-           settings.Properties.Caption = "商品";
-           settings.Properties.TextField = "ITM_NM";
-           settings.Properties.ValueField = "BA02A_ID";
-           settings.SelectedIndex = 0;
-       }).BindList(ERP_V2.CacheCommonDataModule.GetBA02A()).GetHtml()
+            @Html.DevExpress().ComboBox(
+            settings =>
+            {
+                settings.Name = "CboProduct";
+                settings.Properties.Caption = "商品";
+                settings.Properties.TextField = "ITM_NM";
+                settings.Properties.ValueField = "BA02A_ID";
+            }).BindList(ERP_V2.CacheCommonDataModule.GetBA02A()).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().DateEdit(settings =>
@@ -43,6 +43,7 @@
            settings.Properties.Caption = "日期";
            settings.Date = DateTime.Now.AddMonths(-1);
            settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+           settings.Properties.EditFormatString = "yyyy/MM/dd";
        }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
@@ -53,6 +54,7 @@
            settings.Date = DateTime.Now;
            settings.Properties.CaptionSettings.ShowColon = false;
            settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+           settings.Properties.EditFormatString = "yyyy/MM/dd";
        }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
@@ -67,7 +69,7 @@
     </div>
     <div>
         @{
-            Html.RenderPartial("_GridView", Model);
+            Html.RenderAction("GridView");
         }
     </div>
 </div>
@@ -91,6 +93,7 @@
                 settings.Properties.Caption = "日期";
                 settings.Date = DateTime.Now.AddMonths(-1);
                 settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+                settings.Properties.EditFormatString = "yyyy/MM/dd";
             }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
@@ -101,6 +104,7 @@
                 settings.Date = DateTime.Now;
                 settings.Properties.CaptionSettings.ShowColon = false;
                 settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+                settings.Properties.EditFormatString = "yyyy/MM/dd";
             }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">

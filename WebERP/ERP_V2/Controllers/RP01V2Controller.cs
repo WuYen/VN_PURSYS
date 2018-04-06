@@ -15,11 +15,15 @@ namespace ERP_V2.Controllers
         // GET: RP01
         public ActionResult Index()
         {
-            return View(GetData());
+            return View();
         }
 
         public ActionResult GridView(string BA02A_ID, string DateBeg, string DateEnd)
         {
+            if (string.IsNullOrWhiteSpace(BA02A_ID))
+            {
+                return PartialView("_GridView", null);
+            }
             DateTime.TryParse(DateBeg, out DateTime dateBeg);
             DateTime.TryParse(DateEnd, out DateTime dateEnd);
             return PartialView("_GridView", GetData(BA02A_ID, dateBeg.ToString("yyyyMMdd"), dateEnd.ToString("yyyyMMdd")));
