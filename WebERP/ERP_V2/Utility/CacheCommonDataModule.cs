@@ -195,6 +195,51 @@ namespace ERP_V2
             _BA04AList = entity.BA04A.OrderBy(x => x.SEQ_NO).ToList();
         }
 
+        private static List<FN01> _FN01List;
+
+        public static List<FN01> GetFN01List
+        {
+            get
+            {
+                if (_FN01List == null)
+                {
+                    ResetFN01List();
+                }
+                return _FN01List;
+            }
+        }
+        public static string GetPageName(string ACT)
+        {
+            var text = "";
+            if (_FN01List == null)
+            {
+                ResetFN01List();
+            }
+            var item = _FN01List.FirstOrDefault(x => x.ACT_RF.Contains(ACT));
+            switch (ERP_V2.UserInfo.LanguageType)
+            {
+                case Language.Type.VN:
+                    text = item.NAM_VN;
+                    break;
+                case Language.Type.CN:
+                    text = item.NAM_CN;
+                    break;
+                case Language.Type.TW:
+                    text = item.NAM_TW;
+                    break;
+                case Language.Type.EN:
+                    text = item.NAM_US;
+                    break;
+            }
+
+            return text;
+        }
+        public static void ResetFN01List()
+        {
+            var entity = new PURSysEntities();
+            _FN01List = entity.FN01.ToList();
+        }
+
         /// <summary> 取得幣別 </summary>
         /// <returns></returns>
         //public static List<VW_BA01A> GetVW_BA01A()

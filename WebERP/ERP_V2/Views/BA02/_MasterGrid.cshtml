@@ -34,7 +34,7 @@
             {
                 cbo.ValueField = "value";
                 cbo.TextField = "key";
-                cbo.DataSource = ERP_V2.CacheCommonDataModule.GetTypeDic();
+                cbo.DataSource = ERP_V2.CacheCommonDataModule.GetBA04A(ERP_V2.UserInfo.LanguageType);
             });
         });
         //GridViewHelper.SetColumn(settings, "ITM_NO", Resources.Resource.BA02A_ITM_NO);

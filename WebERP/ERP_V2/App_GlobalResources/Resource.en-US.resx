@@ -271,7 +271,7 @@
     <value>Not Confirm</value>
   </data>
   <data name="AbnormalConfirm" xml:space="preserve">
-    <value>Abnormal Confirm</value>
+    <value>Exception Confirm</value>
   </data>
   <data name="ApplyConfirm" xml:space="preserve">
     <value>Apply Confirm</value>

@@ -8,9 +8,9 @@
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
     settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
-    ERP_V2.Models.PURSysEntities entity = new ERP_V2.Models.PURSysEntities();
-    var list = entity.FN01.ToList();
-    foreach (var item in list.Where(x => x.PAR_ID == 0).ToList())
+
+    var list = ERP_V2.CacheCommonDataModule.GetFN01List;
+    foreach (var item in list.Where(x => x.PAR_ID == 0).OrderBy(x=>x.ORD_NO).ToList())
     {
         string text = "";
         switch (ERP_V2.UserInfo.LanguageType)
@@ -29,7 +29,7 @@
                 break;
         }
         var group = settings.Groups.Add(text);
-        foreach (var subItem in list.Where(x => x.PAR_ID == item.FN01_ID).ToList())
+        foreach (var subItem in list.Where(x => x.PAR_ID == item.FN01_ID).OrderBy(x => x.ORD_NO).ToList())
         {
             switch (ERP_V2.UserInfo.LanguageType)
             {

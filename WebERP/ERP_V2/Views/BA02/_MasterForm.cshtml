@@ -60,7 +60,7 @@
             s.Width = Unit.Percentage(100);
             s.Properties.TextField = "Key";
             s.Properties.ValueField= "Value";
-            s.Properties.DataSource = ERP_V2.CacheCommonDataModule.GetTypeDic();
+            s.Properties.DataSource = ERP_V2.CacheCommonDataModule.GetBA04A(ERP_V2.UserInfo.LanguageType);
         });
     });
     settings.Items.Add(i =>
