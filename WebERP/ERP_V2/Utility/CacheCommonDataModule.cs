@@ -189,6 +189,32 @@ namespace ERP_V2
             return list;
         }
 
+        public static string GetBA04AText(Language.Type type, int TYP_ID)
+        {
+            if (_BA04AList == null)
+            {
+                ResetBA04AList();
+            }
+            var item = _BA04AList.First(x => x.BA04A_ID == TYP_ID);
+            var text = "";
+            switch (type)
+            {
+                case Language.Type.VN:
+                    text = item.TYP_VN;
+                    break;
+                case Language.Type.CN:
+                    text = item.TYP_CN;
+                    break;
+                case Language.Type.TW:
+                    text = item.TYP_TW;
+                    break;
+                case Language.Type.EN:
+                    text = item.TYP_US;
+                    break;
+            }
+            return text;
+        }
+
         public static void ResetBA04AList()
         {
             var entity = new PURSysEntities();

@@ -173,19 +173,6 @@ namespace ERP_V2.Controllers
             return PartialView("_ChartPartial", model);
         }
 
-        private DataTable GetData3()
-        {
-            var ds = new DataSet();
-            var command = "select C.TYP_ID, left(D.ARR_DT, 6) as DT, SUM(D.INV_MY * D.CUR_RT) as MonthTotal"
-                    + " from TR01B as A"
-                    + " left join BA02A as C on A.BA02A_ID = C.BA02A_ID"
-                    + " left join TR01C as D on A.TR01B_ID = D.TR01B_ID"
-                    + " where C.TYP_ID > 0 and D.INV_MY > 0"
-                    + " group by C.TYP_ID,left(D.ARR_DT, 6)";
-            SQLCommandReader(command, ds);
-            return ds.Tables[0];
-        }
-
         [ValidateInput(false)]
         public ActionResult PivotGridPartial()
         {
@@ -201,6 +188,63 @@ namespace ERP_V2.Controllers
             }
             return PartialView("_PivotGrid", dataTable);
         }
+        public ActionResult GridView3()
+        {
+            var dataTable = GetData3();
+            dataTable.Columns.Add("TYP_NM", typeof(string));
+            foreach (DataRow row in dataTable.Rows)
+            {
+                var typeID = row["TYP_ID"].ToString();
+                if (int.TryParse(typeID, out int id))
+                {
+                    row["TYP_NM"] = CacheCommonDataModule.GetBA04AText(UserInfo.LanguageType, int.Parse(typeID));
+                }
+            }
+            TempData["Data3"] = dataTable;
+            return PartialView("_GridView3", dataTable);
+        }
+        public ActionResult ChartPartial2()
+        {
+            //var temp = TempData["DT"] as DataTable;
+            var model = TempData["Data3"] as DataTable;// GetData2();
+            return PartialView("_ChartPartial2", model);
+        }
+        private DataTable GetData3()
+        {
+            var ds = new DataSet();
+            var command = "SELECT TYP_ID,"
+                + " [201801] as '201801', [201802] as '201802', [201803] as '201803', [201804] as '201804',"
+                + " [201805] as '201805', [201806] as '201806', [201807] as '201807', [201808] as '201808',"
+                + " [201809] as '201809', [201810] as '201810', [201811] as '201811', [201812] as '201812' "
+                + " FROM("
+                + " select C.TYP_ID, left(D.ARR_DT, 6) as DT, SUM(D.INV_MY * D.CUR_RT) as MonthTotal"
+                + " from TR01B as A"
+                + " left join BA02A as C on A.BA02A_ID = C.BA02A_ID"
+                + " left join TR01C as D on A.TR01B_ID = D.TR01B_ID"
+                + " where C.TYP_ID > 0 and D.INV_MY > 0 and left(D.ARR_DT, 4) = '2018'"
+                + " group by C.TYP_ID, left(D.ARR_DT, 6)"
+                + " ) as GroupTable"
+                + " PIVOT"
+                + " ("
+                + " Sum(MonthTotal)"
+                + " FOR DT IN([201801], [201802], [201803], [201804], [201805], [201806], [201807], [201808], [201809], [201810], [201811], [201812])"
+                + " ) AS PivotTable";
+            SQLCommandReader(command, ds);
+            return ds.Tables[0];
+        }
+
+        //private DataTable GetData3()
+        //{
+        //    var ds = new DataSet();
+        //    var command = "select C.TYP_ID, left(D.ARR_DT, 6) as DT, SUM(D.INV_MY * D.CUR_RT) as MonthTotal"
+        //            + " from TR01B as A"
+        //            + " left join BA02A as C on A.BA02A_ID = C.BA02A_ID"
+        //            + " left join TR01C as D on A.TR01B_ID = D.TR01B_ID"
+        //            + " where C.TYP_ID > 0 and D.INV_MY > 0"
+        //            + " group by C.TYP_ID,left(D.ARR_DT, 6)";
+        //    SQLCommandReader(command, ds);
+        //    return ds.Tables[0];
+        //}
     }
 
 }

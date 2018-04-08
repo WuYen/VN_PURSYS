@@ -28,43 +28,43 @@
     <div style="margin-top:10px;height:30px">
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().ComboBox(
-            settings =>
+                 settings =>
+                 {
+                     settings.Name = "CboProduct";
+                     settings.Properties.Caption = "商品";
+                     settings.Properties.TextField = "ITM_NM";
+                     settings.Properties.ValueField = "BA02A_ID";
+                 }).BindList(ERP_V2.CacheCommonDataModule.GetBA02A()).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().DateEdit(settings =>
             {
-                settings.Name = "CboProduct";
-                settings.Properties.Caption = "商品";
-                settings.Properties.TextField = "ITM_NM";
-                settings.Properties.ValueField = "BA02A_ID";
-            }).BindList(ERP_V2.CacheCommonDataModule.GetBA02A()).GetHtml()
+                settings.Name = "DateBeg";
+                settings.Properties.Caption = "日期";
+                settings.Date = DateTime.Now.AddMonths(-1);
+                settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+                settings.Properties.EditFormatString = "yyyy/MM/dd";
+            }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().DateEdit(settings =>
-       {
-           settings.Name = "DateBeg";
-           settings.Properties.Caption = "日期";
-           settings.Date = DateTime.Now.AddMonths(-1);
-           settings.Properties.DisplayFormatString = "yyyy/MM/dd";
-           settings.Properties.EditFormatString = "yyyy/MM/dd";
-       }).GetHtml()
-        </div>
-        <div style="float:left;display:inline-block;margin-right:5px">
-            @Html.DevExpress().DateEdit(settings =>
-       {
-           settings.Name = "DateEnd";
-           settings.Properties.Caption = "到";
-           settings.Date = DateTime.Now;
-           settings.Properties.CaptionSettings.ShowColon = false;
-           settings.Properties.DisplayFormatString = "yyyy/MM/dd";
-           settings.Properties.EditFormatString = "yyyy/MM/dd";
-       }).GetHtml()
+            {
+                settings.Name = "DateEnd";
+                settings.Properties.Caption = "到";
+                settings.Date = DateTime.Now;
+                settings.Properties.CaptionSettings.ShowColon = false;
+                settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+                settings.Properties.EditFormatString = "yyyy/MM/dd";
+            }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
             @Html.DevExpress().Button(settings =>
-       {
-           settings.Name = "BtnSearch";
-           settings.Text = "Search";
-           settings.Images.Image.Url = "~/Content/Icon/search.png";
-           settings.ClientSideEvents.Click = "BtnSearchClick";
-       }).GetHtml()
+            {
+                settings.Name = "BtnSearch";
+                settings.Text = "Search";
+                settings.Images.Image.Url = "~/Content/Icon/search.png";
+                settings.ClientSideEvents.Click = "BtnSearchClick";
+            }).GetHtml()
         </div>
     </div>
     <div>
@@ -78,43 +78,44 @@
     <div style="margin-top:10px;height:30px">
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().ComboBox(
-            settings =>
-            {
-                settings.Name = "TYP_ID";
-                settings.Properties.ValueField = "value";
-                settings.Properties.TextField = "key";
-                settings.SelectedIndex = 1;
-            }).BindList(ERP_V2.CacheCommonDataModule.GetTypeDic()).GetHtml()
+                 settings =>
+                 {
+                     settings.Name = "TYP_ID";
+                     settings.Properties.Caption = Resources.Resource.TYP_ID;
+                     settings.Properties.ValueField = "value";
+                     settings.Properties.TextField = "key";
+                     settings.SelectedIndex = 1;
+                 }).BindList(ERP_V2.CacheCommonDataModule.GetTypeDic()).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().DateEdit(settings =>
-            {
-                settings.Name = "DateBeg2";
-                settings.Properties.Caption = "日期";
-                settings.Date = DateTime.Now.AddMonths(-1);
-                settings.Properties.DisplayFormatString = "yyyy/MM/dd";
-                settings.Properties.EditFormatString = "yyyy/MM/dd";
-            }).GetHtml()
+                 {
+                     settings.Name = "DateBeg2";
+                     settings.Properties.Caption = "日期";
+                     settings.Date = DateTime.Now.AddMonths(-1);
+                     settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+                     settings.Properties.EditFormatString = "yyyy/MM/dd";
+                 }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().DateEdit(settings =>
-            {
-                settings.Name = "DateEnd2";
-                settings.Properties.Caption = "到";
-                settings.Date = DateTime.Now;
-                settings.Properties.CaptionSettings.ShowColon = false;
-                settings.Properties.DisplayFormatString = "yyyy/MM/dd";
-                settings.Properties.EditFormatString = "yyyy/MM/dd";
-            }).GetHtml()
+                 {
+                     settings.Name = "DateEnd2";
+                     settings.Properties.Caption = "到";
+                     settings.Date = DateTime.Now;
+                     settings.Properties.CaptionSettings.ShowColon = false;
+                     settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+                     settings.Properties.EditFormatString = "yyyy/MM/dd";
+                 }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
             @Html.DevExpress().Button(settings =>
-       {
-           settings.Name = "BtnSearch2";
-           settings.Text = "Search";
-           settings.Images.Image.Url = "~/Content/Icon/search.png";
-           settings.ClientSideEvents.Click = "BtnSearch2Click";
-       }).GetHtml()
+            {
+                settings.Name = "BtnSearch2";
+                settings.Text = "Search";
+                settings.Images.Image.Url = "~/Content/Icon/search.png";
+                settings.ClientSideEvents.Click = "BtnSearch2Click";
+            }).GetHtml()
         </div>
     </div>
     <div style="height:520px">
@@ -133,7 +134,12 @@
 <br />
 <div style="margin-left:10px">
     @{
-        Html.RenderAction("PivotGridPartial");
+        Html.RenderAction("GridView3");
     }
 </div>
+
+    @{
+        Html.RenderAction("ChartPartial2");
+    }
+
 <br />

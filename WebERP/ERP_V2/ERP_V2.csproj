@@ -366,6 +366,8 @@
     <Content Include="Views\RP01V2\_GridView.cshtml" />
     <Content Include="Views\RP01V2\_GridView2.cshtml" />
     <Content Include="Views\RP01V2\_PivotGrid.cshtml" />
+    <Content Include="Views\RP01V2\_GridView3.cshtml" />
+    <Content Include="Views\RP01V2\_ChartPartial2.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
