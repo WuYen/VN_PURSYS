@@ -159,7 +159,7 @@ namespace ERP_V2
         }
 
         public static List<BA04A> _BA04AList;
-        public static Dictionary<string, int> GetBA04A(Language.Type type)
+        public static Dictionary<string, int> GetBA04A(Language.Type type, bool displayAll = true)
         {
             if (_BA04AList == null)
             {
@@ -186,6 +186,11 @@ namespace ERP_V2
                 }
                 list.Add(text, item.BA04A_ID);
             }
+            if (!displayAll)
+            {
+                list.Remove(list.First(x => x.Value == 0).Key);
+            }
+
             return list;
         }
 

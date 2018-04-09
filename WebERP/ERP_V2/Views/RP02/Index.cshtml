@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "採購類別佔比";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@*各類別年份占比*@
+<script>
+    function BtnSearchClick(s, e) {
+        GridView.PerformCallback();
+    }
+    function GridViewBegCallback(s, e) {
+        e.customArgs["Year"] = Year.GetValue();
+    }
+    function GridViewEndCallback(s, e) {
+        chart.PerformCallback();
+    }
+</script>
+<div style="margin-left:10px;margin-top:10px;height:30px">
+    <div style="float:left;display:inline-block;margin-right:5px">
+        @Html.DevExpress().ComboBox(settings =>
+             {
+                 settings.Name = "Year";
+                 settings.Properties.Caption = "年";
+                 for (int i = 2018; i <= DateTime.Now.Year; i++)
+                 {
+                     settings.Properties.Items.Add(i.ToString(), i);
+                 }
+                 settings.SelectedIndex = 0;
+             }).GetHtml()
+    </div>
+
+    <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+        @Html.DevExpress().Button(settings =>
+             {
+                 settings.Name = "BtnSearch";
+                 settings.Text = "Search";
+                 settings.Images.Image.Url = "~/Content/Icon/search.png";
+                 settings.ClientSideEvents.Click = "BtnSearchClick";
+             }).GetHtml()
+    </div>
+    @*<div style="float:left;display:inline-block;margin-right:5px">
+
+        </div>
+        <div style="float:left;display:inline-block;margin-right:5px">
+
+        </div>*@
+</div>
+<div style="height:520px">
+    <div style="display:inline-block; float:left">
+        @{
+            Html.RenderAction("GridView");
+        }
+    </div>
+    <div style="display:inline-block; float:left; ">
+        @{
+            Html.RenderAction("ChartPartial");
+        }
+    </div>
+</div>

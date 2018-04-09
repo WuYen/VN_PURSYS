@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ERP_V2.Models;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -38,6 +40,36 @@ namespace ERP_V2.Utility
             }
 
             return errMsg;
+        }
+
+        public void SQLCommandReader(string command, DataSet ds)
+        {
+            using (var _Entity = new PURSysEntities())
+            {
+                var conn = _Entity.Database.Connection;
+                var connectionState = conn.State;
+                if (connectionState != ConnectionState.Open)
+                {
+                    conn.Open();
+                }
+
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = command;
+                    cmd.CommandTimeout = 60;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        do
+                        {
+                            DataTable dt = new DataTable();
+                            dt.Load(reader);
+                            ds.Tables.Add(dt);
+                        }
+                        while (!reader.IsClosed);
+                    }
+                }
+            }
         }
     }
 }

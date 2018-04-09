@@ -29,15 +29,16 @@
                     DateTime.TryParse(colName.ColumnName.Insert(4, "-") + "-01", out dtParseResult);
 
                     var value = row[colName].ToString();
-                    if (!string.IsNullOrWhiteSpace(value))
+                    if (string.IsNullOrWhiteSpace(value))
                     {
-                        value = value.Substring(0, value.IndexOf("."));
-                        int outValue;
-                        if (int.TryParse(value, out outValue))
-                        {
-                            var point = new SeriesPoint(dtParseResult, outValue);
-                            seriesLine.Points.Add(point);
-                        }
+                        value = "0.0";
+                    }
+                    value = value.Substring(0, value.IndexOf("."));
+                    int outValue;
+                    if (int.TryParse(value, out outValue))
+                    {
+                        var point = new SeriesPoint(dtParseResult, outValue);
+                        seriesLine.Points.Add(point);
                     }
                 }
             }

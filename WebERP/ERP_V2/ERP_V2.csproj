@@ -368,6 +368,9 @@
     <Content Include="Views\RP01V2\_PivotGrid.cshtml" />
     <Content Include="Views\RP01V2\_GridView3.cshtml" />
     <Content Include="Views\RP01V2\_ChartPartial2.cshtml" />
+    <Content Include="Views\RP02\Index.cshtml" />
+    <Content Include="Views\RP02\_GridView.cshtml" />
+    <Content Include="Views\RP02\_ChartPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -408,6 +411,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\RP01Controller.cs" />
     <Compile Include="Controllers\RP01V2Controller.cs" />
+    <Compile Include="Controllers\RP02Controller.cs" />
     <Compile Include="Controllers\TR01Controller.cs" />
     <Compile Include="Controllers\TR01MController.cs" />
     <Compile Include="Controllers\TR01V2Controller.cs" />
@@ -486,6 +490,7 @@
     <Compile Include="Utility\ErrorHandler.cs" />
     <Compile Include="Utility\GridViewSetting.cs" />
     <Compile Include="Utility\Language.cs" />
+    <Compile Include="Utility\MSSQL.cs" />
     <Compile Include="Utility\ObjectHelper.cs" />
     <Compile Include="Utility\ReadViewHelper.cs" />
     <Compile Include="ViewModel\BA01\BA01AViewModel.cs" />

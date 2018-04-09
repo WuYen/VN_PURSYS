@@ -36,7 +36,7 @@ namespace ERP_V2.Controllers
             return PartialView("_GridView", GetData(BA02A_ID, dateBeg.ToString("yyyyMMdd"), dateEnd.ToString("yyyyMMdd")));
         }
 
-        public ActionResult GridView2(string TYP_ID, string DateBeg, string DateEnd)
+        public ActionResult GridView2(string TYP_ID, string Year, string Month)
         {
             //DateTime.TryParse(DateBeg, out DateTime dateBeg);
             //DateTime.TryParse(DateEnd, out DateTime dateEnd);
@@ -47,13 +47,15 @@ namespace ERP_V2.Controllers
             //var data = GetData2(TYP_ID, "20170101", "20171231");
             //TempData["DT"] = data;
             //return PartialView("_GridView2", data);
-            if (string.IsNullOrWhiteSpace(DateBeg) || string.IsNullOrWhiteSpace(DateEnd))
+            if (string.IsNullOrWhiteSpace(Year) || string.IsNullOrWhiteSpace(Month))
             {
                 return PartialView("_GridView2", null);
             }
 
-            DateTime.TryParse(DateBeg, out DateTime dateBeg);
-            DateTime.TryParse(DateEnd, out DateTime dateEnd);
+            DateTime.TryParse(Year + "/" + Month + "/01", out DateTime dateBeg);
+
+            var dateEnd = dateBeg.AddMonths(1).AddDays(-1);
+
 
             var data = GetGridView2SessionData(TYP_ID, dateBeg.ToString("yyyyMMdd"), dateEnd.ToString("yyyyMMdd"));
             TempData["DT"] = data;
@@ -72,27 +74,16 @@ namespace ERP_V2.Controllers
             return data;
         }
 
-        public ActionResult GridViewRefreshData2(string TYP_ID, string DateBeg, string DateEnd)
+        public ActionResult GridViewRefreshData2(string TYP_ID, string Year, string Month)
         {
-            //if (string.IsNullOrWhiteSpace(TYP_ID))
-            //{
-            //    TYP_ID = "2";
-            //}
-            //DateTime.TryParse(DateBeg, out DateTime dateBeg);
-            //DateTime.TryParse(DateEnd, out DateTime dateEnd);
-            //var data = GetData2(TYP_ID, dateBeg.ToString("yyyyMMdd"), dateEnd.ToString("yyyyMMdd"));
-            //TempData["DT"] = data;
-            //return PartialView("_GridView2", data);
-            if (string.IsNullOrWhiteSpace(DateBeg) || string.IsNullOrWhiteSpace(DateEnd))
+            if (string.IsNullOrWhiteSpace(Year) || string.IsNullOrWhiteSpace(Month) || string.IsNullOrWhiteSpace(TYP_ID))
             {
                 return PartialView("_GridView2", null);
             }
-            if (string.IsNullOrWhiteSpace(TYP_ID))
-            {
-                TYP_ID = "2";
-            }
-            DateTime.TryParse(DateBeg, out DateTime dateBeg);
-            DateTime.TryParse(DateEnd, out DateTime dateEnd);
+
+            DateTime.TryParse(Year + "/" + Month + "/01", out DateTime dateBeg);
+            var dateEnd = dateBeg.AddMonths(1).AddDays(-1);
+
             var data = GetData2(TYP_ID, dateBeg.ToString("yyyyMMdd"), dateEnd.ToString("yyyyMMdd"));
             TempData["DT"] = data;
             Session["GridView2Data"] = data;
