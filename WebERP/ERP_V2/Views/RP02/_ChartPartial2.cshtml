@@ -3,8 +3,8 @@
 
 @Html.DevExpress().Chart(settings =>
 {
-    settings.Name = "chart";
-    settings.CallbackRouteValues = new { Controller = "RP02", Action = "ChartPartial" };
+    settings.Name = "Chart2";
+    settings.CallbackRouteValues = new { Controller = "RP02", Action = "ChartPartial2" };
     settings.BorderOptions.Visibility = DefaultBoolean.False;
     settings.Height = 450;
     settings.Width = 600;
@@ -33,7 +33,7 @@
             var item = ERP_V2.CacheCommonDataModule.GetBA04A(ERP_V2.UserInfo.LanguageType).FirstOrDefault(x => x.Value == Convert.ToInt16(Model.Rows[i]["BA04A_ID"].ToString()));
             decimal value = new decimal();
 
-            if (decimal.TryParse(Model.Rows[i]["YearTotal"].ToString(), out value))
+            if (decimal.TryParse(Model.Rows[i]["MonthTotal"].ToString(), out value))
             {
                 series.Points.Add(new SeriesPoint(item.Key, value));
             }            
@@ -56,7 +56,7 @@
 
         settings.Titles.Add(new ChartTitle()
     {
-        Text = "年度類別占比",
+        Text = "月份類別占比",
             Font = new System.Drawing.Font("Arial Unicode MS", 16)
         });
     }

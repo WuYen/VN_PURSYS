@@ -53,7 +53,7 @@ namespace ERP_V2.Controllers
             if (errMsg.Length > 0)
             {
                 ViewData["IsSuccess"] = false;
-                ViewData["EditError"] = "Fail please check error";
+                ViewData["EditError"] = errMsg;
             }
             else
             {

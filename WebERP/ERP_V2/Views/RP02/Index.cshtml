@@ -20,25 +20,25 @@
 <div style="margin-left:10px;margin-top:10px;height:30px">
     <div style="float:left;display:inline-block;margin-right:5px">
         @Html.DevExpress().ComboBox(settings =>
-             {
-                 settings.Name = "Year";
-                 settings.Properties.Caption = "年";
-                 for (int i = 2018; i <= DateTime.Now.Year; i++)
-                 {
-                     settings.Properties.Items.Add(i.ToString(), i);
-                 }
-                 settings.SelectedIndex = 0;
-             }).GetHtml()
+                       {
+                           settings.Name = "Year";
+                           settings.Properties.Caption = "年";
+                           for (int i = 2018; i <= DateTime.Now.Year; i++)
+                           {
+                               settings.Properties.Items.Add(i.ToString(), i);
+                           }
+                           settings.SelectedIndex = 0;
+                       }).GetHtml()
     </div>
 
     <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
         @Html.DevExpress().Button(settings =>
-             {
-                 settings.Name = "BtnSearch";
-                 settings.Text = "Search";
-                 settings.Images.Image.Url = "~/Content/Icon/search.png";
-                 settings.ClientSideEvents.Click = "BtnSearchClick";
-             }).GetHtml()
+                       {
+                           settings.Name = "BtnSearch";
+                           settings.Text = "Search";
+                           settings.Images.Image.Url = "~/Content/Icon/search.png";
+                           settings.ClientSideEvents.Click = "BtnSearchClick";
+                       }).GetHtml()
     </div>
     @*<div style="float:left;display:inline-block;margin-right:5px">
 
@@ -56,6 +56,73 @@
     <div style="display:inline-block; float:left; ">
         @{
             Html.RenderAction("ChartPartial");
+        }
+    </div>
+</div>
+
+
+@*各類別月份占比*@
+<script>
+    function BtnSearch2Click(s, e) {
+        GridView2.PerformCallback();
+    }
+    function GridViewBegCallback2(s, e) {
+        e.customArgs["Year"] = Year2.GetValue();
+        e.customArgs["Month"] = Month2.GetValue();
+    }
+    function GridViewEndCallback2(s, e) {
+        Chart2.PerformCallback();
+    }
+</script>
+<div style="margin-left:10px;margin-top:10px;height:30px">
+    <div style="float:left;display:inline-block;margin-right:5px">
+        @Html.DevExpress().ComboBox(settings =>
+        {
+            settings.Name = "Year2";
+            settings.Properties.Caption = "年";
+            for (int i = 2018; i <= DateTime.Now.Year; i++)
+            {
+                settings.Properties.Items.Add(i.ToString(), i);
+            }
+            settings.SelectedIndex = 0;
+        }).GetHtml()
+    </div>
+    <div style="float:left;display:inline-block;margin-right:5px">
+        @Html.DevExpress().ComboBox(settings =>
+        {
+            settings.Name = "Month2";
+            settings.Properties.Caption = "月";
+            for (int i = 1; i < 13; i++)
+            {
+                settings.Properties.Items.Add(i.ToString(), i);
+            }
+            settings.SelectedIndex = DateTime.Now.Month - 2;
+            if (DateTime.Now.Month - 2 <= 0)
+            {
+                settings.SelectedIndex = 0;
+            }
+        }).GetHtml()
+    </div>
+
+    <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+        @Html.DevExpress().Button(settings =>
+        {
+            settings.Name = "BtnSearch2";
+            settings.Text = "Search";
+            settings.Images.Image.Url = "~/Content/Icon/search.png";
+            settings.ClientSideEvents.Click = "BtnSearch2Click";
+        }).GetHtml()
+    </div>
+</div>
+<div style="height:520px">
+    <div style="display:inline-block; float:left">
+        @{
+            Html.RenderAction("GridView2");
+        }
+    </div>
+    <div style="display:inline-block; float:left; ">
+        @{
+            Html.RenderAction("ChartPartial2");
         }
     </div>
 </div>

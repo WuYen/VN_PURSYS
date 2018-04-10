@@ -107,6 +107,10 @@ namespace ERP_V2.Services.BA03
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    errMsg = "已被使用不可刪除";
+                }
             }
             return errMsg;
         }
