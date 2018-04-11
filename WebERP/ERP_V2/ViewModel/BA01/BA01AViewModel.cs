@@ -51,11 +51,18 @@ namespace ERP_V2.ViewModels.BA01
 
     public class BA01A_MD
     {
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resource),
+              ErrorMessageResourceName = "RequireErrMsg")]
         [StringLength(20)]
         public string INC_NO { get; set; }
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resource),
+                  ErrorMessageResourceName = "RequireErrMsg")]
         [StringLength(100)]
         public string INC_NM { get; set; }
+
+        [Required(ErrorMessageResourceType = typeof(Resources.Resource),
+                  ErrorMessageResourceName = "RequireErrMsg")]
+
+        public int BA03A_ID { get; set; }
     }
 }

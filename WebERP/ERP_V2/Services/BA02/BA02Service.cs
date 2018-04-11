@@ -131,6 +131,17 @@ namespace ERP_V2.Services.BA02
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException != null)
+                    {
+                        errMsg = ex.InnerException.Message;
+                    }
+                    else
+                    {
+                        errMsg = ex.Message;
+                    }
+                }
             }
             return errMsg;
         }
@@ -159,7 +170,8 @@ namespace ERP_V2.Services.BA02
                         _Entity.Entry(item).State = EntityState.Added;
                     }
                     foreach (var item in UpdateD)
-                    {            
+                    {
+                        item.BA02A_ID = entity.BA02A_ID;
                         _Entity.Entry(item).State = EntityState.Modified;
                     }
                     foreach (var key in DeleteD)
@@ -179,6 +191,17 @@ namespace ERP_V2.Services.BA02
                         {
                             errMsg += "<br />" + string.Format("- Property: \"{0}\", Error: \"{1}\"", ve.PropertyName, ve.ErrorMessage);
                         }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException != null)
+                    {
+                        errMsg = ex.InnerException.Message;
+                    }
+                    else
+                    {
+                        errMsg = ex.Message;
                     }
                 }
             }

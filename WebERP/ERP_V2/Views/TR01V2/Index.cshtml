@@ -42,14 +42,11 @@
             ShowAlert = true;
 
             $.validator.unobtrusive.parse("#MasterForm");
-            //alert("123");
             if ($("#MasterForm").valid()) {
                 if (DetailGrid.batchEditApi.HasChanges()) {
-                    //alert("456");
                     DetailGrid.UpdateEdit();
                 }
                 else {
-                    //alert("789");
                     DetailGrid.PerformCallback();
                 }
             }
@@ -196,9 +193,9 @@
 
     //=======================廠商 BA01ASelectedChange==============
     function BA01ASelectedChange(s, e) {
-        //alert(s.name);
         var value = s.GetValue();
         CbBA01B_ID.PerformCallback();
+        DetailGrid.CancelEdit();
     }
     function CboContactBegCall(s, e) {
         e.customArgs["key"] = CbBA01A_ID.GetValue();
@@ -207,7 +204,7 @@
         CbBA03A_ID.SetValue(CbBA01B_ID.cpBA03A_ID);
         ADD_DR.SetValue(CbBA01B_ID.cpADD_DR);
         FAX_NO.SetText(CbBA01B_ID.cpFAX_NO);
-        CUR_RT.SetValue(CbBA01B_ID.cpCUR_RT);
+        //CUR_RT.SetValue(CbBA01B_ID.cpCUR_RT);
         TEL_NO.SetText(CbBA01B_ID.cpTEL_NO);
         TEL_EX.SetText(CbBA01B_ID.cpTEL_EX);
 

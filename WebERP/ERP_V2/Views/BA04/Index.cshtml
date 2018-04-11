@@ -28,6 +28,7 @@
             alertify.confirm('Delete', 'Press OK to confirm delete'
                 , function () {
                     MasterGrid.DeleteRow(e.visibleIndex);
+                    MasterGrid.CancelEdit();
                 }
                 , function () {
                     alertify.error('Cancel')

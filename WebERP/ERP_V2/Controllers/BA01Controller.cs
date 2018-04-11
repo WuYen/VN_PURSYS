@@ -65,7 +65,7 @@ namespace ERP_V2.Controllers
             if (errMsg.Length > 0 || BA01A == null)
             {
                 isSuccess = false;
-                ViewData["EditError"] = "Delete Fail";
+                ViewData["EditError"] = "Delete Fail <br>" + errMsg;
             }
             ViewData["IsSuccess"] = isSuccess;
             return PartialView("_MasterGrid", GetBA01AList());
@@ -231,7 +231,6 @@ namespace ERP_V2.Controllers
         #region Private Funcitons
         private void ValidateMaster(BA01AViewModel master)
         {
-
         }
 
         private BA01A MasterToEntity(BA01AViewModel master)

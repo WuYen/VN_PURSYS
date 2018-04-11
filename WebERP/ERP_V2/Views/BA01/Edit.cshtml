@@ -50,6 +50,9 @@
         SetHideColumn();
         if (formSave) {
             ShowError(s.cpEditError);//operation for save fail
+            if (s.cpEditError != null && s.cpEditError.length > 1) {
+                DetailGrid.Refresh();
+            }
             formSave = false;
             $("#MasterFormDiv").html(s.cpMasterForm);//reload content of master form
             if (s.cpDeleteIDs != undefined) {

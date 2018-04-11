@@ -141,7 +141,7 @@ namespace ERP_V2.ViewModels.TR01V2
         [Required]
         public string CPN_NM { get; set; }
 
-        [Required]
+        //[Required]
         public string CUR_RT { get; set; }
     }
 }

@@ -135,6 +135,7 @@ namespace ERP_V2.ViewModels.TR01V2
                     }
                     foreach (var item in UpdateD)
                     {
+                        item.TR01A_ID = entity.TR01A_ID;
                         _Entity.Entry(item).State = EntityState.Modified;
                     }
                     //要先update delete的資料

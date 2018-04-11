@@ -172,21 +172,21 @@
             s.Properties.DataSource = ERP_V2.CacheCommonDataModule.GetBA03A();
         });
     });
-    settings.Items.Add(i =>
-    {
-        i.Name = "CUR_RT";
-        i.FieldName = "CUR_RT";
-        i.Caption = Resources.Resource.TR01A_CUR_RT;
-        i.NestedExtension().SpinEdit(s =>
-        {
-            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-            s.ShowModelErrors = true;
-            s.Width = Unit.Percentage(100);
-            s.Properties.DisplayFormatString = "G29";
-            s.Properties.DisplayFormatInEditMode = true;
-            s.Properties.DecimalPlaces = 4;
-        });
-    });
+    //settings.Items.Add(i =>
+    //{
+    //    i.Name = "CUR_RT";
+    //    i.FieldName = "CUR_RT";
+    //    i.Caption = Resources.Resource.TR01A_CUR_RT;
+    //    i.NestedExtension().SpinEdit(s =>
+    //    {
+    //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //        s.ShowModelErrors = true;
+    //        s.Width = Unit.Percentage(100);
+    //        s.Properties.DisplayFormatString = "G29";
+    //        s.Properties.DisplayFormatInEditMode = true;
+    //        s.Properties.DecimalPlaces = 4;
+    //    });
+    //});
     settings.Items.Add(i =>
     {
         i.Name = "TAX_RT";
@@ -203,7 +203,7 @@
             s.Properties.ClientSideEvents.SelectedIndexChanged = "TAX_RTSelectedChanged";
         });
     });
-    settings.Items.AddEmptyItem();
+
     //settings.Items.Add(i =>
     //{
     //    i.Name = "TOT_MY";
