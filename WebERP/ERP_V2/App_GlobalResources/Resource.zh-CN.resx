@@ -328,4 +328,31 @@
   <data name="FillInUser" xml:space="preserve">
     <value>填写人</value>
   </data>
+  <data name="DateRangBeg" xml:space="preserve">
+    <value>日期</value>
+  </data>
+  <data name="DateRangEnd" xml:space="preserve">
+    <value>到</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="TOT_PR" xml:space="preserve">
+    <value>采购金额</value>
+  </data>
+  <data name="NotEnoughQT" xml:space="preserve">
+    <value>缺交数量</value>
+  </data>
+  <data name="RP01_PUR_QT" xml:space="preserve">
+    <value>采购数量</value>
+  </data>
+  <data name="ReceiveMY" xml:space="preserve">
+    <value>到货单价</value>
+  </data>
+  <data name="EachPrice" xml:space="preserve">
+    <value>采购单价</value>
+  </data>
 </root>

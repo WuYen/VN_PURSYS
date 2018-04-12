@@ -22,7 +22,7 @@
         @Html.DevExpress().ComboBox(settings =>
                        {
                            settings.Name = "Year";
-                           settings.Properties.Caption = "年";
+                           settings.Properties.Caption = Resources.Resource.Year;
                            for (int i = 2018; i <= DateTime.Now.Year; i++)
                            {
                                settings.Properties.Items.Add(i.ToString(), i);
@@ -79,7 +79,7 @@
         @Html.DevExpress().ComboBox(settings =>
         {
             settings.Name = "Year2";
-            settings.Properties.Caption = "年";
+            settings.Properties.Caption = Resources.Resource.Year;
             for (int i = 2018; i <= DateTime.Now.Year; i++)
             {
                 settings.Properties.Items.Add(i.ToString(), i);
@@ -91,7 +91,7 @@
         @Html.DevExpress().ComboBox(settings =>
         {
             settings.Name = "Month2";
-            settings.Properties.Caption = "月";
+            settings.Properties.Caption = Resources.Resource.Month;
             for (int i = 1; i < 13; i++)
             {
                 settings.Properties.Items.Add(i.ToString(), i);

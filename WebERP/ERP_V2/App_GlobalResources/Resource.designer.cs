@@ -414,6 +414,24 @@ namespace Resources {
         /// <summary>
         ///   查詢類似 日期 的當地語系化字串。
         /// </summary>
+        internal static string DateRangBeg {
+            get {
+                return ResourceManager.GetString("DateRangBeg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 到 的當地語系化字串。
+        /// </summary>
+        internal static string DateRangEnd {
+            get {
+                return ResourceManager.GetString("DateRangEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 日期 的當地語系化字串。
+        /// </summary>
         internal static string DT_From {
             get {
                 return ResourceManager.GetString("DT_From", resourceCulture);
@@ -426,6 +444,15 @@ namespace Resources {
         internal static string DT_To {
             get {
                 return ResourceManager.GetString("DT_To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 採購單價 的當地語系化字串。
+        /// </summary>
+        internal static string EachPrice {
+            get {
+                return ResourceManager.GetString("EachPrice", resourceCulture);
             }
         }
         
@@ -475,6 +502,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   查詢類似 月 的當地語系化字串。
+        /// </summary>
+        internal static string Month {
+            get {
+                return ResourceManager.GetString("Month", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 未全數送達 的當地語系化字串。
         /// </summary>
         internal static string NotAllArrive {
@@ -502,11 +538,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   查詢類似 缺交數量 的當地語系化字串。
+        /// </summary>
+        internal static string NotEnoughQT {
+            get {
+                return ResourceManager.GetString("NotEnoughQT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 按 的當地語系化字串。
         /// </summary>
         internal static string Press {
             get {
                 return ResourceManager.GetString("Press", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 到貨單價 的當地語系化字串。
+        /// </summary>
+        internal static string ReceiveMY {
+            get {
+                return ResourceManager.GetString("ReceiveMY", resourceCulture);
             }
         }
         
@@ -538,6 +592,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   查詢類似 採購數量 的當地語系化字串。
+        /// </summary>
+        internal static string RP01_PUR_QT {
+            get {
+                return ResourceManager.GetString("RP01_PUR_QT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 顯示順序 的當地語系化字串。
         /// </summary>
         internal static string SEQ_NO {
@@ -552,6 +615,15 @@ namespace Resources {
         internal static string TaxRate {
             get {
                 return ResourceManager.GetString("TaxRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 採購金額 的當地語系化字串。
+        /// </summary>
+        internal static string TOT_PR {
+            get {
+                return ResourceManager.GetString("TOT_PR", resourceCulture);
             }
         }
         
@@ -750,6 +822,15 @@ namespace Resources {
         internal static string TYP_ID {
             get {
                 return ResourceManager.GetString("TYP_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 年 的當地語系化字串。
+        /// </summary>
+        internal static string Year {
+            get {
+                return ResourceManager.GetString("Year", resourceCulture);
             }
         }
     }

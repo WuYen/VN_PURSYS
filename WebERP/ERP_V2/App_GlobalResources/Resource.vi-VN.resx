@@ -348,4 +348,31 @@
   <data name="FillInUser" xml:space="preserve">
     <value>Người điền biểu</value>
   </data>
+  <data name="DateRangBeg" xml:space="preserve">
+    <value>từ ngày</value>
+  </data>
+  <data name="DateRangEnd" xml:space="preserve">
+    <value>đến ngày</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>năm</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Tháng</value>
+  </data>
+  <data name="TOT_PR" xml:space="preserve">
+    <value>Số tiền thu mua</value>
+  </data>
+  <data name="NotEnoughQT" xml:space="preserve">
+    <value>Số còn thiếu</value>
+  </data>
+  <data name="RP01_PUR_QT" xml:space="preserve">
+    <value>Số lượng thu mua</value>
+  </data>
+  <data name="ReceiveMY" xml:space="preserve">
+    <value>đơn giá thực tế</value>
+  </data>
+  <data name="EachPrice" xml:space="preserve">
+    <value>Đơn giá thu mua</value>
+  </data>
 </root>

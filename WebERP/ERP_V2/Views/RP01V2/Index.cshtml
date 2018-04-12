@@ -11,48 +11,87 @@
         e.customArgs["DateBeg"] = DateBeg.GetText();
         e.customArgs["DateEnd"] = DateEnd.GetText();
     }
+    function BtnExportClick(s, e) {
+        if (GridView.GetVisibleRowsOnPage() == 0) {
+            ShowError('請先篩選資料');
+            return;
+        }
+        var form = $('<form enctype="application/json"></form>');
+        form.attr("method", "post");
+        form.attr("action", '@Url.Action("ExportToExcel1", "RP01V2")');
+
+        var field = $('<input></input>');
+        field.attr("type", "hidden");
+        field.attr("name", "BA02A_ID");
+        field.attr("value", CboProduct.GetValue());
+        form.append(field);
+
+        var field2 = $('<input></input>');
+        field2.attr("type", "hidden");
+        field2.attr("name", "DateBeg");
+        field2.attr("value", DateBeg.GetText());
+        form.append(field2);
+
+        var field3 = $('<input></input>');
+        field3.attr("type", "hidden");
+        field3.attr("name", "DateEnd");
+        field3.attr("value", DateEnd.GetText());
+        form.append(field3);
+
+        $(document.body).append(form);
+        form.submit();
+    }
 </script>
 <div style="margin-left:10px">
     <div style="margin-top:10px;height:30px">
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().ComboBox(settings =>
-            {
-                settings.Name = "CboProduct";
-                settings.Properties.Caption = "商品";
-                settings.Properties.TextField = "ITM_NM";
-                settings.Properties.ValueField = "BA02A_ID";
-            }).BindList(ERP_V2.CacheCommonDataModule.GetBA02A()).GetHtml()
+                        {
+                            settings.Name = "CboProduct";
+                            settings.Properties.Caption = Resources.Resource.BA02A_ITM_NM;
+                            settings.Properties.TextField = "ITM_NM";
+                            settings.Properties.ValueField = "BA02A_ID";
+                        }).BindList(ERP_V2.CacheCommonDataModule.GetBA02A()).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().DateEdit(settings =>
-            {
-                settings.Name = "DateBeg";
-                settings.Properties.Caption = "日期";
-                settings.Date = DateTime.Now.AddMonths(-1);
-                settings.Properties.DisplayFormatString = "yyyy/MM/dd";
-                settings.Properties.EditFormatString = "yyyy/MM/dd";
-            }).GetHtml()
+                        {
+                            settings.Name = "DateBeg";
+                            settings.Properties.Caption = Resources.Resource.DateRangBeg;
+                            settings.Date = DateTime.Now.AddMonths(-1);
+                            settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+                            settings.Properties.EditFormatString = "yyyy/MM/dd";
+                        }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().DateEdit(settings =>
-            {
-                settings.Name = "DateEnd";
-                settings.Properties.Caption = "到";
-                settings.Date = DateTime.Now;
-                settings.Properties.CaptionSettings.ShowColon = false;
-                settings.Properties.DisplayFormatString = "yyyy/MM/dd";
-                settings.Properties.EditFormatString = "yyyy/MM/dd";
-            }).GetHtml()
+                        {
+                            settings.Name = "DateEnd";
+                            settings.Properties.Caption = Resources.Resource.DateRangEnd;
+                            settings.Date = DateTime.Now;
+                            settings.Properties.CaptionSettings.ShowColon = false;
+                            settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+                            settings.Properties.EditFormatString = "yyyy/MM/dd";
+                        }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
             @Html.DevExpress().Button(settings =>
-            {
-                settings.Name = "BtnSearch";
-                settings.Text = "Search";
-                settings.Images.Image.Url = "~/Content/Icon/search.png";
-                settings.ClientSideEvents.Click = "BtnSearchClick";
+                        {
+                            settings.Name = "BtnSearch";
+                            settings.Text = "Search";
+                            settings.Images.Image.Url = "~/Content/Icon/search.png";
+                            settings.ClientSideEvents.Click = "BtnSearchClick";
+                        }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+                 {
+                     settings.Name = "BtnExport";
+                     settings.Text = "Export";
+                     settings.ClientSideEvents.Click = "BtnExportClick";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
             }).GetHtml()
         </div>
+
     </div>
     <div>
         @{
@@ -73,57 +112,95 @@
     function GridView2EndCallback(s, e) {
         chart.PerformCallback();
     }
+    function BtnExportClick2(s, e) {
+        if (GridView2.GetVisibleRowsOnPage() == 0) {
+            ShowError('請先篩選資料');
+            return;
+        }
+        var form = $('<form enctype="application/json"></form>');
+        form.attr("method", "post");
+        form.attr("action", '@Url.Action("ExportToExcel2", "RP01V2")');
+
+        var field = $('<input></input>');
+        field.attr("type", "hidden");
+        field.attr("name", "TYP_ID");
+        field.attr("value", TYP_ID.GetValue());
+        form.append(field);
+
+        var field2 = $('<input></input>');
+        field2.attr("type", "hidden");
+        field2.attr("name", "Year");
+        field2.attr("value", Year.GetValue());
+        form.append(field2);
+
+        var field3 = $('<input></input>');
+        field3.attr("type", "hidden");
+        field3.attr("name", "Month");
+        field3.attr("value", Month.GetValue());
+        form.append(field3);
+
+        $(document.body).append(form);
+        form.submit();
+    }
 </script>
 <div style="margin-left:10px">
     <div style="margin-top:10px;height:30px">
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().ComboBox(settings =>
-            {
-                settings.Name = "TYP_ID";
-                settings.Properties.Caption = Resources.Resource.TYP_ID;
-                settings.Properties.ValueField = "value";
-                settings.Properties.TextField = "key";
-                settings.SelectedIndex = 0;
-            }).BindList(ERP_V2.CacheCommonDataModule.GetBA04A(ERP_V2.UserInfo.LanguageType, false).Where(x => x.Value > 0)).GetHtml()
+                       {
+                           settings.Name = "TYP_ID";
+                           settings.Properties.Caption = Resources.Resource.TYP_ID;
+                           settings.Properties.ValueField = "value";
+                           settings.Properties.TextField = "key";
+                           settings.SelectedIndex = 0;
+                       }).BindList(ERP_V2.CacheCommonDataModule.GetBA04A(ERP_V2.UserInfo.LanguageType, false).Where(x => x.Value > 0)).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().ComboBox(settings =>
-            {
-                settings.Name = "Year";
-                settings.Properties.Caption = "年";
+                  {
+                      settings.Name = "Year";
+                      settings.Properties.Caption = Resources.Resource.Year;
 
-                for (int i = 2018; i <= DateTime.Now.Year; i++)
-                {
-                    settings.Properties.Items.Add(i.ToString(), i);
-                }
+                      for (int i = 2018; i <= DateTime.Now.Year; i++)
+                      {
+                          settings.Properties.Items.Add(i.ToString(), i);
+                      }
 
-                settings.SelectedIndex = 0;
-            }).GetHtml()
+                      settings.SelectedIndex = 0;
+                  }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().ComboBox(settings =>
-            {
-                settings.Name = "Month";
-                settings.Properties.Caption = "月";
-                for (int i = 1; i < 13; i++)
-                {
-                    settings.Properties.Items.Add(i.ToString(), i);
-                }
-                settings.SelectedIndex = DateTime.Now.Month - 2;
-                if (DateTime.Now.Month - 2 <= 0)
-                {
-                    settings.SelectedIndex = 0;
-                }
-            }).GetHtml()
+                       {
+                           settings.Name = "Month";
+                           settings.Properties.Caption = Resources.Resource.Month;
+                           for (int i = 1; i < 13; i++)
+                           {
+                               settings.Properties.Items.Add(i.ToString(), i);
+                           }
+                           settings.SelectedIndex = DateTime.Now.Month - 2;
+                           if (DateTime.Now.Month - 2 <= 0)
+                           {
+                               settings.SelectedIndex = 0;
+                           }
+                       }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
             @Html.DevExpress().Button(settings =>
-            {
-                settings.Name = "BtnSearch2";
-                settings.Text = "Search";
-                settings.Images.Image.Url = "~/Content/Icon/search.png";
-                settings.ClientSideEvents.Click = "BtnSearch2Click";
-            }).GetHtml()
+                       {
+                           settings.Name = "BtnSearch2";
+                           settings.Text = "Search";
+                           settings.Images.Image.Url = "~/Content/Icon/search.png";
+                           settings.ClientSideEvents.Click = "BtnSearch2Click";
+                       }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+                  {
+                      settings.Name = "BtnExport2";
+                      settings.Text = "Export";
+                      settings.ClientSideEvents.Click = "BtnExportClick2";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
+             }).GetHtml()
         </div>
     </div>
     <div style="height:520px">
@@ -140,7 +217,47 @@
     </div>
 </div>
 <br />
+<script>
+    function BtnExportClick3(s, e) {
+        if (GridView2.GetVisibleRowsOnPage() == 0) {
+            ShowError('請先篩選資料');
+            return;
+        }
+        var form = $('<form enctype="application/json"></form>');
+        form.attr("method", "post");
+        form.attr("action", '@Url.Action("ExportToExcel3", "RP01V2")');
+
+        var field = $('<input></input>');
+        field.attr("type", "hidden");
+        field.attr("name", "TYP_ID");
+        field.attr("value", TYP_ID.GetValue());
+        form.append(field);
+
+        var field2 = $('<input></input>');
+        field2.attr("type", "hidden");
+        field2.attr("name", "Year");
+        field2.attr("value", Year.GetValue());
+        form.append(field2);
+
+        var field3 = $('<input></input>');
+        field3.attr("type", "hidden");
+        field3.attr("name", "Month");
+        field3.attr("value", Month.GetValue());
+        form.append(field3);
+
+        $(document.body).append(form);
+        form.submit();
+    }
+</script>
 <div style="margin-left:10px">
+    @*<div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+        @Html.DevExpress().Button(settings =>
+                   {
+                       settings.Name = "BtnExport3";
+                       settings.Text = "Export";
+                       settings.ClientSideEvents.Click = "BtnExportClick3";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
+              }).GetHtml()
+    </div>*@
     @{
         Html.RenderAction("GridView3");
     }

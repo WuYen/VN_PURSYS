@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using ERP_V2.Models;
 using System.Data;
 using System.Data.SqlClient;
+using DevExpress.XtraPrinting;
+using DevExpress.Web;
 
 namespace ERP_V2.Controllers
 {
@@ -31,9 +33,158 @@ namespace ERP_V2.Controllers
 
         public ActionResult GridViewRefreshData(string BA02A_ID, string DateBeg, string DateEnd)
         {
+            if (string.IsNullOrWhiteSpace(BA02A_ID))
+            {
+                return PartialView("_GridView", new DataTable());
+            }
             DateTime.TryParse(DateBeg, out DateTime dateBeg);
             DateTime.TryParse(DateEnd, out DateTime dateEnd);
             return PartialView("_GridView", GetData(BA02A_ID, dateBeg.ToString("yyyyMMdd"), dateEnd.ToString("yyyyMMdd")));
+        }
+
+        public ActionResult ExportToExcel1(string BA02A_ID, string DateBeg, string DateEnd)
+        {
+            DateTime.TryParse(DateBeg, out DateTime dateBeg);
+            DateTime.TryParse(DateEnd, out DateTime dateEnd);
+            var dt = GetData(BA02A_ID, dateBeg.ToString("yyyyMMdd"), dateEnd.ToString("yyyyMMdd"));
+            var settings = new GridViewSettings();
+            settings.Name = "GridView";
+            settings.CallbackRouteValues = new { Controller = "RP01V2", Action = "GridView" };
+            settings.CustomActionRouteValues = new { Controller = "RP01V2", Action = "GridViewRefreshData" };
+            settings.ClientSideEvents.BeginCallback = "GridViewBegCallback";
+            settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e9e9e9");
+            settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0076c2");
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "PUR_NO";
+                    column.Caption = Resources.Resource.TR01A_PUR_NO;
+                });
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "PUR_DT";
+                    column.Caption = Resources.Resource.TR01A_PUR_DT;
+                });
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "INC_NM";
+                    column.Caption = Resources.Resource.BA01A_INC_NM;
+                });
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "PUR_PR";
+                    column.Caption = Resources.Resource.EachPrice;
+                    column.EditorProperties().SpinEdit(s =>
+                    {
+                        s.DecimalPlaces = 2;
+                        s.DisplayFormatString = "G29";
+                    });
+                });
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "Each_PR";
+                    column.Caption = Resources.Resource.ReceiveMY;
+                    column.EditorProperties().SpinEdit(s =>
+                    {
+                        s.DecimalPlaces = 2;
+                        s.DisplayFormatString = "G29";
+                    });
+                });
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "PUR_QT";
+                    column.Caption = Resources.Resource.RP01_PUR_QT;
+                    column.EditorProperties().SpinEdit(s =>
+                    {
+                        s.DecimalPlaces = 2;
+                        s.DisplayFormatString = "G29";
+                    });
+                });
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "TOT_QT";
+                    column.Caption = Resources.Resource.TR01M_ARR_QT;
+                    column.EditorProperties().SpinEdit(s =>
+                    {
+                        s.DecimalPlaces = 2;
+                        s.DisplayFormatString = "G29";
+                    });
+                });
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "DIF_QT";
+                    column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+                    //column.UnboundExpression = "[PUR_QT]-[TOT_QT]";
+                    column.Caption = Resources.Resource.NotEnoughQT;
+                    column.EditorProperties().SpinEdit(s =>
+                    {
+                        //s.DisplayFormatString = "#,#.#";
+                        s.DisplayFormatString = "G29";
+                    });
+                });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName == "DIF_QT")
+                {
+                    decimal PUR_QT = (decimal)e.GetListSourceFieldValue("PUR_QT");
+                    decimal? TOT_QT = e.GetListSourceFieldValue("TOT_QT") as decimal?;
+                    if (!TOT_QT.HasValue)
+                    {
+                        TOT_QT = 0;
+                    }
+                    e.Value = PUR_QT - TOT_QT;
+                }
+            };
+            settings.HtmlDataCellPrepared = (s, e) =>
+            {
+                if (e.DataColumn.FieldName == "TOT_QT")
+                {
+                    var ss = s as MVCxGridView;
+                    var cellValue = ss.GetRowValues(e.VisibleIndex, "PUR_QT") as decimal?;
+                    var currentCell = e.CellValue as decimal?;
+                    if (cellValue.HasValue && currentCell.HasValue)
+                    {
+                        if (Decimal.Compare(cellValue.Value, currentCell.Value) != 0)
+                        {
+                            e.Cell.ForeColor = System.Drawing.Color.Red;
+                        }
+                    }
+                }
+                else if (e.DataColumn.FieldName == "DIF_QT")
+                {
+                    var currentCell = e.CellValue as decimal?;
+                    if (currentCell.HasValue && currentCell.Value > 0)
+                    {
+                        e.Cell.ForeColor = System.Drawing.Color.Red;
+                    }
+                }
+                else if (e.DataColumn.FieldName == "Each_PR")
+                {
+                    var ss = s as MVCxGridView;
+                    var cellValue = ss.GetRowValues(e.VisibleIndex, "PUR_PR") as decimal?;
+                    var currentCell = e.CellValue as decimal?;
+                    if (currentCell.HasValue)
+                    {
+                        if (Decimal.Compare(cellValue.Value, currentCell.Value) == 0)
+                        {
+                            e.Cell.ForeColor = System.Drawing.Color.Green;
+                        }
+                        else
+                        {
+                            e.Cell.ForeColor = System.Drawing.Color.Red;
+                        }
+                    }
+                }
+            };
+
+            return GridViewExtension.ExportToXlsx(settings, dt, "商品採購紀錄", new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG });
         }
 
         public ActionResult GridView2(string TYP_ID, string Year, string Month)
@@ -72,6 +223,51 @@ namespace ERP_V2.Controllers
                 Session["GridView2Data"] = data;
             }
             return data;
+        }
+
+
+        public ActionResult ExportToExcel2(string TYP_ID, string Year, string Month)
+        {
+            DateTime.TryParse(Year + "/" + Month + "/01", out DateTime dateBeg);
+            var dateEnd = dateBeg.AddMonths(1).AddDays(-1);
+            var dt = GetGridView2SessionData(TYP_ID, dateBeg.ToString("yyyyMMdd"), dateEnd.ToString("yyyyMMdd"));
+
+            var settings = new GridViewSettings();
+            settings.Name = "GridView2";
+            settings.Width = 300;
+            settings.CallbackRouteValues = new { Controller = "RP01V2", Action = "GridView2" };
+            settings.CustomActionRouteValues = new { Controller = "RP01V2", Action = "GridViewRefreshData2" };
+            settings.ClientSideEvents.BeginCallback = "GridView2BegCallback";
+            settings.ClientSideEvents.EndCallback = "GridView2EndCallback";
+            settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e9e9e9");
+            settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0076c2");
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "BA02A_ID";
+                    column.Caption = Resources.Resource.BA02A_ITM_NM;
+                    column.EditorProperties().ComboBox(
+                        p =>
+                        {
+                            p.TextField = "ITM_NM";
+                            p.ValueField = "BA02A_ID";
+                            p.DataSource = ERP_V2.CacheCommonDataModule.GetBA02A();
+                        });
+                });
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "TOT_PR";
+                    column.Caption = Resources.Resource.TOT_PR;
+                    column.EditorProperties().SpinEdit(s =>
+                    {
+                        s.DisplayFormatString = "#,0";
+                    });
+                });
+            settings.Settings.ShowFooter = false;
+            settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+            return GridViewExtension.ExportToXlsx(settings, dt,"類別採購項目", new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG });
         }
 
         public ActionResult GridViewRefreshData2(string TYP_ID, string Year, string Month)

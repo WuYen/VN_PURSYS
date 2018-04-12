@@ -15,7 +15,7 @@
             column =>
             {
                 column.FieldName = "BA02A_ID";
-                column.Caption = "商品名稱";
+                column.Caption = Resources.Resource.BA02A_ITM_NM;
                 column.EditorProperties().ComboBox(
                     p =>
                     {
@@ -28,7 +28,7 @@
             column =>
             {
                 column.FieldName = "TOT_PR";
-                column.Caption = "採購金額";
+                column.Caption = Resources.Resource.TOT_PR;
                 column.EditorProperties().SpinEdit(s =>
                 {
                     s.DisplayFormatString = "#,0";

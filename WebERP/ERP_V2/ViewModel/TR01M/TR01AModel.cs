@@ -13,8 +13,16 @@ namespace ERP_V2.ViewModels.TR01M
         {
             get
             {
-                var time = DateTime.UtcNow.AddHours(07);
-                return time.Subtract(this.DtEXP_DT.Value).Days;
+                if (this.CFN_YN != "Y")
+                {
+                    var time = DateTime.UtcNow.AddHours(07);
+                    return time.Subtract(this.DtEXP_DT.Value).Days;
+                }
+                else
+                {
+                    return 0;
+                }
+
             }
         }
     }
