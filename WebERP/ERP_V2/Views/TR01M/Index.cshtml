@@ -13,8 +13,10 @@
     }
 </style>
 <script>
+    var fromFilter = false;
     function ApplyFilterlick(s, e) {
         GridTR01A.PerformCallback();
+        fromFilter = true;
     }
     function GridTR01ABeginCallback(s, e) {
         GridTR01A.callbackCustomArgs["search"] = $.extend(GridTR01A.callbackCustomArgs["search"], MVCxClientUtils.GetSerializedEditorValuesInContainer("SearchForm", true));
@@ -24,6 +26,10 @@
             GridTR01B.UnselectAllRowsOnPage();
             GridTR01B.PerformCallback();
             GridTR01C.PerformCallback();
+        }
+        if (fromFilter) {
+            GridTR01B.PerformCallback();
+            fromFilter = false;
         }
     }
 

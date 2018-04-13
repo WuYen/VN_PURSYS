@@ -123,14 +123,14 @@
             $("#MasterFormDiv").html(s.cpMasterForm);//reload content of master form
             var toolBarEnable = false;
             if (s.cpCFN_YN == 'Y') {
-                ToolBar.GetItemByName('Lock').SetText('@Resources.Resource.CaseClosed');
+                ToolBar.GetItemByName('Lock').SetText(CaseClosed.GetText());
             } else if (s.cpCFN_YN == 'P') {
-                ToolBar.GetItemByName('Lock').SetText('@Resources.Resource.Applying');
+                ToolBar.GetItemByName('Lock').SetText(Applying.GetText());
             } else if (s.cpCFN_YN == 'R') {
-                ToolBar.GetItemByName('Lock').SetText('@Resources.Resource.Reject');
+                ToolBar.GetItemByName('Lock').SetText(Reject.GetText());
                 toolBarEnable = true;
             }else {
-                ToolBar.GetItemByName('Lock').SetText('@Resources.Resource.NotClosed');
+                ToolBar.GetItemByName('Lock').SetText(NotClosed.GetText());
                 toolBarEnable = true;
             }
             ToolBar.GetItemByName('Save').SetEnabled(toolBarEnable);
@@ -271,113 +271,117 @@
 <div style="margin-top:5px;margin-left:10px">
     <div style="display:inline-block">
         @Html.DevExpress().Button(s =>
-             {
-                 s.Name = "BtnTitle";
-                 s.Text = ERP_V2.CacheCommonDataModule.GetPageName("TR01");
-                 s.Height = 35;
-                 s.Styles.Style.Font.Size = FontUnit.Medium;
-                 s.Styles.Style.Font.Bold = true;
-                 s.ControlStyle.Border.BorderStyle = BorderStyle.None;
-                 s.ControlStyle.BorderLeft.BorderStyle = BorderStyle.Solid;
-                 s.ControlStyle.BorderLeft.BorderColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
-                 s.ControlStyle.BorderLeft.BorderWidth = 4;
-                 s.ClientEnabled = false;
-                 s.Styles.Style.DisabledStyle.ForeColor = System.Drawing.Color.Black;
-             }).GetHtml()
+                       {
+                           s.Name = "BtnTitle";
+                           s.Text = ERP_V2.CacheCommonDataModule.GetPageName("TR01");
+                           s.Height = 35;
+                           s.Styles.Style.Font.Size = FontUnit.Medium;
+                           s.Styles.Style.Font.Bold = true;
+                           s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+                           s.ControlStyle.BorderLeft.BorderStyle = BorderStyle.Solid;
+                           s.ControlStyle.BorderLeft.BorderColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+                           s.ControlStyle.BorderLeft.BorderWidth = 4;
+                           s.ClientEnabled = false;
+                           s.Styles.Style.DisabledStyle.ForeColor = System.Drawing.Color.Black;
+                       }).GetHtml()
     </div>
     <div style="display:inline-block">
         @Html.DevExpress().Button(
-                  s =>
-                  {
-                      s.Name = "BtnSearch";
-                      s.Text = "Search";
-                      s.Height = 35;
-                      s.Images.Image.Url = "~/Content/Icon/Search.png";
-                      s.ClientSideEvents.Click = "SearchClick";
-                  }).GetHtml()
+                            s =>
+                            {
+                                s.Name = "BtnSearch";
+                                s.Text = "Search";
+                                s.Height = 35;
+                                s.Images.Image.Url = "~/Content/Icon/Search.png";
+                                s.ClientSideEvents.Click = "SearchClick";
+                            }).GetHtml()
 
     </div>
     <div style="display:inline-block">
         @Html.DevExpress().Button(
-                  s =>
-                  {
-                      s.Name = "BtnAddNew";
-                      s.Text = "Add";
-                      s.Height = 35;
-                      s.Images.Image.IconID = "actions_additem_16x16";
-                      s.ClientSideEvents.Click = "AddNewClick";
-                  }).GetHtml()
+                            s =>
+                            {
+                                s.Name = "BtnAddNew";
+                                s.Text = "Add";
+                                s.Height = 35;
+                                s.Images.Image.IconID = "actions_additem_16x16";
+                                s.ClientSideEvents.Click = "AddNewClick";
+                            }).GetHtml()
     </div>
     <div style="display:inline-block">
         @Html.DevExpress().Button(
-                           s =>
-                           {
-                               s.Name = "BtnReload";
-                               s.Text = "";
-                               s.Height = 35;
-                               s.Images.Image.IconID = "actions_refresh2_16x16";
-                               s.ClientSideEvents.Click = "function(){location.reload();}";
-                           }).GetHtml()
+                                     s =>
+                                     {
+                                         s.Name = "BtnReload";
+                                         s.Text = "";
+                                         s.Height = 35;
+                                         s.Images.Image.IconID = "actions_refresh2_16x16";
+                                         s.ClientSideEvents.Click = "function(){location.reload();}";
+                                     }).GetHtml()
     </div>
 </div>
+@Html.DevExpress().TextBox(settings => { settings.Name = "Applying"; settings.Text = @Resources.Resource.Applying;settings.ClientVisible = false; }).GetHtml()
+@Html.DevExpress().TextBox(settings => { settings.Name = "CaseClosed"; settings.Text = @Resources.Resource.CaseClosed; settings.ClientVisible = false; }).GetHtml()
+@Html.DevExpress().TextBox(settings => { settings.Name = "Reject"; settings.Text = @Resources.Resource.Reject; settings.ClientVisible = false; }).GetHtml()
+@Html.DevExpress().TextBox(settings => { settings.Name = "NotClosed"; settings.Text = @Resources.Resource.NotClosed; settings.ClientVisible = false; }).GetHtml()
 
 <div style="margin-top:15px;margin-left:10px; margin-right:10px">
     @Html.DevExpress().Menu(settings =>
-{
-    settings.Name = "ToolBar";
-    settings.Width = Unit.Percentage(100);
-    settings.ItemAutoWidth = false;
-    settings.EnableAnimation = true;
-    settings.Styles.Style.BackColor = System.Drawing.Color.White;
-    settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
-    settings.ControlStyle.Border.BorderColor = System.Drawing.Color.Gray;
-    settings.ControlStyle.Border.BorderWidth = 1;
-    settings.Styles.Item.BackColor = System.Drawing.Color.White;
-    settings.Styles.Item.HoverStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
-    settings.Styles.Item.HoverStyle.ForeColor = System.Drawing.Color.White;
-    settings.ControlStyle.Paddings.PaddingTop = 5;
-    settings.ControlStyle.Paddings.PaddingBottom = 5;
-    settings.ClientSideEvents.ItemClick = "ToolBarClick";
-    settings.Items.Add(i =>
-    {
-        i.Text = "Save";
-        i.Name = "Save";
-        i.Image.IconID = "actions_save_16x16devav";
-    });
-    settings.Items.Add(i =>
-    {
-        i.Text = "Cancel";
-        i.Name = "Cancel";
-        i.Image.IconID = "actions_cancel_16x16";
-    });
-    settings.Items.Add(i =>
-    {
-        i.Text = "Delete";
-        i.Name = "Delete";
-        i.Image.IconID = "actions_deletelist_16x16";
-    });
-    settings.Items.Add(i =>
-    {
-        i.Text = "Print";
-        i.Name = "Print";
-        i.Image.IconID = "actions_print_16x16devav";
-    });
-    settings.Items.Add(i =>
-    {
-        i.Name = "Lock";
-        i.Text = Resources.Resource.NotClosed;
-        i.Image.Url = "~/Content/Icon/lock.png";
-        i.ClientEnabled = false;
-        //if (ERP_V2.UserInfo.Permission == "1")
-        //{
-        //    i.ClientVisible = true;
-        //}
-        //else
-        //{
-        //    i.ClientVisible = false;
-        //}
-    });
-}).GetHtml()
+        {
+            settings.Name = "ToolBar";
+            settings.Width = Unit.Percentage(100);
+            settings.ItemAutoWidth = false;
+            settings.EnableAnimation = true;
+            settings.Styles.Style.BackColor = System.Drawing.Color.White;
+            settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+            settings.ControlStyle.Border.BorderColor = System.Drawing.Color.Gray;
+            settings.ControlStyle.Border.BorderWidth = 1;
+            settings.Styles.Item.BackColor = System.Drawing.Color.White;
+            settings.Styles.Item.HoverStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+            settings.Styles.Item.HoverStyle.ForeColor = System.Drawing.Color.White;
+            settings.ControlStyle.Paddings.PaddingTop = 5;
+            settings.ControlStyle.Paddings.PaddingBottom = 5;
+            settings.ClientSideEvents.ItemClick = "ToolBarClick";
+            settings.Items.Add(i =>
+            {
+                i.Text = "Save";
+                i.Name = "Save";
+                i.Image.IconID = "actions_save_16x16devav";
+            });
+            settings.Items.Add(i =>
+            {
+                i.Text = "Cancel";
+                i.Name = "Cancel";
+                i.Image.IconID = "actions_cancel_16x16";
+            });
+            settings.Items.Add(i =>
+            {
+                i.Text = "Delete";
+                i.Name = "Delete";
+                i.Image.IconID = "actions_deletelist_16x16";
+            });
+            settings.Items.Add(i =>
+            {
+                i.Text = "Print";
+                i.Name = "Print";
+                i.Image.IconID = "actions_print_16x16devav";
+            });
+            settings.Items.Add(i =>
+            {
+                i.Name = "Lock";
+                i.Text = Resources.Resource.NotClosed;
+                i.Image.Url = "~/Content/Icon/lock.png";
+                i.ClientEnabled = false;
+    //if (ERP_V2.UserInfo.Permission == "1")
+    //{
+    //    i.ClientVisible = true;
+    //}
+    //else
+    //{
+    //    i.ClientVisible = false;
+    //}
+});
+        }).GetHtml()
 </div>
 
 @Html.DevExpress().PopupControl(
