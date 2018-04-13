@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DevExpress.Web.Mvc;
+using DevExpress.XtraPrinting;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -16,21 +18,29 @@ namespace ERP_V2.Controllers
         }
         public ActionResult GridView(string Year)
         {
-            return PartialView("_GridView", GetData(Year).Tables[0]);
+            if (string.IsNullOrEmpty(Year))
+            {
+                return PartialView("_GridView", new DataTable());
+            }
+            return PartialView("_GridView", GetData(Year));
         }
 
         public ActionResult ChartPartial(string Year)
         {
-            var model = GetData(Year).Tables[0];
+            if (string.IsNullOrEmpty(Year))
+            {
+                return PartialView("_ChartPartial", new DataTable());
+            }
+            var model = GetData(Year);
             return PartialView("_ChartPartial", model);
         }
 
         public ActionResult GridViewRefreshData(string Year)
         {
-            return PartialView("_GridView", GetData(Year, true).Tables[0]);
+            return PartialView("_GridView", GetData(Year, true));
         }
 
-        private DataSet GetData(string Year, bool Reload = false)
+        private DataTable GetData(string Year, bool Reload = false)
         {
             var data = Session["GridViewData"] as DataSet;
             if (data == null || Reload)
@@ -53,27 +63,71 @@ namespace ERP_V2.Controllers
                 new Utility.MSSQL().SQLCommandReader(sqlCmd, data);
                 Session["GridViewData"] = data;
             }
-            return data;
+            return data.Tables[0];
         }
+
+        public ActionResult ExportToExcel(string Year)
+        {
+            var dt = GetData(Year);
+
+            var settings = new GridViewSettings();
+            settings.Name = "GridView";
+            settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e9e9e9");
+            settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0076c2");
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "BA04A_ID";
+                    column.Caption = Resources.Resource.TYP_ID;
+                    column.EditorProperties().ComboBox(
+                        p =>
+                        {
+                            p.TextField = "key";
+                            p.ValueField = "value";
+                            p.DataSource = ERP_V2.CacheCommonDataModule.GetBA04A(ERP_V2.UserInfo.LanguageType, false);
+                        });
+                });
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "YearTotal";
+                    column.Caption = Resources.Resource.TOT_PR;// "採購金額";
+                    column.EditorProperties().SpinEdit(s =>
+                        {
+                            s.DisplayFormatString = "#,0";
+                        });
+                });
+            return GridViewExtension.ExportToXlsx(settings, dt, Year + Resources.Resource.YearTypePurchaseRatio, new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG });
+        }
+
+
 
         public ActionResult GridView2(string Year, string Month)
         {
-            return PartialView("_GridView2", GetData2(Year, Month).Tables[0]);
+            if (string.IsNullOrWhiteSpace(Year) || string.IsNullOrWhiteSpace(Month))
+            {
+                return PartialView("_GridView2", new DataTable());
+            }
+            return PartialView("_GridView2", GetData2(Year, Month));
         }
 
         public ActionResult GridViewRefreshData2(string Year, string Month)
         {
             var data = GetData2(Year, Month, true);
-            return PartialView("_GridView2", data.Tables[0]);
+            return PartialView("_GridView2", data);
         }
 
         public ActionResult ChartPartial2(string Year, string Month)
         {
-            var model = GetData2(Year, Month).Tables[0];
+            if (string.IsNullOrWhiteSpace(Year) || string.IsNullOrWhiteSpace(Month))
+            {
+                return PartialView("_ChartPartial2", new DataTable());
+            }
+            var model = GetData2(Year, Month);
             return PartialView("_ChartPartial2", model);
         }
 
-        private DataSet GetData2(string Year, string Month, bool Reload = false)
+        private DataTable GetData2(string Year, string Month, bool Reload = false)
         {
             var date = new DateTime();
             DateTime.TryParse(Year + "/" + Month, out date);
@@ -99,7 +153,41 @@ namespace ERP_V2.Controllers
                 new Utility.MSSQL().SQLCommandReader(sqlCmd, data);
                 Session["GridViewData2"] = data;
             }
-            return data;
+            return data.Tables[0];
+        }
+
+        public ActionResult ExportToExcel2(string Year, string Month)
+        {
+            var dt = GetData2(Year, Month);
+
+            var settings = new GridViewSettings();
+            settings.Name = "GridView2";
+            settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e9e9e9");
+            settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0076c2");
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "BA04A_ID";
+                    column.Caption = Resources.Resource.TYP_ID;
+                    column.EditorProperties().ComboBox(
+                        p =>
+                        {
+                            p.TextField = "key";
+                            p.ValueField = "value";
+                            p.DataSource = ERP_V2.CacheCommonDataModule.GetBA04A(ERP_V2.UserInfo.LanguageType, false);
+                        });
+                });
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "MonthTotal";
+                    column.Caption = Resources.Resource.TOT_PR;
+                    column.EditorProperties().SpinEdit(s =>
+                    {
+                        s.DisplayFormatString = "#,0";
+                    });
+                });
+            return GridViewExtension.ExportToXlsx(settings, dt, Year + Month + Resources.Resource.MonthTypePurchaseRatio, new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG });
         }
     }
 }

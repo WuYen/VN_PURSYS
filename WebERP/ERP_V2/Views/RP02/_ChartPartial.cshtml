@@ -7,23 +7,23 @@
     settings.CallbackRouteValues = new { Controller = "RP02", Action = "ChartPartial" };
     settings.BorderOptions.Visibility = DefaultBoolean.False;
     settings.Height = 450;
-    settings.Width = 600;
+    settings.Width = 570;
     settings.SaveStateOnCallbacks = false;
     settings.Legends.Default(l =>
-    {
-        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
-        l.AlignmentVertical = LegendAlignmentVertical.Top;
-        l.Direction = LegendDirection.LeftToRight;
-        //l.MaxHorizontalPercentage = 50;
-        l.Border.Visibility = DefaultBoolean.False;
-    });
+{
+    l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+    l.AlignmentVertical = LegendAlignmentVertical.Top;
+    l.Direction = LegendDirection.LeftToRight;
+//l.MaxHorizontalPercentage = 50;
+l.Border.Visibility = DefaultBoolean.False;
+});
 
 
     Series series = new Series("Product", DevExpress.XtraCharts.ViewType.Pie);
-    //series.Label.ResolveOverlappingMode = ResolveOverlappingMode.Default;
-    ((PieSeriesLabel)series.Label).ResolveOverlappingMode = ResolveOverlappingMode.Default;
-    //((PieSeriesLabel)series.Label).ResolveOverlappingMinIndent = 15;
-    ((PieSeriesLabel)series.Label).LineVisibility = DefaultBoolean.False;
+//series.Label.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+((PieSeriesLabel)series.Label).ResolveOverlappingMode = ResolveOverlappingMode.Default;
+//((PieSeriesLabel)series.Label).ResolveOverlappingMinIndent = 15;
+((PieSeriesLabel)series.Label).LineVisibility = DefaultBoolean.False;
 
     if (Model != null)
     {
@@ -36,28 +36,29 @@
             if (decimal.TryParse(Model.Rows[i]["YearTotal"].ToString(), out value))
             {
                 series.Points.Add(new SeriesPoint(item.Key, value));
-            }            
+            }
         }
 
 
         var seriesView = (series.View) as PieSeriesView;
         seriesView.SeriesLabel(
-            labelAction =>
-            {
-                //labelAction.Position = PieSeriesLabelPosition.Outside;
-                labelAction.Position = PieSeriesLabelPosition.TwoColumns;
-                labelAction.ResolveOverlappingMode = ResolveOverlappingMode.Default;
-                labelAction.TextPattern = "{A}: {VP:P2}";//{VP:P0}
-                labelAction.TextColor = System.Drawing.Color.Black;
-                labelAction.LineVisibility = DefaultBoolean.True;
-                labelAction.Border.Visibility = DefaultBoolean.False;
-            });
+labelAction =>
+{
+//labelAction.Position = PieSeriesLabelPosition.Outside;
+labelAction.Position = PieSeriesLabelPosition.TwoColumns;
+            labelAction.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+            labelAction.TextPattern = "{A}: {VP:P2}";//{VP:P0}
+labelAction.TextColor = System.Drawing.Color.Black;
+            labelAction.LineVisibility = DefaultBoolean.True;
+            labelAction.Border.Visibility = DefaultBoolean.False;
+        });
         settings.Series.Add(series);
 
         settings.Titles.Add(new ChartTitle()
-    {
-        Text = "年度類別占比",
-            Font = new System.Drawing.Font("Arial Unicode MS", 16)
+        {
+            Text = Resources.Resource.YearTypePurchaseRatio,//"年度類別占比",
+Font = new System.Drawing.Font("Arial Unicode MS", 16)
+
         });
     }
 }).Bind(Model).GetHtml()

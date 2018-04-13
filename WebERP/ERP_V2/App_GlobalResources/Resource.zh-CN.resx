@@ -355,4 +355,16 @@
   <data name="EachPrice" xml:space="preserve">
     <value>采购单价</value>
   </data>
+  <data name="MonthTypePurchaseRatio" xml:space="preserve">
+    <value>月份类别占比</value>
+  </data>
+  <data name="YearTypePurchaseRatio" xml:space="preserve">
+    <value>年度类别占比</value>
+  </data>
+  <data name="TypePurchaseRatio" xml:space="preserve">
+    <value>采购类别占比</value>
+  </data>
+  <data name="PurchaseRatio" xml:space="preserve">
+    <value>采购占比</value>
+  </data>
 </root>

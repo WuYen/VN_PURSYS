@@ -51,6 +51,7 @@
                             settings.Properties.Caption = Resources.Resource.BA02A_ITM_NM;
                             settings.Properties.TextField = "ITM_NM";
                             settings.Properties.ValueField = "BA02A_ID";
+                            settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
                         }).BindList(ERP_V2.CacheCommonDataModule.GetBA02A()).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
@@ -218,8 +219,17 @@
 </div>
 <br />
 <script>
+    function BtnSearchClick3(s, e) {
+        GridView3.PerformCallback();
+    }
+    function GridViewBegCallback3(s,e) {
+        e.customArgs["Year"] = Year3.GetValue();
+    }
+    function GridViewEndCallback3() {
+        Chart3.PerformCallback();
+    }
     function BtnExportClick3(s, e) {
-        if (GridView2.GetVisibleRowsOnPage() == 0) {
+        if (GridView3.GetVisibleRowsOnPage() == 0) {
             ShowError('請先篩選資料');
             return;
         }
@@ -250,21 +260,46 @@
     }
 </script>
 <div style="margin-left:10px">
-    @*<div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
-        @Html.DevExpress().Button(settings =>
-                   {
-                       settings.Name = "BtnExport3";
-                       settings.Text = "Export";
-                       settings.ClientSideEvents.Click = "BtnExportClick3";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
-              }).GetHtml()
-    </div>*@
+    <div style="margin-top:10px;height:30px">
+        <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().ComboBox(settings =>
+                                  {
+                                      settings.Name = "Year3";
+                                      settings.Properties.Caption = Resources.Resource.Year;
+
+                                      for (int i = 2018; i <= DateTime.Now.Year; i++)
+                                      {
+                                          settings.Properties.Items.Add(i.ToString(), i);
+                                      }
+
+                                      settings.SelectedIndex = 0;
+                                  }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+                                  {
+                                      settings.Name = "BtnSearch3";
+                                      settings.Text = "Search";
+                                      settings.Images.Image.Url = "~/Content/Icon/search.png";
+                                      settings.ClientSideEvents.Click = "BtnSearchClick3";
+                                  }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+                                  {
+                                      settings.Name = "BtnExport3";
+                                      settings.Text = "Export";
+                                      settings.ClientSideEvents.Click = "BtnExportClick3";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
+                             }).GetHtml()
+        </div>
+    </div>
+        @{
+            Html.RenderAction("GridView3");
+        }
+    </div>
+
     @{
-        Html.RenderAction("GridView3");
+        Html.RenderAction("ChartPartial3");
     }
-</div>
 
-@{
-    Html.RenderAction("ChartPartial2");
-}
-
-<br />
+    <br />

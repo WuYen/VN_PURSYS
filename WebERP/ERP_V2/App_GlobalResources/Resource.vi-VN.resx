@@ -375,4 +375,16 @@
   <data name="EachPrice" xml:space="preserve">
     <value>Đơn giá thu mua</value>
   </data>
+  <data name="MonthTypePurchaseRatio" xml:space="preserve">
+    <value>Biểu so sánh tỷ lệ tháng</value>
+  </data>
+  <data name="YearTypePurchaseRatio" xml:space="preserve">
+    <value>Biểu so sánh tỷ lệ năm</value>
+  </data>
+  <data name="PurchaseRatio" xml:space="preserve">
+    <value>Tỷ lệ thu mua</value>
+  </data>
+  <data name="TypePurchaseRatio" xml:space="preserve">
+    <value>Tỷ lệ thu mua các nhóm hàng</value>
+  </data>
 </root>

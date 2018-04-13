@@ -1,0 +1,83 @@
+﻿@model System.Data.DataTable
+
+
+@Html.DevExpress().Chart(
+    settings =>
+    {
+        settings.Name = "Chart3";
+        settings.CallbackRouteValues = new { Controller = "RP01V2", Action = "ChartPartial3" };
+        settings.BorderOptions.Visibility = DefaultBoolean.False;
+        settings.Height = 400;
+        settings.Width = 700;
+        settings.SaveStateOnCallbacks = false;
+        settings.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.Center;
+        settings.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.TopOutside;
+        settings.Legend.Direction = DevExpress.XtraCharts.LegendDirection.LeftToRight;
+        if (Model != null && Model.Rows.Count > 0)
+        {
+            foreach (System.Data.DataRow row in Model.Rows)
+            {
+                string keyField = row["TYP_ID"].ToString();
+                Series seriesLine = new Series(row["TYP_NM"].ToString(), DevExpress.XtraCharts.ViewType.Line);
+                seriesLine.LegendText = row["TYP_NM"].ToString();
+
+                foreach (System.Data.DataColumn colName in Model.Columns)
+                {
+                    var month = colName.ColumnName.Substring(4);
+                    if (System.Text.RegularExpressions.Regex.IsMatch(colName.ColumnName, "^[0-9]*$") && int.Parse(month) <= DateTime.Now.Month)
+                    {
+                        DateTime dtParseResult = DateTime.Now;
+                        DateTime.TryParse(colName.ColumnName.Insert(4, "-") + "-01", out dtParseResult);
+
+                        var value = row[colName].ToString();
+                        if (string.IsNullOrWhiteSpace(value))
+                        {
+                            value = "0.0";
+                        }
+                        value = value.Substring(0, value.IndexOf("."));
+                        int outValue;
+                        if (int.TryParse(value, out outValue))
+                        {
+                            var point = new SeriesPoint(dtParseResult, outValue);
+                            seriesLine.Points.Add(point);
+                        }
+                    }
+                }
+                seriesLine.LabelsVisibility = DefaultBoolean.False;
+                seriesLine.CrosshairLabelPattern = "{S} : {V:#,0}";
+                ((LineSeriesView)seriesLine.View).LineMarkerOptions.Kind = MarkerKind.Circle;
+                ((LineSeriesView)seriesLine.View).Shadow.Visible = false;
+                ((LineSeriesView)seriesLine.View).Shadow.Size = 2;
+                ((LineSeriesView)seriesLine.View).Shadow.Color = System.Drawing.ColorTranslator.FromHtml("#a9a9a9");
+                ((LineSeriesView)seriesLine.View).LineMarkerOptions.BorderVisible = true;
+                ((LineSeriesView)seriesLine.View).LineMarkerOptions.FillStyle.FillMode = FillMode.Solid;
+                ((LineSeriesView)seriesLine.View).LineMarkerOptions.Size = 8;
+                ((LineSeriesView)seriesLine.View).LineMarkerOptions.BorderColor = System.Drawing.Color.White;
+                ((LineSeriesView)seriesLine.View).LineStyle.Thickness = 4;
+                settings.Series.Add(seriesLine);
+            }//end of column foreach
+}
+
+
+        XYDiagram diagram = (XYDiagram)settings.Diagram;
+
+        if (diagram != null)
+        {
+            diagram.DefaultPane.BackColor = System.Drawing.ColorTranslator.FromHtml("#f7f7f7");
+            diagram.AxisX.InterlacedColor = System.Drawing.ColorTranslator.FromHtml("#ECECEA");
+
+            diagram.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Month;
+            diagram.AxisX.DateTimeScaleOptions.GridAlignment = DateTimeGridAlignment.Month;
+            diagram.AxisX.DateTimeScaleOptions.GridSpacing = 1;
+            diagram.AxisX.Label.TextPattern = "{A:yyyy-MM}";
+            settings.CrosshairOptions.GroupHeaderPattern = "{A:yyyy-MM}";
+
+            diagram.AxisX.DateTimeScaleOptions.GridOffset = -1;
+            diagram.AxisX.WholeRange.SideMarginsValue = 1;
+            diagram.AxisX.GridLines.Visible = false;
+            diagram.AxisX.Interlaced = true;
+            diagram.AxisY.WholeRange.AlwaysShowZeroLevel = false;
+
+            diagram.AxisY.Label.TextPattern = "{V:#,0}";
+        }
+    }).Bind(Model).GetHtml()

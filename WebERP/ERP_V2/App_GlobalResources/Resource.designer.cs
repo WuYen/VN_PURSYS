@@ -511,6 +511,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   查詢類似 月份類別占比 的當地語系化字串。
+        /// </summary>
+        internal static string MonthTypePurchaseRatio {
+            get {
+                return ResourceManager.GetString("MonthTypePurchaseRatio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 未全數送達 的當地語系化字串。
         /// </summary>
         internal static string NotAllArrive {
@@ -552,6 +561,15 @@ namespace Resources {
         internal static string Press {
             get {
                 return ResourceManager.GetString("Press", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 採購占比 的當地語系化字串。
+        /// </summary>
+        internal static string PurchaseRatio {
+            get {
+                return ResourceManager.GetString("PurchaseRatio", resourceCulture);
             }
         }
         
@@ -817,6 +835,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   查詢類似 採購類別佔比 的當地語系化字串。
+        /// </summary>
+        internal static string TypePurchaseRatio {
+            get {
+                return ResourceManager.GetString("TypePurchaseRatio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 類別 的當地語系化字串。
         /// </summary>
         internal static string TYP_ID {
@@ -831,6 +858,15 @@ namespace Resources {
         internal static string Year {
             get {
                 return ResourceManager.GetString("Year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 年度類別占比 的當地語系化字串。
+        /// </summary>
+        internal static string YearTypePurchaseRatio {
+            get {
+                return ResourceManager.GetString("YearTypePurchaseRatio", resourceCulture);
             }
         }
     }

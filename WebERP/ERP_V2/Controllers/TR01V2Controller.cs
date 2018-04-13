@@ -178,7 +178,8 @@ namespace ERP_V2.Controllers
             //    master.TEL_NO = BA01B.TEL_NO;
             //    master.TEL_EX = BA01B.TEL_EX;
             //}
-            if (master.CFN_YN == "Y")
+            ViewData["CFN_YN"] = master.CFN_YN;
+            if (master.CFN_YN == "Y") 
             {
                 ViewData["IsConfirm"] = true;
             }
@@ -317,6 +318,7 @@ namespace ERP_V2.Controllers
 
             var BA01BList = new Services.BA01.BA01Service().GetAllD(master.BA01A_ID).ToList();
             ViewBag.Data = BA01BList;
+            ViewData["CFN_YN"] = master.CFN_YN;
             if (master.CFN_YN == "Y")
             {
                 ViewData["IsConfirm"] = true;

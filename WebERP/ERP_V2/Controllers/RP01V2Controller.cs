@@ -22,7 +22,7 @@ namespace ERP_V2.Controllers
 
         public ActionResult GridView(string BA02A_ID, string DateBeg, string DateEnd)
         {
-            if (string.IsNullOrWhiteSpace(BA02A_ID))
+            if (string.IsNullOrWhiteSpace(DateBeg) || string.IsNullOrWhiteSpace(DateEnd))
             {
                 return PartialView("_GridView", null);
             }
@@ -33,9 +33,9 @@ namespace ERP_V2.Controllers
 
         public ActionResult GridViewRefreshData(string BA02A_ID, string DateBeg, string DateEnd)
         {
-            if (string.IsNullOrWhiteSpace(BA02A_ID))
+            if (string.IsNullOrWhiteSpace(DateBeg) || string.IsNullOrWhiteSpace(DateEnd))
             {
-                return PartialView("_GridView", new DataTable());
+                return PartialView("_GridView", null);
             }
             DateTime.TryParse(DateBeg, out DateTime dateBeg);
             DateTime.TryParse(DateEnd, out DateTime dateEnd);
@@ -65,6 +65,12 @@ namespace ERP_V2.Controllers
                 {
                     column.FieldName = "PUR_DT";
                     column.Caption = Resources.Resource.TR01A_PUR_DT;
+                });
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "ITM_NM";
+                    column.Caption = Resources.Resource.BA02A_ITM_NM;
                 });
             settings.Columns.Add(
                 column =>
@@ -225,7 +231,6 @@ namespace ERP_V2.Controllers
             return data;
         }
 
-
         public ActionResult ExportToExcel2(string TYP_ID, string Year, string Month)
         {
             DateTime.TryParse(Year + "/" + Month + "/01", out DateTime dateBeg);
@@ -267,7 +272,7 @@ namespace ERP_V2.Controllers
             settings.Settings.ShowFooter = false;
             settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
 
-            return GridViewExtension.ExportToXlsx(settings, dt,"類別採購項目", new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG });
+            return GridViewExtension.ExportToXlsx(settings, dt, "類別採購項目", new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG });
         }
 
         public ActionResult GridViewRefreshData2(string TYP_ID, string Year, string Month)
@@ -291,21 +296,31 @@ namespace ERP_V2.Controllers
             var ds = new DataSet();
             var command = "SELECT AA.*,BB.TOT_QT,BB.TOT_MY,BB.Each_PR FROM"
                     + " ("
-                    + " select A.TR01A_ID, A.PUR_NO, A.PUR_DT, A.BA01A_ID, B.BA02A_ID, B.PUR_PR, B.PUR_QT, C.INC_NM"
+                    + " select A.TR01A_ID, A.PUR_NO, D.ITM_NM, A.PUR_DT, A.BA01A_ID, B.BA02A_ID, B.PUR_PR, B.PUR_QT, C.INC_NM"
                     + " from TR01A as A"
                     + " left join TR01B as B on A.TR01A_ID = B.TR01A_ID"
                     + " left join BA01A as C on A.BA01A_ID = C.BA01A_ID"
-                    + $" where B.BA02A_ID = {BA02A_ID} and A.PUR_DT >= '{DateBeg}' and A.PUR_DT <= '{DateEnd}'"
-                    + " ) AA"
-                    + " LEFT JOIN"
-                    + " ("
-                    + " SELECT A.TR01A_ID, A.BA02A_ID, Sum(B.ARR_QT) TOT_QT, Sum(B.INV_MY) TOT_MY, Sum(B.INV_MY) / Sum(B.ARR_QT) as Each_PR"
-                    + " FROM TR01B as A"
-                    + " left join TR01C as B on A.TR01B_ID = B.TR01B_ID"
-                    + $" where A.BA02A_ID = {BA02A_ID}"
-                    + " group by A.TR01A_ID, A.BA02A_ID"
-                    + " ) BB"
-                    + " ON AA.TR01A_ID = BB.TR01A_ID";
+                    + " left join BA02A as D on D.BA02A_ID = B.BA02A_ID"
+                    + $" where A.PUR_DT >= '{DateBeg}' and A.PUR_DT <= '{DateEnd}'";
+            if (!string.IsNullOrWhiteSpace(BA02A_ID))
+            {
+                command += $" and B.BA02A_ID = {BA02A_ID}";
+            }
+            command += " ) AA"
+               + " LEFT JOIN"
+               + " ("
+               + " SELECT A.TR01A_ID, A.BA02A_ID, Sum(B.ARR_QT) TOT_QT, Sum(B.INV_MY) TOT_MY, Sum(B.INV_MY) / Sum(B.ARR_QT) as Each_PR"
+               + " FROM TR01B as A"
+               + " left join TR01C as B on A.TR01B_ID = B.TR01B_ID"
+               + " left join TR01A as C on C.TR01A_ID = A.TR01A_ID "
+               + $" where C.PUR_DT >= '{DateBeg}' and C.PUR_DT <= '{DateEnd}'";
+            if (!string.IsNullOrWhiteSpace(BA02A_ID))
+            {
+                command += $" and B.BA02A_ID = {BA02A_ID}";
+            }
+            command += " group by A.TR01A_ID, A.BA02A_ID"
+           + " ) BB"
+           + " ON AA.TR01A_ID = BB.TR01A_ID and AA.BA02A_ID = BB.BA02A_ID";
             SQLCommandReader(command, ds);
             return ds.Tables[0];
         }
@@ -360,64 +375,136 @@ namespace ERP_V2.Controllers
             return PartialView("_ChartPartial", model);
         }
 
-        [ValidateInput(false)]
-        public ActionResult PivotGridPartial()
+        //[ValidateInput(false)]
+        //public ActionResult PivotGridPartial()
+        //{
+        //    var dataTable = GetData3();
+        //    dataTable.Columns.Add("TYP_NM", typeof(string));
+        //    foreach (DataRow row in dataTable.Rows)
+        //    {
+        //        var typeID = row["TYP_ID"].ToString();
+        //        if (int.TryParse(typeID, out int id))
+        //        {
+        //            row["TYP_NM"] = CacheCommonDataModule.GetTypeDic().First(x => x.Value == id).Key;
+        //        }
+        //    }
+        //    return PartialView("_PivotGrid", dataTable);
+        //}
+
+        public ActionResult GridView3(string Year)
         {
-            var dataTable = GetData3();
-            dataTable.Columns.Add("TYP_NM", typeof(string));
-            foreach (DataRow row in dataTable.Rows)
+            if (string.IsNullOrWhiteSpace(Year))
             {
-                var typeID = row["TYP_ID"].ToString();
-                if (int.TryParse(typeID, out int id))
-                {
-                    row["TYP_NM"] = CacheCommonDataModule.GetTypeDic().First(x => x.Value == id).Key;
-                }
+                return PartialView("_GridView3", new DataTable());
             }
-            return PartialView("_PivotGrid", dataTable);
-        }
-        public ActionResult GridView3()
-        {
-            var dataTable = GetData3();
-            dataTable.Columns.Add("TYP_NM", typeof(string));
-            foreach (DataRow row in dataTable.Rows)
-            {
-                var typeID = row["TYP_ID"].ToString();
-                if (int.TryParse(typeID, out int id))
-                {
-                    row["TYP_NM"] = CacheCommonDataModule.GetBA04AText(UserInfo.LanguageType, int.Parse(typeID));
-                }
-            }
+            var dataTable = GetGridViewSessionData3(Year);
             TempData["Data3"] = dataTable;
             return PartialView("_GridView3", dataTable);
         }
-        public ActionResult ChartPartial2()
+
+        public ActionResult GridViewRefreshData3(string Year)
+        {
+            if (string.IsNullOrWhiteSpace(Year))
+            {
+                return PartialView("_GridView3", new DataTable());
+            }
+            var date = GetGridViewSessionData3(Year, true);
+            TempData["Data3"] = date;
+            return PartialView("_GridView3", date);
+        }
+
+        public ActionResult ChartPartial3()
         {
             //var temp = TempData["DT"] as DataTable;
             var model = TempData["Data3"] as DataTable;// GetData2();
-            return PartialView("_ChartPartial2", model);
+            return PartialView("_ChartPartial3", model);
         }
-        private DataTable GetData3()
+
+        private DataTable GetData3(string Year)
         {
             var ds = new DataSet();
             var command = "SELECT TYP_ID,"
-                + " [201801] as '201801', [201802] as '201802', [201803] as '201803', [201804] as '201804',"
-                + " [201805] as '201805', [201806] as '201806', [201807] as '201807', [201808] as '201808',"
-                + " [201809] as '201809', [201810] as '201810', [201811] as '201811', [201812] as '201812' "
-                + " FROM("
-                + " select C.TYP_ID, left(D.ARR_DT, 6) as DT, SUM(D.INV_MY * D.CUR_RT) as MonthTotal"
-                + " from TR01B as A"
-                + " left join BA02A as C on A.BA02A_ID = C.BA02A_ID"
-                + " left join TR01C as D on A.TR01B_ID = D.TR01B_ID"
-                + " where C.TYP_ID > 0 and D.INV_MY > 0 and left(D.ARR_DT, 4) = '2018'"
-                + " group by C.TYP_ID, left(D.ARR_DT, 6)"
-                + " ) as GroupTable"
-                + " PIVOT"
-                + " ("
-                + " Sum(MonthTotal)"
-                + " FOR DT IN([201801], [201802], [201803], [201804], [201805], [201806], [201807], [201808], [201809], [201810], [201811], [201812])"
-                + " ) AS PivotTable";
+                + $" [{Year}01] as '{Year}01', [{Year}02] as '{Year}02', [{Year}03] as '{Year}03', [{Year}04] as '{Year}04',"
+                + $" [{Year}05] as '{Year}05', [{Year}06] as '{Year}06', [{Year}07] as '{Year}07', [{Year}08] as '{Year}08',"
+                + $" [{Year}09] as '{Year}09', [{Year}10] as '{Year}10', [{Year}11] as '{Year}11', [{Year}12] as '{Year}12' "
+                + $" FROM("
+                + $" select C.TYP_ID, left(D.ARR_DT, 6) as DT, SUM(D.INV_MY * D.CUR_RT) as MonthTotal"
+                + $" from TR01B as A"
+                + $" left join BA02A as C on A.BA02A_ID = C.BA02A_ID"
+                + $" left join TR01C as D on A.TR01B_ID = D.TR01B_ID"
+                + $" where C.TYP_ID > 0 and D.INV_MY > 0 and left(D.ARR_DT, 4) = '{Year}'"
+                + $" group by C.TYP_ID, left(D.ARR_DT, 6)"
+                + $" ) as GroupTable"
+                + $" PIVOT"
+                + $" ("
+                + $" Sum(MonthTotal)"
+                + $" FOR DT IN([{Year}01], [{Year}02], [{Year}03], [{Year}04], [{Year}05], [{Year}06], [{Year}07], [{Year}08], [{Year}09], [{Year}10], [{Year}11], [{Year}12])"
+                + $" ) AS PivotTable";
             SQLCommandReader(command, ds);
             return ds.Tables[0];
+        }
+
+        private DataTable GetGridViewSessionData3(string Year, bool Reload = false)
+        {
+            var data = Session["GridViewData3"] as DataTable;
+            if (data == null || Reload)
+            {
+                data = GetData3(Year);
+                data.Columns.Add("TYP_NM", typeof(string));
+                foreach (DataRow row in data.Rows)
+                {
+                    var typeID = row["TYP_ID"].ToString();
+                    if (int.TryParse(typeID, out int id))
+                    {
+                        row["TYP_NM"] = CacheCommonDataModule.GetBA04AText(UserInfo.LanguageType, int.Parse(typeID));
+                    }
+                }
+                Session["GridViewData3"] = data;
+            }
+            return data;
+        }
+
+        public ActionResult ExportToExcel3(string Year)
+        {
+            var dt = GetGridViewSessionData3(Year);
+
+            var settings = new GridViewSettings();
+            settings.Name = "GridView3";
+            //settings.Width = Unit.Percentage(100);
+            settings.CallbackRouteValues = new { Controller = "RP01V2", Action = "GridView3" };
+            settings.CustomActionRouteValues = new { Controller = "RP01V2", Action = "GridViewRefreshData3" };
+            settings.ClientSideEvents.BeginCallback = "GridViewBegCallback3";
+            settings.ClientSideEvents.EndCallback = "GridViewEndCallback3";
+            settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e9e9e9");
+            settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0076c2");
+            settings.Columns.Add(
+                column =>
+                {
+                    column.FieldName = "TYP_NM";
+                    column.Caption = Resources.Resource.TYP_ID;
+                });
+            foreach (System.Data.DataColumn item in dt.Columns)
+            {
+                var month = item.ColumnName.Substring(4);
+                if (System.Text.RegularExpressions.Regex.IsMatch(item.ColumnName, "^[0-9]*$") && int.Parse(month) <= DateTime.Now.Month)
+                {
+                    settings.Columns.Add(
+                        column =>
+                        {
+                            column.FieldName = item.ColumnName;
+                            column.Caption = item.ColumnName.Insert(4, "-");
+                            column.EditorProperties().SpinEdit(s =>
+                            {
+                                s.DisplayFormatString = "#,0";
+                            });
+                        });
+                }
+            }
+
+            settings.Settings.ShowFooter = false;
+            settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+            return GridViewExtension.ExportToXlsx(settings, dt, Year + "採購彙總", new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG });
         }
 
         //private DataTable GetData3()

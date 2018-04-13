@@ -4,11 +4,11 @@
     settings =>
     {
         settings.Name = "GridView3";
-//settings.Width = Unit.Percentage(100);
-settings.CallbackRouteValues = new { Controller = "RP01V2", Action = "GridView2" };
-        settings.CustomActionRouteValues = new { Controller = "RP01V2", Action = "GridViewRefreshData2" };
-        settings.ClientSideEvents.BeginCallback = "GridView2BegCallback";
-        settings.ClientSideEvents.EndCallback = "GridView2EndCallback";
+        //settings.Width = Unit.Percentage(100);
+        settings.CallbackRouteValues = new { Controller = "RP01V2", Action = "GridView3" };
+        settings.CustomActionRouteValues = new { Controller = "RP01V2", Action = "GridViewRefreshData3" };
+        settings.ClientSideEvents.BeginCallback = "GridViewBegCallback3";
+        settings.ClientSideEvents.EndCallback = "GridViewEndCallback3";
         settings.Styles.Header.BackColor = System.Drawing.ColorTranslator.FromHtml("#e9e9e9");
         settings.Styles.Header.ForeColor = System.Drawing.ColorTranslator.FromHtml("#0076c2");
         settings.Columns.Add(
