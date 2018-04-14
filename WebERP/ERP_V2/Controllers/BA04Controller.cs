@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace ERP_V2.Controllers
 {
-    public class BA04Controller : Controller
+    public class BA04Controller : BaseController
     {
         private BA04Service _Service = new BA04Service();
 

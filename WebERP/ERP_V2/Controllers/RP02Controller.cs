@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace ERP_V2.Controllers
 {
-    public class RP02Controller : Controller
+    public class RP02Controller : BaseController
     {
         // GET: RP02
         public ActionResult Index()

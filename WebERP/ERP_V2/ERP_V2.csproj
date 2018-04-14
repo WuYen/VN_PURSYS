@@ -494,6 +494,8 @@
     <Compile Include="Utility\Language.cs" />
     <Compile Include="Utility\MSSQL.cs" />
     <Compile Include="Utility\ObjectHelper.cs" />
+    <Compile Include="Utility\Permissions\BaseController.cs" />
+    <Compile Include="Utility\Permissions\PermissionsAttribute.cs" />
     <Compile Include="Utility\ReadViewHelper.cs" />
     <Compile Include="ViewModel\BA01\BA01AViewModel.cs" />
     <Compile Include="ViewModel\BA01\BA01BViewModel.cs" />

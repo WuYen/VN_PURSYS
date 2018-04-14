@@ -11,7 +11,7 @@ using System.Data.Entity.Core.EntityClient;
 
 namespace ERP_V2.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public ActionResult Index()
         {

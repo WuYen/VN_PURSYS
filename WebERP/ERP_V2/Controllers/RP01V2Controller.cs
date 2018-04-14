@@ -12,7 +12,7 @@ using DevExpress.Web;
 
 namespace ERP_V2.Controllers
 {
-    public class RP01V2Controller : Controller
+    public class RP01V2Controller : BaseController
     {
         // GET: RP01
         public ActionResult Index()
@@ -395,7 +395,8 @@ namespace ERP_V2.Controllers
         {
             if (string.IsNullOrWhiteSpace(Year))
             {
-                return PartialView("_GridView3", new DataTable());
+                Year = DateTime.Now.Year.ToString();
+                //return PartialView("_GridView3", new DataTable());
             }
             var dataTable = GetGridViewSessionData3(Year);
             TempData["Data3"] = dataTable;

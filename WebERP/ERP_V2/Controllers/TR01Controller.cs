@@ -13,7 +13,7 @@ using System.Data;
 
 namespace ERP_V2.Controllers
 {
-    public class TR01Controller : Controller
+    public class TR01Controller : BaseController
     {
         private TR01Service _Service;
 

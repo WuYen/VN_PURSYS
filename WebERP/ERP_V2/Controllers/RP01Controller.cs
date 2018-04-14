@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace ERP_V2.Controllers
 {
-    public class RP01Controller : Controller
+    public class RP01Controller : BaseController
     {
         // GET: RP01
         public ActionResult Index()

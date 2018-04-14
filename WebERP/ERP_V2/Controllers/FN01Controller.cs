@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace ERP_V2.Controllers
 {
-    public class FN01Controller : Controller
+    public class FN01Controller : BaseController
     {
         // GET: FN01
         public ActionResult Index()

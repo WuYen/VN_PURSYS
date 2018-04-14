@@ -10,7 +10,7 @@ using ERP_V2.Models;
 
 namespace ERP_V2.Controllers
 {
-    public class BA03Controller : Controller
+    public class BA03Controller : BaseController
     {
         private BA03Service _Service;
         public BA03Controller()

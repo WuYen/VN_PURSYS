@@ -10,7 +10,7 @@ using DevExpress.Web.Mvc;
 
 namespace ERP_V2.Controllers
 {
-    public class BA01Controller : Controller
+    public class BA01Controller : BaseController
     {
         private BA01Service _Service = new BA01Service();
 

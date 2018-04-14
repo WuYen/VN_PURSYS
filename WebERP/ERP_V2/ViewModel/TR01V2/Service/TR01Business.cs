@@ -19,14 +19,18 @@ namespace ERP_V2.ViewModels.TR01V2
             //{
             //    modelState.AddModelError("REM_MM", "REM_MM Too long From Business layer");
             //}
+            if (model.TAX_RT < 0)
+            {
+                modelState.AddModelError("TAX_RT", "Error");
+            }
             return modelState.IsValid;
         }
 
         public static bool Validation(TR01AViewModel model, MVCxGridViewBatchUpdateValues<TR01BViewModel, int> updateValues, ModelStateDictionary modelState)
         {
-            if (model.CUR_RT <1)
+            if (model.TAX_RT < 0)
             {
-                modelState.AddModelError("CUR_RT", "不可小於1");
+                modelState.AddModelError("TAX_RT", "Error");
             }
 
             for (int i = 0; i < updateValues.Insert.Count; i++)

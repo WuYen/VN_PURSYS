@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace ERP_V2.Controllers
 {
-    public class TR01MController : Controller
+    public class TR01MController : BaseController
     {
         private TR01Service _Service = new TR01Service();
 
@@ -257,12 +257,18 @@ namespace ERP_V2.Controllers
                 item.ARR_QT = TR01B.PUR_QT - total;
                 item.ARR_QT = decimal.Parse(item.ARR_QT.ToString("G29"));
 
-                item.INV_MY = TR01B.PUR_PR * item.ARR_QT;
-                item.INV_MY = decimal.Parse(item.INV_MY.Value.ToString("G29"));
 
                 var TR01A = entity.TR01A.FirstOrDefault(x => x.TR01A_ID == TR01B.TR01A_ID);
                 if (TR01A != null)
                 {
+
+                    item.INV_MY = TR01B.PUR_PR * item.ARR_QT;
+                    if (TR01A.TAX_RT.HasValue)
+                    {
+                        item.INV_MY = item.INV_MY * Convert.ToDecimal(TR01A.TAX_RT.Value);
+                    }
+                    item.INV_MY = decimal.Parse(item.INV_MY.Value.ToString("G29"));
+
                     item.CUR_RT = entity.BA03A.First(x => x.BA03A_ID == TR01A.BA03A_ID).CUR_RT;
                     item.CUR_RT = decimal.Parse(item.CUR_RT.ToString("G29"));
                 }

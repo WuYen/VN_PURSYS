@@ -54,6 +54,8 @@
                  i.Caption = Resources.Resource.DT_From;
                  i.NestedExtension().DateEdit(s =>
                  {
+                     s.Properties.DisplayFormatString = "yyyy/MM/dd";
+                     s.Properties.EditFormatString = "yyyy/MM/dd";
                      s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                  });
              });
@@ -63,6 +65,8 @@
                  i.Caption = Resources.Resource.DT_To;
                  i.NestedExtension().DateEdit(s =>
                  {
+                     s.Properties.DisplayFormatString = "yyyy/MM/dd";
+                     s.Properties.EditFormatString = "yyyy/MM/dd";
                      s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                  });
              });

@@ -143,5 +143,7 @@ namespace ERP_V2.ViewModels.TR01V2
 
         //[Required]
         public string CUR_RT { get; set; }
+        [Required]
+        public string TAX_RT { get; set; }
     }
 }

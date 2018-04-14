@@ -13,7 +13,7 @@ using System.Web.Mvc;
 
 namespace ERP_V2.Controllers
 {
-    public class TR01V2Controller : Controller
+    public class TR01V2Controller : BaseController
     {
         private TR01Service _Service = new TR01Service();
         // GET: TR01V2
@@ -128,7 +128,7 @@ namespace ERP_V2.Controllers
                         TR01A.PUR_DT = DateBeg.Replace("/", "");//master.DtPUR_DT.Value.ToString("yyyyddMM");
                         TR01A.EXP_DT = DateEnd.Replace("/", "");//master.DtEXP_DT.Value.ToString("yyyyddMM");
                         System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(Language.US);
-                        TR01A.TAX_RT = double.Parse(Tax);
+                        TR01A.TAX_RT = double.Parse(Tax);//越文沒有小數點特殊處理
                     }
                     else
                     {
@@ -225,6 +225,7 @@ namespace ERP_V2.Controllers
                 }
                 else
                 {
+                    //新增初始化
                     master.DtPUR_DT = DateTime.UtcNow.AddHours(07);
                     master.CPN_NM = "劲亨金属表面处理工業有限公司   Công ty Jingheng";
                     master.TAX_RT = CacheCommonDataModule.GetTaxRate().First().Value;
