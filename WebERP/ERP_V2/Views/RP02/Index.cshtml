@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "採購類別佔比";
+    ViewBag.Title = ERP_V2.CacheCommonDataModule.GetPageName("RP02");
 }
 
-<h2>@ViewBag.Title</h2>
+
 
 @*各類別年份占比*@
 <script>
@@ -15,6 +15,9 @@
     }
     function GridViewEndCallback(s, e) {
         chart.PerformCallback();
+    }
+    function ChartBeginCallBack(s, e) {
+        e.customArgs["Year"] = Year.GetValue();
     }
     function BtnExportClick(s,e) {
         if (GridView.GetVisibleRowsOnPage() == 0) {
@@ -35,60 +38,76 @@
         form.submit();
     }
 </script>
-<div style="margin-left:10px;margin-top:10px;height:30px">
-    <div style="float:left;display:inline-block;margin-right:5px">
-        @Html.DevExpress().ComboBox(settings =>
+<div style="margin-top:5px;margin-left:10px">
+    @Html.DevExpress().Button(s =>
                             {
-                                settings.Name = "Year";
-                                settings.Properties.Caption = Resources.Resource.Year;
-                                for (int i = 2018; i <= DateTime.Now.Year; i++)
-                                {
-                                    settings.Properties.Items.Add(i.ToString(), i);
-                                }
-                                settings.SelectedIndex = 0;
+                                s.Name = "BtnTitle";
+                                s.Text = ERP_V2.CacheCommonDataModule.GetPageName("RP02");
+                                s.Height = 35;
+                                s.Styles.Style.Font.Size = FontUnit.Medium;
+                                s.Styles.Style.Font.Bold = true;
+                                s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+                                s.ControlStyle.BorderLeft.BorderStyle = BorderStyle.Solid;
+                                s.ControlStyle.BorderLeft.BorderColor = System.Drawing.ColorTranslator.FromHtml("#0072c6");
+                                s.ControlStyle.BorderLeft.BorderWidth = 4;
+                                s.ClientEnabled = false;
+                                s.Styles.Style.DisabledStyle.ForeColor = System.Drawing.Color.Black;
                             }).GetHtml()
-    </div>
-
-    <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
-        @Html.DevExpress().Button(settings =>
-                            {
-                                settings.Name = "BtnSearch";
-                                settings.Text = "Search";
-                                settings.Images.Image.Url = "~/Content/Icon/search.png";
-                                settings.ClientSideEvents.Click = "BtnSearchClick";
-                            }).GetHtml()
-    </div>
-    <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
-        @Html.DevExpress().Button(settings =>
-                  {
-                      settings.Name = "BtnExport";
-                      settings.Text = "Export";
-                      settings.ClientSideEvents.Click = "BtnExportClick";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
-             }).GetHtml()
-    </div>
-    @*<div style="float:left;display:inline-block;margin-right:5px">
-
-        </div>
+</div>
+    <div style="margin-left:10px;margin-top:10px;height:30px">
         <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().ComboBox(settings =>
+                                               {
+                                                   settings.Name = "Year";
+                                                   settings.Properties.Caption = Resources.Resource.Year;
+                                                   for (int i = 2018; i <= DateTime.Now.Year; i++)
+                                                   {
+                                                       settings.Properties.Items.Add(i.ToString(), i);
+                                                   }
+                                                   settings.SelectedIndex = 0;
+                                               }).GetHtml()
+        </div>
 
-        </div>*@
-</div>
-<div style="height:520px">
-    <div style="display:inline-block; float:left">
-        @{
-            Html.RenderAction("GridView");
-        }
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+                                               {
+                                                   settings.Name = "BtnSearch";
+                                                   settings.Text = "Search";
+                                                   settings.Images.Image.Url = "~/Content/Icon/search.png";
+                                                   settings.ClientSideEvents.Click = "BtnSearchClick";
+                                               }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+                                     {
+                                         settings.Name = "BtnExport";
+                                         settings.Text = "Export";
+                                         settings.ClientSideEvents.Click = "BtnExportClick";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
+                            }).GetHtml()
+        </div>
+        @*<div style="float:left;display:inline-block;margin-right:5px">
+
+            </div>
+            <div style="float:left;display:inline-block;margin-right:5px">
+
+            </div>*@
     </div>
-    <div style="display:inline-block; float:left; ">
-        @{
-            Html.RenderAction("ChartPartial");
-        }
+    <div style="height:520px;margin-left:10px">
+        <div style="display:inline-block; float:left">
+            @{
+                Html.RenderAction("GridView");
+            }
+        </div>
+        <div style="display:inline-block; float:left; ">
+            @{
+                Html.RenderAction("ChartPartial");
+            }
+        </div>
     </div>
-</div>
 
 
-@*各類別月份占比*@
-<script>
+    @*各類別月份占比*@
+    <script>
     function BtnSearch2Click(s, e) {
         GridView2.PerformCallback();
     }
@@ -98,7 +117,11 @@
     }
     function GridViewEndCallback2(s, e) {
         Chart2.PerformCallback();
-    }
+        }
+    function ChartBeginCallBack2(s, e) {
+        e.customArgs["Year"] = Year2.GetValue();
+        e.customArgs["Month"] = Month2.GetValue();
+        }
     function BtnExportClick2(s,e) {
         if (GridView2.GetVisibleRowsOnPage() == 0) {
             ShowError('請先篩選資料');
@@ -123,64 +146,64 @@
         $(document.body).append(form);
         form.submit();
     }
-</script>
-<div style="margin-left:10px;margin-top:10px;height:30px">
-    <div style="float:left;display:inline-block;margin-right:5px">
-        @Html.DevExpress().ComboBox(settings =>
-             {
-                 settings.Name = "Year2";
-                 settings.Properties.Caption = Resources.Resource.Year;
-                 for (int i = 2018; i <= DateTime.Now.Year; i++)
-                 {
-                     settings.Properties.Items.Add(i.ToString(), i);
-                 }
-                 settings.SelectedIndex = 0;
-             }).GetHtml()
-    </div>
-    <div style="float:left;display:inline-block;margin-right:5px">
-        @Html.DevExpress().ComboBox(settings =>
-             {
-                 settings.Name = "Month2";
-                 settings.Properties.Caption = Resources.Resource.Month;
-                 for (int i = 1; i < 13; i++)
-                 {
-                     settings.Properties.Items.Add(i.ToString(), i);
-                 }
-                 settings.SelectedIndex = DateTime.Now.Month - 2;
-                 if (DateTime.Now.Month - 2 <= 0)
-                 {
-                     settings.SelectedIndex = 0;
-                 }
-             }).GetHtml()
-    </div>
+    </script>
+    <div style="margin-left:10px;margin-top:10px;height:30px">
+        <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().ComboBox(settings =>
+                                {
+                                    settings.Name = "Year2";
+                                    settings.Properties.Caption = Resources.Resource.Year;
+                                    for (int i = 2018; i <= DateTime.Now.Year; i++)
+                                    {
+                                        settings.Properties.Items.Add(i.ToString(), i);
+                                    }
+                                    settings.SelectedIndex = 0;
+                                }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().ComboBox(settings =>
+                                {
+                                    settings.Name = "Month2";
+                                    settings.Properties.Caption = Resources.Resource.Month;
+                                    for (int i = 1; i < 13; i++)
+                                    {
+                                        settings.Properties.Items.Add(i.ToString(), i);
+                                    }
+                                    settings.SelectedIndex = DateTime.Now.Month - 2;
+                                    if (DateTime.Now.Month - 2 <= 0)
+                                    {
+                                        settings.SelectedIndex = 0;
+                                    }
+                                }).GetHtml()
+        </div>
 
-    <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
-        @Html.DevExpress().Button(settings =>
-             {
-                 settings.Name = "BtnSearch2";
-                 settings.Text = "Search";
-                 settings.Images.Image.Url = "~/Content/Icon/search.png";
-                 settings.ClientSideEvents.Click = "BtnSearch2Click";
-             }).GetHtml()
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "BtnSearch2";
+                                    settings.Text = "Search";
+                                    settings.Images.Image.Url = "~/Content/Icon/search.png";
+                                    settings.ClientSideEvents.Click = "BtnSearch2Click";
+                                }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+                                     {
+                                         settings.Name = "BtnExport2";
+                                         settings.Text = "Export";
+                                         settings.ClientSideEvents.Click = "BtnExportClick2";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
+                            }).GetHtml()
+        </div>
     </div>
-    <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
-        @Html.DevExpress().Button(settings =>
-                  {
-                      settings.Name = "BtnExport2";
-                      settings.Text = "Export";
-                      settings.ClientSideEvents.Click = "BtnExportClick2";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
-             }).GetHtml()
+    <div style="height:520px;margin-left:10px">
+        <div style="display:inline-block; float:left">
+            @{
+                Html.RenderAction("GridView2");
+            }
+        </div>
+        <div style="display:inline-block; float:left; ">
+            @{
+                Html.RenderAction("ChartPartial2");
+            }
+        </div>
     </div>
-</div>
-<div style="height:520px">
-    <div style="display:inline-block; float:left">
-        @{
-            Html.RenderAction("GridView2");
-        }
-    </div>
-    <div style="display:inline-block; float:left; ">
-        @{
-            Html.RenderAction("ChartPartial2");
-        }
-    </div>
-</div>

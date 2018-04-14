@@ -260,8 +260,12 @@ namespace ERP_V2.Controllers
                 item.INV_MY = TR01B.PUR_PR * item.ARR_QT;
                 item.INV_MY = decimal.Parse(item.INV_MY.Value.ToString("G29"));
 
-                item.CUR_RT = entity.TR01A.First(x => x.TR01A_ID == TR01B.TR01A_ID).CUR_RT.Value;
-                item.CUR_RT = decimal.Parse(item.CUR_RT.ToString("G29"));
+                var TR01A = entity.TR01A.FirstOrDefault(x => x.TR01A_ID == TR01B.TR01A_ID);
+                if (TR01A != null)
+                {
+                    item.CUR_RT = entity.BA03A.First(x => x.BA03A_ID == TR01A.BA03A_ID).CUR_RT;
+                    item.CUR_RT = decimal.Parse(item.CUR_RT.ToString("G29"));
+                }
                 ModelState.Clear();
             }
             return PartialView("_EditForm", item);

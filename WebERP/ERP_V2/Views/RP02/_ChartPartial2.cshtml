@@ -6,6 +6,7 @@
     settings.Name = "Chart2";
     settings.CallbackRouteValues = new { Controller = "RP02", Action = "ChartPartial2" };
     settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.ClientSideEvents.BeginCallback = "ChartBeginCallBack2";
     settings.Height = 450;
     settings.Width = 570;
     settings.SaveStateOnCallbacks = false;
