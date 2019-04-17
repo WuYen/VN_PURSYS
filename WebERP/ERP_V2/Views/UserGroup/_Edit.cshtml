@@ -1,0 +1,189 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+<script>
+    var formSave = false;
+    var currentKey = 0;
+    function SetKeyOnPage(key) {
+        currentKey = key;
+    }
+    function SaveClick(s, e) {
+        $.validator.unobtrusive.parse("#MasterForm");
+        var f = $("#MasterForm");
+        if (f.valid()) {
+            formSave = true;
+
+            DetailGrid.callbackCustomArgs["permissions"] = TreeList.GetVisibleSelectedNodeKeys();
+            DetailGrid.callbackCustomArgs["master"] = MVCxClientUtils.GetSerializedEditorValuesInContainer("MasterForm", true);
+
+            if (DetailGrid.batchEditApi.HasChanges()) {
+                DetailGrid.UpdateEdit();
+            }
+            else {
+                DetailGrid.PerformCallback();
+            }
+        }
+    }
+
+    function CancelClick(s, e) {
+        DetailGrid.CancelEdit();
+    }
+
+    function ReloadClick(s, e) {
+        DetailGrid.CancelEdit();
+    }
+
+    //=======================DetailGrid========================
+    function DetailGridBeginCallback(s, e) {
+        DetailGrid.callbackCustomArgs["key"] = currentKey;
+        //if (formSave) {
+        //    DetailGrid.callbackCustomArgs["master"] = $.extend(DetailGrid.callbackCustomArgs["master"], MVCxClientUtils.GetSerializedEditorValuesInContainer("MasterForm", true));
+        //    TreeList.GetVisibleSelectedNodeKeys();
+        //}
+    }
+
+    function DetailGridEndCallBack(s, e) {
+        if (s.cpMasterForm) {
+            $("#MasterFormDiv").html(s.cpMasterForm);
+        }
+
+        //if (formSave) {
+        //    ShowError(s.cpEditError);//operation for save fail
+        //    if (s.cpEditError != null && s.cpEditError.length > 1) {
+        //        DetailGrid.Refresh();
+        //    }
+        //    formSave = false;
+        //    $("#MasterFormDiv").html(s.cpMasterForm);//reload content of master form
+        //    if (s.cpDeleteIDs != undefined) {
+        //        var key = s.cpDeleteIDs.split(",");//把刪除的row重新標記刪除
+        //        for (var i = 0; i < key.length - 1; i++) {
+        //            DetailGrid.DeleteRowByKey(key[i].toString());
+        //        }
+        //    }
+        //}
+    }
+
+    function BtnDetailAddNewClick(s, e) {
+        DetailGrid.AddNewRow();
+
+        //DetailGrid.batchEditApi.EndEdit();
+        //var currentAddIndex = DetailGrid.batchEditApi.GetRowVisibleIndices()[0]
+        //selectItemKeys.push({ rowIndex: currentAddIndex, FB20B_ID: element.FB20B_ID });
+        //DetailGrid.batchEditApi.SetCellValue(currentAddIndex, "FA11A_ID", element.FA11A_ID, element.ITM_NM);
+        //DetailGrid.batchEditApi.SetCellValue(currentAddIndex, "ITM_NO", element.ITM_NO, element.ITM_NO);//value,displayText
+    }
+    function ShowSelectUser() {
+
+    }
+
+    function GetEditorValues() {
+        return MVCxClientUtils.GetSerializedEditorValuesInContainer("MasterForm", true);
+    }
+
+    //=======================TreeList========================
+    function TreeListBegCall(s, e) {
+        TreeList.callbackCustomArgs["key"] = currentKey;
+    }
+    function TreeListNodeClick(s, e) {
+        TreeList.SelectNode(e.nodeKey, !TreeList.IsNodeSelected(e.nodeKey));
+
+        //TreeList.GetVisibleSelectedNodeKeys()  => 取得畫面上所有的key
+
+        //var result = arr_diff(orginSelect, TreeList.GetVisibleSelectedNodeKeys());
+        //NewNode = result[0];
+        //TreeList.PerformCallback();
+        //var keys = TreeList.GetVisibleSelectedNodeKeys();
+        //if (keys.indexOf(e.nodeKey) > 0) {
+        //    TreeList.SelectNode(e.nodeKey, false);
+        //} else {
+        //    TreeList.SelectNode(e.nodeKey);
+        //}
+    }
+
+</script>
+<style>
+    h6 {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+<div style="margin:10px">
+    @Html.DevExpress().Button(s =>
+                {
+                    s.Name = "BtnSave";
+                    s.Text = "Save";
+                    s.Images.Image.Url = "~/Content/Icon/save_grey_18x18.png";
+                    s.ClientSideEvents.Click = "SaveClick";
+                }).GetHtml()
+    @Html.DevExpress().Button(s =>
+                {
+                    s.Name = "BtnCancel";
+                    s.Text = "Cancel";
+                    s.Images.Image.Url = "~/Content/Icon/cancel_grey_18x18.png";
+                    s.ClientSideEvents.Click = "CancelClick";
+                }).GetHtml()
+    @Html.DevExpress().Button(s =>
+                {
+                    s.Name = "BtnReload";
+                    s.Text = "Reload";
+                    s.Images.Image.Url = "~/Content/Icon/autorenew_grey_18x18.png";
+                    s.ClientSideEvents.Click = "ReloadClick";
+                }).GetHtml()
+</div>
+
+
+<script>
+    var index;
+    function BtnSelectUser(s, e) {
+        index = DetailGrid.batchEditApi.GetEditCellInfo().rowVisibleIndex;
+        //var ITM_NO = DetailGrid.batchEditApi.GetCellValue(index, "ITM_NO", false);
+        //ProductGridLookUp.PerformCallback({ selectedItem: ITM_NO, FirstPage: true });
+
+        DoShowUserSelectPopup(s);
+    }
+    function handleSetSelectedUser(selectedValues) {
+        if (selectedValues.length == 0) {
+            return;
+        } else {
+            //ID;Name;Account
+            DetailGrid.batchEditApi.EndEdit();
+            DetailGrid.batchEditApi.SetCellValue(index, "Name", selectedValues[0][0], selectedValues[0][1]);
+            DetailGrid.batchEditApi.SetCellValue(index, "Account", selectedValues[0][2], selectedValues[0][2]);
+        }
+    }
+</script>
+
+@{
+    Html.RenderAction("UserSelectPopup", "Utility");
+}
+
+<div style="margin:10px;">
+    <div style="float:left; min-width:230px;margin-right:10px">
+        <h6>群組名稱</h6>
+        <form id="MasterForm">
+            <div id="MasterFormDiv">
+                @{
+                    Html.RenderPartial("_MasterForm", new ERP_V2.ViewModel.UserGroup.UserGroupModel());
+                }
+            </div>
+        </form>
+        <br />
+        <div style="padding-right:26px">
+            <h6>群組人員</h6>
+            @using (Html.BeginForm())
+            {
+                Html.RenderAction("DetailGrid");
+            }
+        </div>
+        <br />
+    </div>
+    <div style="float:left;width:50%">
+        <h6>權限</h6>
+        @{
+            Html.RenderAction("TreeList");
+        }
+    </div>
+</div>

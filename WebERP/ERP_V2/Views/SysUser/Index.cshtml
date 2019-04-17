@@ -1,0 +1,31 @@
+﻿<script>
+    function GridBegCall(s, e) {
+
+    }
+
+    function GridEndCall(s, e) {
+        if (s.cpSuccess != null && s.cpSuccess == true) {
+            ShowSuccess();
+        } else {
+            ShowError(s.cpErrMsg);
+        }
+    }
+
+    function GridCustomButtonClick(s, e) {
+        var index = Grid.GetFocusedRowIndex();
+        if (e.buttonID == "BtnCmdEdit") {
+            Grid.StartEditRow(index);
+        }
+        if (e.buttonID == "BtnCmdDelete") {
+            Grid.DeleteRow(index);
+        }
+    }
+    function AddNewClick(s, e) {
+        Grid.AddNewRow();
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    Html.RenderAction("Grid");
+}

@@ -1,0 +1,62 @@
+﻿@model List<ERP_V2.Models.SystemUser>
+
+<script>
+    function DoShowUserSelectPopup(s) {
+        //ProductGridLookUp.PerformCallback({ selectedItem: ITM_NO, FirstPage: true });
+        UserSelectPopup.ShowAtElement(s.GetMainElement());
+    }
+    function HideUserSelectPopup() {
+        UserSelectGrid.ClearFilter();
+        UserSelectPopup.Hide();
+    }
+    function SetSelectedUser() {
+        HideUserSelectPopup();
+        UserSelectGrid.GetSelectedFieldValues('ID;Name;Account', handleSetSelectedUser);
+    }
+</script>
+
+@Html.DevExpress().PopupControl(
+settings =>
+{
+    settings.Name = "UserSelectPopup";
+    settings.Width = 600;
+
+    settings.PopupVerticalAlign = PopupVerticalAlign.BottomSides;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.LeftSides;
+
+
+    settings.AllowDragging = true;
+    settings.ShowOnPageLoad = false;
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.ShowHeader = false;
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("_UserSelectGrid", Model);
+    });
+
+    settings.ShowFooter = true;
+    settings.Styles.Footer.Paddings.PaddingRight = 12;
+    settings.SetFooterContentTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div style=\"padding: 0px 0px 6px 0px; float: right\">");
+        Html.DevExpress().Button(
+        btnSettings =>
+        {
+            btnSettings.Name = "BtnSelectUserOK";
+            btnSettings.Text = "Confirm";
+            btnSettings.ClientSideEvents.Click = "function(s,e){ SetSelectedUser();}";
+        }).GetHtml();
+        ViewContext.Writer.Write("&nbsp");
+        Html.DevExpress().Button(
+        btnSettings =>
+        {
+            btnSettings.Name = "BtnSelectUserNO";
+            btnSettings.Text = "Cancel";
+
+            btnSettings.ClientSideEvents.Click = "function(s,e){ HideUserSelectPopup();}";
+        }).GetHtml();
+
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()

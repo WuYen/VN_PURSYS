@@ -1,0 +1,28 @@
+﻿@model System.Collections.IEnumerable
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        //GridHelper.GetBasicSetting(settings, "SYS02", "SelectUser", "SelectUser");
+        //GridHelper.GetHeaderStyle(settings, true);
+        //settings.ClientSideEvents.BeginCallback = "SelectUserBegCall";
+        //settings.ClientSideEvents.EndCallback = "SelectUserEndCall";
+
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        settings.KeyFieldName = "ID";
+
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "Account";
+            column.Caption = Language.Account;//"帳號";
+
+        });
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "Name";
+            column.Caption = Language.UserName;
+        });
+    }).Bind(Model).GetHtml()

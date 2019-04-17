@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "UserGroup";//ERP_V2.CacheCommonDataModule.GetPageName("BA01");
+}
+
+<script type="text/javascript">
+    function MasterGridEndCallback(s, e) {
+        if (s.cpIsSuccess) {
+            ShowSuccess();
+        } else {
+            ShowError(s.cpEditError);
+        }
+    }
+
+    function MasterGridCustomButtonClick(s, e) {
+        if (e.buttonID == "BtnCmdEdit") {
+            ShowEditForm(s.GetRowKey(e.visibleIndex));
+        }
+        else if (e.buttonID == "BtnCmdDelete") {
+            alertify.confirm('Delete', 'Press OK to confirm delete'
+                , function () {
+                    MasterGrid.DeleteRow(e.visibleIndex);
+                }
+                , function () {
+                    alertify.error('Cancel')
+                });
+        }
+    }
+    function AddNewClick() {
+        ShowEditForm(0);
+    }
+    function ShowEditForm(key) {
+        $("#MasterGridContainer").hide();
+        //CallBack
+        SetKeyOnPage(key);
+        DetailGrid.PerformCallback();
+        TreeList.PerformCallback();
+        
+        $("#EditFormContainer").show();
+    }
+    function ShowMasterGrid() {
+        $("#EditFormContainer").hide();
+        //CallBack
+        $("#MasterGridContainer").show();
+    }
+
+</script>
+
+<div id="MasterGridContainer">
+    @{
+        Html.RenderAction("MasterGrid");
+    }
+</div>
+<div id="EditFormContainer" hidden>
+    @{
+        Html.RenderPartial("_Edit");
+    }
+</div>

@@ -45,28 +45,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Charts.v17.1.Core, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.CodeParser.v17.1, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.DataAccess.v17.1, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Pdf.v17.1.Core, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.PivotGrid.v17.1.Core, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.RichEdit.v17.1.Export, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Sparkline.v17.1.Core, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Web.Resources.v17.1, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Xpo.v17.1, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraCharts.v17.1, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraCharts.v17.1.Web, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraGauges.v17.1.Core, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraReports.v17.1, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraReports.v17.1.Web, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Charts.v17.1.Core, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.CodeParser.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.DataAccess.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Pdf.v17.1.Core, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.PivotGrid.v17.1.Core, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.RichEdit.v17.1.Export, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Sparkline.v17.1.Core, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxPivotGrid.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.Resources.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Xpo.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraCharts.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v17.1.Web, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGauges.v17.1.Core, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v17.1.Web, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="InternationalNumericFormatter">
-      <HintPath>C:\Program Files (x86)\Microsoft Visual Studio International Feature Pack 2.0\NumericConversion\InternationalNumericFormatter.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
@@ -171,14 +169,14 @@
     <Reference Include="System.EnterpriseServices">
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.Utils.v17.1, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Data.v17.1, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.ASPxThemes.v17.1, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Office.v17.1.Core, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.RichEdit.v17.1.Core, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Printing.v17.1.Core, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.v17.1, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.Mvc5.v17.1, Version=17.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Data.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxThemes.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Office.v17.1.Core, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.RichEdit.v17.1.Core, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Printing.v17.1.Core, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.Mvc5.v17.1, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.3.2.3\lib\net45\WebMatrix.Data.dll</HintPath>
     </Reference>
@@ -211,6 +209,7 @@
     <Content Include="Content\Icon\edit_grey_18x18.png" />
     <Content Include="Content\Icon\icons8-Cancel-18.png" />
     <Content Include="Content\Icon\icons8-Checked-18.png" />
+    <Content Include="Content\Icon\lock.png" />
     <Content Include="Content\Icon\lock_grey_18x18.png" />
     <Content Include="Content\Icon\lock_open_grey_18x18.png" />
     <Content Include="Content\Icon\print_grey_18x18.png" />
@@ -238,12 +237,8 @@
       <DependentUpon>DataEntity.edmx</DependentUpon>
       <LastGenOutput>DataEntity.cs</LastGenOutput>
     </Content>
-    <Content Include="Reports\TR01\HR.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Reports\TR01\JH.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Reports\TR01\HR.jpg" />
+    <Content Include="Reports\TR01\JH.jpg" />
     <Content Include="Scripts\ace.js" />
     <Content Include="Scripts\alertify.js" />
     <Content Include="Scripts\alertify.min.js" />
@@ -270,6 +265,17 @@
     <Content Include="Scripts\knockout-3.3.0.debug.js" />
     <Content Include="Scripts\knockout-3.3.0.js" />
     <Content Include="packages.config" />
+    <Content Include="App_GlobalResources\Resource.vi-VN.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Resource.vi-VN.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Resource.zh-CN.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Resource.zh-CN.designer.cs</LastGenOutput>
+    </Content>
+    <EmbeddedResource Include="Reports\TR01\TR01Report.resx">
+      <DependentUpon>TR01Report.cs</DependentUpon>
+    </EmbeddedResource>
     <EntityDeploy Include="Models\DataEntity.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DataEntity.Designer.cs</LastGenOutput>
@@ -308,35 +314,75 @@
     <Content Include="Views\Shared\ContentLeftPartialView.cshtml" />
     <Content Include="Views\Shared\FooterPartialView.cshtml" />
     <Content Include="Views\Shared\HeaderPartialView.cshtml" />
-    <Content Include="Views\BA01\Index.cshtml" />
-    <Content Include="Views\BA02\Edit.cshtml" />
-    <Content Include="Views\BA02\Index.cshtml" />
     <Content Include="Views\TR01\_DetailGrid.cshtml" />
     <Content Include="Views\TR01\_MasterForm.cshtml" />
-    <Content Include="Views\BA02\_MasterGrid.cshtml" />
     <Content Include="Views\Utility\_ProductGrid.cshtml" />
     <Content Include="Views\Utility\_ProductPopup.cshtml" />
     <Content Include="Views\Home\ProductSelectTest.cshtml" />
-    <Content Include="Views\BA02\_DetailGrid.cshtml" />
-    <Content Include="Views\BA02\_MasterForm.cshtml" />
     <Content Include="Views\TR01\_MasterGrid.cshtml" />
     <Content Include="Views\TR01\Edit.cshtml" />
     <Content Include="Views\TR01\Index.cshtml" />
     <Content Include="Views\Home\CreateReport.cshtml" />
     <Content Include="Views\Home\_DocumentViewerPartial.cshtml" />
-    <Content Include="Views\BA03\Index.cshtml" />
-    <Content Include="Views\BA03\_EditForm.cshtml" />
-    <Content Include="Views\BA03\_MasterGrid.cshtml" />
-    <Content Include="Views\BA01\Edit.cshtml" />
-    <Content Include="Views\BA01\_DetailGrid.cshtml" />
-    <Content Include="Views\BA01\_MasterForm.cshtml" />
-    <Content Include="Views\BA01\_MasterGrid.cshtml" />
     <Content Include="Views\TR01\_ComboBoxContact.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\RP01\Index.cshtml" />
     <Content Include="Views\RP01\_GridView.cshtml" />
     <Content Include="Views\RP01\_ChartPartial.cshtml" />
     <Content Include="Views\RP01\_GridView2.cshtml" />
+    <Content Include="Views\FN01\Index.cshtml" />
+    <Content Include="Views\FN01\_GridViewPartial.cshtml" />
+    <Content Include="Views\TR01V2\Index.cshtml" />
+    <Content Include="Views\TR01V2\_ComboBoxContact.cshtml" />
+    <Content Include="Views\TR01V2\_DetailGrid.cshtml" />
+    <Content Include="Views\TR01V2\_MasterForm.cshtml" />
+    <Content Include="Views\TR01V2\_SearchGrid.cshtml" />
+    <Content Include="Views\TR01V2\_SearchPanel.cshtml" />
+    <Content Include="Views\BA01\Edit.cshtml" />
+    <Content Include="Views\BA01\Index.cshtml" />
+    <Content Include="Views\BA01\_DetailGrid.cshtml" />
+    <Content Include="Views\BA01\_MasterForm.cshtml" />
+    <Content Include="Views\BA01\_MasterGrid.cshtml" />
+    <Content Include="Views\BA02\Edit.cshtml" />
+    <Content Include="Views\BA02\Index.cshtml" />
+    <Content Include="Views\BA02\_DetailGrid.cshtml" />
+    <Content Include="Views\BA02\_MasterForm.cshtml" />
+    <Content Include="Views\BA02\_MasterGrid.cshtml" />
+    <Content Include="Views\BA03\Index.cshtml" />
+    <Content Include="Views\BA03\_EditForm.cshtml" />
+    <Content Include="Views\BA03\_MasterGrid.cshtml" />
+    <Content Include="Views\RP01\_PivotGrid.cshtml" />
+    <Content Include="Views\BA04\_EditForm.cshtml" />
+    <Content Include="Views\BA04\_MasterGrid.cshtml" />
+    <Content Include="Views\BA04\Index.cshtml" />
+    <Content Include="Views\TR01M\Index.cshtml" />
+    <Content Include="Views\TR01M\_EditForm.cshtml" />
+    <Content Include="Views\TR01M\_GridTR01A.cshtml" />
+    <Content Include="Views\TR01M\_GridTR01B.cshtml" />
+    <Content Include="Views\TR01M\_GridTR01C.cshtml" />
+    <Content Include="Views\TR01M\_SearchForm.cshtml" />
+    <Content Include="Views\RP01V2\Index.cshtml" />
+    <Content Include="Views\RP01V2\_ChartPartial.cshtml" />
+    <Content Include="Views\RP01V2\_GridView.cshtml" />
+    <Content Include="Views\RP01V2\_GridView2.cshtml" />
+    <Content Include="Views\RP01V2\_PivotGrid.cshtml" />
+    <Content Include="Views\RP01V2\_GridView3.cshtml" />
+    <Content Include="Views\RP01V2\_ChartPartial3.cshtml" />
+    <Content Include="Views\RP02\Index.cshtml" />
+    <Content Include="Views\RP02\_GridView.cshtml" />
+    <Content Include="Views\RP02\_ChartPartial.cshtml" />
+    <Content Include="Views\RP02\_ChartPartial2.cshtml" />
+    <Content Include="Views\RP02\_GridView2.cshtml" />
+    <Content Include="Views\SysUser\Index.cshtml" />
+    <Content Include="Views\SysUser\_Grid.cshtml" />
+    <Content Include="Views\SysUser\_EditForm.cshtml" />
+    <Content Include="Views\UserGroup\Index.cshtml" />
+    <Content Include="Views\UserGroup\_DetailGrid.cshtml" />
+    <Content Include="Views\UserGroup\_MasterForm.cshtml" />
+    <Content Include="Views\UserGroup\_MasterGrid.cshtml" />
+    <Content Include="Views\UserGroup\_Edit.cshtml" />
+    <Content Include="Views\UserGroup\_TreeList.cshtml" />
+    <Content Include="Views\UserGroup\_SelectUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -355,16 +401,34 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Resource.vi-VN.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.vi-VN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Resource.zh-CN.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.zh-CN.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BA01Controller.cs" />
     <Compile Include="Controllers\BA02Controller.cs" />
     <Compile Include="Controllers\BA03Controller.cs" />
+    <Compile Include="Controllers\BA04Controller.cs" />
+    <Compile Include="Controllers\FN01Controller.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\RP01Controller.cs" />
+    <Compile Include="Controllers\RP01V2Controller.cs" />
+    <Compile Include="Controllers\RP02Controller.cs" />
     <Compile Include="Controllers\TR01Controller.cs" />
+    <Compile Include="Controllers\TR01MController.cs" />
+    <Compile Include="Controllers\TR01V2Controller.cs" />
+    <Compile Include="Controllers\SysUserController.cs" />
+    <Compile Include="Controllers\UserGroupController.cs" />
     <Compile Include="Controllers\UtilityController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -384,6 +448,9 @@
     <Compile Include="Models\BA03A.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BA04A.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataEntity.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -400,16 +467,36 @@
       <DependentUpon>DataEntity.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ErrorData.cs" />
+    <Compile Include="Models\FN01.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ServiceResult.cs" />
+    <Compile Include="Models\SystemUser.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TR01A.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TR01B.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TR01C.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserGroup.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserGroupPermission.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserGroupUser.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reports\TR01\TR01Report.cs" />
+    <Compile Include="Reports\TR01\TR01Report.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\TR01\TR01Report.Designer.cs">
       <DependentUpon>TR01Report.cs</DependentUpon>
     </Compile>
@@ -420,27 +507,52 @@
     <Compile Include="Services\IRepository.cs" />
     <Compile Include="Services\IServiceS.cs" />
     <Compile Include="Services\IServiceMD.cs" />
+    <Compile Include="Services\SysUser\SysUserBusiness.cs" />
+    <Compile Include="Services\SysUser\SysUserService.cs" />
     <Compile Include="Services\TR01\TR01Service.cs" />
+    <Compile Include="Services\UserGroup\UserGroupService.cs" />
     <Compile Include="Utility\CacheCommonDataModule.cs" />
     <Compile Include="Utility\CacheHelper.cs" />
     <Compile Include="Utility\CommonDataModel.cs" />
     <Compile Include="Utility\DevHelper\GridViewHelper.cs" />
     <Compile Include="Utility\EnumCollection.cs" />
+    <Compile Include="Utility\ErrorHandler.cs" />
     <Compile Include="Utility\GridViewSetting.cs" />
     <Compile Include="Utility\Language.cs" />
+    <Compile Include="Utility\MSSQL.cs" />
     <Compile Include="Utility\ObjectHelper.cs" />
+    <Compile Include="Utility\Permissions\BaseController.cs" />
+    <Compile Include="Utility\Permissions\PermissionsAttribute.cs" />
     <Compile Include="Utility\ReadViewHelper.cs" />
     <Compile Include="ViewModel\BA01\BA01AViewModel.cs" />
     <Compile Include="ViewModel\BA01\BA01BViewModel.cs" />
     <Compile Include="ViewModel\BA01\BA01ViewModel.cs" />
     <Compile Include="ViewModel\BA03\BA03AViewModel.cs" />
+    <Compile Include="ViewModel\BA04\BA04AModel.cs" />
+    <Compile Include="ViewModel\BA04\BA04Business.cs" />
+    <Compile Include="ViewModel\BA04\BA04Service.cs" />
+    <Compile Include="ViewModel\BA04\BA04ViewModel.cs" />
     <Compile Include="ViewModel\Login\LoginViewModel.cs" />
+    <Compile Include="ViewModel\SysUser\SysUserModel.cs" />
+    <Compile Include="ViewModel\TR01M\Service\TR01Business.cs" />
+    <Compile Include="ViewModel\TR01M\Service\TR01Service.cs.cs" />
+    <Compile Include="ViewModel\TR01M\TR01AModel.cs" />
+    <Compile Include="ViewModel\TR01M\TR01BModel.cs" />
+    <Compile Include="ViewModel\TR01M\TR01CModel.cs" />
+    <Compile Include="ViewModel\TR01M\TR01MViewModel.cs" />
+    <Compile Include="ViewModel\TR01V2\Service\TR01Business.cs" />
+    <Compile Include="ViewModel\TR01V2\Service\TR01Service.cs.cs" />
+    <Compile Include="ViewModel\TR01V2\TR01AViewModel.cs" />
+    <Compile Include="ViewModel\TR01V2\TR01BViewModel.cs" />
+    <Compile Include="ViewModel\TR01V2\TR01ViewModel.cs" />
     <Compile Include="ViewModel\TR01\TR01AViewModel.cs" />
     <Compile Include="ViewModel\TR01\TR01BViewModel.cs" />
     <Compile Include="ViewModel\TR01\TR01ViewModel.cs" />
     <Compile Include="ViewModel\BA02\BA02AViewModel.cs" />
     <Compile Include="ViewModel\BA02\BA02BViewModel.cs" />
     <Compile Include="ViewModel\BA02\BA02ViewModel.cs" />
+    <Compile Include="Services\UserGroup\UserGroupBusiness.cs" />
+    <Compile Include="ViewModel\UserGroup\UserGroupModel.cs" />
     <Compile Include="ViewModel\UtilityViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -454,11 +566,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
-    <EmbeddedResource Include="Reports\TR01\TR01Report.resx">
-      <DependentUpon>TR01Report.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Default\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

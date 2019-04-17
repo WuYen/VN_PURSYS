@@ -1,0 +1,94 @@
+﻿@model ERP_V2.ViewModel.SysUser.SysUserModel
+            
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "EditFormLayout";
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+    settings.ColCount = 2;
+    settings.UseDefaultPaddings = false;
+    settings.Items.Add(i =>
+    {
+        i.Name = "Name";
+        i.FieldName = "Name";
+        i.Caption = Language.UserName;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.ShowModelErrors = true;
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        });
+    });
+
+    settings.Items.Add(i =>
+    {
+        i.Name = "Account";
+        i.FieldName = "Account";
+        i.Caption = Language.Account;
+        i.NestedExtension().TextBox(s =>
+        {
+            if (Model.ID != 0)
+            {
+                s.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.Beige;
+                s.ReadOnly = true;
+            }
+            s.ShowModelErrors = true;
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        });
+    });
+    settings.Items.Add(i =>
+    {
+        i.Name = "Password";
+        i.FieldName = "Password";
+        i.Caption = Language.Password;
+        i.NestedExtension().TextBox(s =>
+        {
+            if (Model.ID != 0)
+            {
+                s.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.Beige;
+                s.ReadOnly = true;
+            }
+            s.ShowModelErrors = true;
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        });
+    });
+
+    settings.Items.Add(i =>
+    {
+        i.Name = "Enabled";
+        i.FieldName = "Enabled";
+        i.Caption = Language.Enabled;
+        i.NestedExtension().CheckBox(s =>
+        {
+            s.Checked = Model.Enabled == "Y";
+            s.ShowModelErrors = true;
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        });
+    });
+    settings.Items.AddEmptyItem();
+    settings.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.Width = Unit.Percentage(100);
+        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+    }).SetNestedContent(() =>
+    {
+        ViewContext.Writer.Write("<div style='float:right;padding-right: 26px;'>");
+        Html.DevExpress().Button(
+            btnSettings =>
+            {
+                btnSettings.Name = "btnUpdate";
+                btnSettings.Text = "Update";
+                btnSettings.ClientSideEvents.Click = "function(s, e){ Grid.UpdateEdit(); }";
+            }).Render();
+        Html.DevExpress().Button(
+            btnSettings =>
+            {
+                btnSettings.Name = "btnCancel";
+                btnSettings.Text = "Cancel";
+                btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                btnSettings.ClientSideEvents.Click = "function(s, e){ Grid.CancelEdit(); }";
+            }).Render();
+        ViewContext.Writer.Write("</div>");
+    });
+
+}).Bind(Model).GetHtml()

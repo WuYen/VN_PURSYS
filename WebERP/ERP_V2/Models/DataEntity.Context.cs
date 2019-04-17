@@ -30,10 +30,14 @@ namespace ERP_V2.Models
         public virtual DbSet<BA02A> BA02A { get; set; }
         public virtual DbSet<BA02B> BA02B { get; set; }
         public virtual DbSet<BA03A> BA03A { get; set; }
-        public virtual DbSet<FN01> FN01 { get; set; }
         public virtual DbSet<BA04A> BA04A { get; set; }
+        public virtual DbSet<SystemUser> SystemUser { get; set; }
+        public virtual DbSet<TR01C> TR01C { get; set; }
+        public virtual DbSet<FN01> FN01 { get; set; }
         public virtual DbSet<TR01A> TR01A { get; set; }
         public virtual DbSet<TR01B> TR01B { get; set; }
-        public virtual DbSet<TR01C> TR01C { get; set; }
+        public virtual DbSet<UserGroup> UserGroup { get; set; }
+        public virtual DbSet<UserGroupPermission> UserGroupPermission { get; set; }
+        public virtual DbSet<UserGroupUser> UserGroupUser { get; set; }
     }
 }

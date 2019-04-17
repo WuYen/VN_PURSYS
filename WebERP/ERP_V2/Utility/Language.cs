@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ERP_V2.Utility
 {
-    public class Language
+    public partial class Language
     {
         public enum Type { VN, CN, TW, EN }
         public static readonly Dictionary<Type, LanguageObject> TypeStr = new Dictionary<Type, LanguageObject>()
@@ -26,5 +26,21 @@ namespace ERP_V2.Utility
         public static readonly string TW = "zh-TW";
         public static readonly string US = "en-US";
         public static readonly string CN = "zh-CN";
+    }
+
+    public partial class Language
+    {
+        public static string UserName { get { return "使用者名稱"; } }
+        public static string Account { get { return "帳號"; } }
+        public static string Enabled { get { return "使否啟用"; } }
+        public static string Remark { get { return "備註說明"; } }
+        public static string Password { get { return "密碼"; } }
+        public static string Required { get { return "必填"; } }
+        public static string DataHasDeleted { get { return "資料已被其他使用者刪除"; } }
+
+        public static string GroupNameCH { get { return "中文名稱"; } }
+        public static string GroupNameVN { get { return "越文名稱"; } }
+        
+        public static string GroupNameEN { get { return "英文名稱"; } }
     }
 }

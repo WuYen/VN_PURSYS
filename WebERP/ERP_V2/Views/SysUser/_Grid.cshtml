@@ -1,0 +1,120 @@
+﻿
+@model System.Collections.IEnumerable
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.CallbackRouteValues = new { Controller = "SysUser", Action = "Grid" };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditForm;
+
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 770;
+
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsPager.PageSize = 50;
+        settings.SettingsPager.NumericButtonCount = 8;//page bar show page number count
+
+        settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.BorderTop.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+        settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+
+        settings.KeyFieldName = "ID";
+
+        GridViewHelper.SetColumn(settings, "Name", Language.UserName);
+        GridViewHelper.SetColumn(settings, "Account", Language.Account);
+        GridViewHelper.SetColumn(settings, "Enabled", Language.Enabled);
+        GridViewHelper.SetColumn(settings, "Remark", Language.Remark);
+
+        settings.SettingsSearchPanel.Visible = true;
+        settings.SettingsSearchPanel.ShowApplyButton = true;
+        settings.SettingsSearchPanel.AllowTextInputTimer = false;
+        settings.SettingsCommandButton.SearchPanelApplyButton.Image.Url = "~/Content/Icon/search_grey_18x18.png";
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 130;
+        settings.CommandColumn.CellStyle.Paddings.Padding = 0;
+
+        settings.CommandColumn.Caption = "";
+        settings.CommandColumn.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+        settings.SettingsCommandButton.RenderMode = GridCommandButtonRenderMode.Button;
+
+        settings.CommandColumn.SetHeaderCaptionTemplateContent(c =>
+        {
+            Html.DevExpress().Button(button =>
+            {
+                button.Name = "BtnCmdNew";
+                button.Text = "New";
+                button.Styles.Style.Paddings.PaddingTop = 0;
+                button.Styles.Style.Paddings.PaddingBottom = 0;
+                button.Images.Image.Url = "~/Content/Icon/add_circle_outline_grey_18x18.png";
+                button.ClientSideEvents.Click = "AddNewClick";
+            }).GetHtml();
+        });
+
+        GridViewCommandColumnCustomButton btnEdit = new GridViewCommandColumnCustomButton();
+        btnEdit.ID = "BtnCmdEdit";
+        btnEdit.Text = "Edit";
+        btnEdit.Image.Url = "~/Content/Icon/edit_grey_18x18.png";
+        btnEdit.Styles.Style.Paddings.Padding = 0;
+        settings.CommandColumn.CustomButtons.Add(btnEdit);
+        settings.CommandColumn.ButtonRenderMode = GridCommandButtonRenderMode.Button;
+
+        GridViewCommandColumnCustomButton btnDelete = new GridViewCommandColumnCustomButton();
+        btnDelete.ID = "BtnCmdDelete";
+        btnDelete.Text = "Del";
+        btnDelete.Image.Url = "~/Content/Icon/delete_grey_18x18.png";
+        btnDelete.Styles.Style.Paddings.Padding = 0;
+        settings.CommandColumn.CustomButtons.Add(btnDelete);
+        settings.CommandColumn.ButtonRenderMode = GridCommandButtonRenderMode.Button;
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "SysUser", Action = "AddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "SysUser", Action = "Update" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "SysUser", Action = "Delete" };
+
+        settings.SetEditFormTemplateContent(c =>
+        {
+            if (ViewData["ErrorData"] != null)
+            {
+                Html.RenderPartial("_EditForm", ViewData["ErrorData"]);
+            }
+            else
+            {
+                var item = c.Grid.GetRow(c.VisibleIndex);
+                Html.RenderAction("EditForm", item);
+            }
+        });
+
+        settings.CustomJSProperties += (s, e) =>
+        {
+            e.Properties["cpErrMsg"] = ViewData["ErrMsg"];
+            e.Properties["cpSuccess"] = ViewData["Success"];
+        };
+
+        settings.PreRender += (s, e) =>
+        {
+            MVCxGridView gridView = (MVCxGridView)s;
+            if (ViewData["selectedItem"] != null)
+            {
+                var rowIndex = gridView.FindVisibleIndexByKeyValue(ViewData["selectedItem"]);
+                if (rowIndex > -1)
+                {
+                    gridView.FocusedRowIndex = rowIndex;
+                    int pageIndex = 0;
+                    pageIndex = rowIndex / gridView.SettingsPager.PageSize;
+                    gridView.PageIndex = pageIndex;
+                }
+            }
+        };
+        settings.ClientSideEvents.BeginCallback = "GridBegCall";
+        settings.ClientSideEvents.EndCallback = "GridEndCall";
+        settings.ClientSideEvents.CustomButtonClick = "GridCustomButtonClick";
+
+    }).Bind(Model).GetHtml()

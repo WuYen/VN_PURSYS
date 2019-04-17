@@ -12,18 +12,15 @@ namespace ERP_V2.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BA04A
+    public partial class UserGroup
     {
-        public int BA04A_ID { get; set; }
-        public string TYP_TW { get; set; }
-        public string TYP_CN { get; set; }
-        public string TYP_US { get; set; }
-        public string TYP_VN { get; set; }
-        public Nullable<int> SEQ_NO { get; set; }
+        public int ID { get; set; }
+        public string NameCH { get; set; }
+        public string NameEN { get; set; }
+        public string NameVN { get; set; }
         public System.DateTime CREATE_DATE { get; set; }
         public string CREATE_USER { get; set; }
         public Nullable<System.DateTime> UPDATE_DATE { get; set; }
         public string UPDATE_USER { get; set; }
-        public int TYP_ID { get; set; }
     }
 }

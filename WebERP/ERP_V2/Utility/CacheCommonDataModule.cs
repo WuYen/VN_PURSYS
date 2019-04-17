@@ -377,6 +377,31 @@ namespace ERP_V2
             return list;
         }
 
+        public static List<SystemUser> GetSystemUser()
+        {
+            var list = new List<SystemUser>();
+
+            var cacheData = CacheHelper.Get("SystemUser");
+
+            if (cacheData == null)
+            {
+                var entity = new PURSysEntities();
+                var SystemUser = entity.SystemUser.ToList();
+                CacheHelper.Set("SystemUser", SystemUser);
+            }
+
+            list = CacheHelper.Get("SystemUser") as List<SystemUser>;
+
+            return list;
+        }
+
+        public static void ReloadSystemUser()
+        {
+            var entity = new PURSysEntities();
+            var SystemUser = entity.SystemUser.ToList();
+            CacheHelper.Set("SystemUser", SystemUser);
+        }
+
 
         /// <summary> 取得Product(FA11A) </summary>
         /// <returns></returns>

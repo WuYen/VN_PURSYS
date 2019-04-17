@@ -1,0 +1,65 @@
+﻿@model List<ERP_V2.Models.SystemUser>
+        
+@Html.DevExpress().GridView(
+settings =>
+{
+    settings.Name = "UserSelectGrid";
+    settings.Width = Unit.Percentage(100);
+    settings.CallbackRouteValues = new { Controller = "Utility", Action = "UserSelectGrid" };
+    settings.SettingsPager.PageSize = 15;
+    settings.SettingsPager.NumericButtonCount = 8;//page bar show page number count
+    settings.SettingsPager.Summary.Visible = false;
+
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 350;
+
+    settings.CommandColumn.Caption = " ";
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowSelectCheckbox = true;
+    settings.CommandColumn.Width = 66;
+    settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    settings.SettingsBehavior.AllowEllipsisInText = true;
+    settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+    settings.KeyFieldName = "ID";
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Account";
+        column.Caption = Language.Account;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+    });
+    settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "Name";
+            column.Caption = Language.UserName;
+            column.CellStyle.Wrap = DefaultBoolean.True;
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+        });
+
+    settings.SettingsBehavior.FilterRowMode = GridViewFilterRowMode.Auto;
+    settings.CommandColumn.ShowClearFilterButton = true;
+    settings.SettingsCommandButton.ClearFilterButton.Text = "Clear";// Resources.Resource.Clear;
+    settings.CommandColumn.ShowApplyFilterButton = false;
+    settings.SettingsCommandButton.ApplyFilterButton.Text = "Apply";// Resources.Resource.Filter;
+    settings.SettingsCommandButton.RenderMode = GridCommandButtonRenderMode.Button;
+
+    settings.AfterPerformCallback = (s, e) =>
+    {
+        if (e.CallbackName == "APPLYCOLUMNFILTER")
+        {
+            ((MVCxGridView)s).PageIndex = 0;
+        }
+    };
+
+    settings.ClientSideEvents.RowDblClick = "function(s,e){SetSelectedUser();}";
+    
+    settings.Init = (s, e) =>
+    {
+        MVCxGridView grid = (MVCxGridView)s;
+
+        grid.ClearSort();
+    };
+}).Bind(Model).GetHtml()

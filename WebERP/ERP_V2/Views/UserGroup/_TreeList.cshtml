@@ -1,0 +1,116 @@
+﻿@model List<ERP_V2.Models.UserGroupPermission>
+
+@Html.DevExpress().TreeList(
+    settings =>
+    {
+        settings.Name = "TreeList";
+        settings.Width = 250;
+
+        settings.CallbackRouteValues = new { Controller = "UserGroup", Action = "TreeList" };
+
+        settings.ClientSideEvents.BeginCallback = "TreeListBegCall";
+        //settings.ClientSideEvents.EndCallback = "TreeListEndCall";
+        //settings.ClientSideEvents.SelectionChanged = "NodeSeclectChange";
+        //settings.ClientSideEvents.Init = "TreeListInit";
+        //settings.ClientSideEvents.FocusedNodeChanged = "";
+        settings.ClientSideEvents.NodeClick = "TreeListNodeClick";
+
+        settings.SettingsCookies.Enabled = false;
+        settings.Settings.ShowColumnHeaders = false;
+        settings.AutoGenerateColumns = false;
+        settings.SettingsPager.Mode = DevExpress.Web.ASPxTreeList.TreeListPagerMode.ShowAllNodes;
+        settings.Settings.ShowColumnHeaders = true;
+        settings.Settings.ScrollableHeight = 350;
+
+        settings.KeyFieldName = "FN01_ID";
+        settings.ParentFieldName = "PAR_ID";
+        settings.Columns.Add("NAM_CN", "權限名稱");
+        settings.Columns.Add(column => { column.FieldName = "ORD_NO"; column.Visible = false; column.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending; });
+        //switch (ERP_V2.UserInfo.LanguageType)
+        //{
+        //    case Language.Type.EN:
+        //        settings.Columns.Add("PMS_NM_Japan", Language.GetDisplayText("permissionname"));
+        //        break;
+        //    case Language.Type.TW:
+        //        settings.Columns.Add("NAM_CH", "權限名稱");
+        //        break;
+        //}
+
+        settings.SettingsBehavior.AutoExpandAllNodes = true;
+        settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+        settings.SettingsBehavior.AllowSort = false;
+
+        settings.SettingsSelection.Enabled = true;
+        settings.SettingsSelection.Recursive = false;
+        settings.SettingsSelection.AllowSelectAll = false;
+
+        //settings.PreRender = (s, e) =>
+        //{
+        //    if (Model == null)
+        //    {
+        //        return;
+        //    }
+
+        //    MVCxTreeList treeList = (MVCxTreeList)s;
+        //    treeList.SortBy((TreeListDataColumn)treeList.Columns["ORD_NO"], 1);
+        //    treeList.UnselectAll();
+        //    TreeListNodeIterator iterator = treeList.CreateNodeIterator();
+        //    TreeListNode node = iterator.Current;
+
+        //    while (node != null)
+        //    {
+        //        //var nodeKey = int.Parse(node.Key);
+        //        if (Model.Exists(x => x.PermissionID.ToString() == node.Key))
+        //        {
+        //            node.Selected = true;
+        //        }
+        //        node = iterator.GetNext();
+        //    }
+        //};
+
+        settings.BeforeGetCallbackResult = (s, e) =>
+        {
+            if (Model == null)
+            {
+                return;
+            }
+
+            MVCxTreeList treeList = (MVCxTreeList)s;
+            treeList.SortBy((TreeListDataColumn)treeList.Columns["ORD_NO"], 1);
+            treeList.UnselectAll();
+            TreeListNodeIterator iterator = treeList.CreateNodeIterator();
+            TreeListNode node = iterator.Current;
+
+            while (node != null)
+            {
+                //var nodeKey = int.Parse(node.Key);
+                if (Model.Exists(x => x.PermissionID.ToString() == node.Key))
+                {
+                    node.Selected = true;
+                }
+                node = iterator.GetNext();
+            }
+            //MVCxTreeList treeList = (MVCxTreeList)s;
+            //var newNodeKey = ViewBag.NewNode as string;
+            //if (newNodeKey != null && newNodeKey != "")
+            //{
+            //    var newNode = treeList.FindNodeByKeyValue(newNodeKey);
+            //    if (newNode.Selected)//新選
+            //    {
+            //        if (newNode.Level == 1)//select all child
+            //        {
+            //            var childNodes = newNode.ChildNodes;
+            //            foreach (TreeListNode leaf in childNodes)
+            //            {
+            //                leaf.Selected = true;
+            //            }
+            //        }
+            //        else // select parent
+            //        {
+            //            newNode.ParentNode.Selected = true;
+            //        }
+            //    }
+            //}
+        };
+    }
+).Bind(ERP_V2.CacheCommonDataModule.GetFN01List).GetHtml()

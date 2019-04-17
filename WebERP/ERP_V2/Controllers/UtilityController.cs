@@ -8,8 +8,6 @@ namespace ERP_V2.Controllers
 {
     public class UtilityController : Controller
     {
-        //private WSBI_DEVEntities _Entity = new WSBI_DEVEntities();
-        // GET: Utility
         public ActionResult ProductPopup(string popupElementID)
         {
             var model = new ProductSelectViewModel
@@ -109,6 +107,19 @@ namespace ERP_V2.Controllers
             }
             return ds.Tables[0];
         }
+
+        public ActionResult UserSelectPopup()
+        {            
+            return PartialView("_UserSelectPopup", CacheCommonDataModule.GetSystemUser());
+        }
+
+        public ActionResult UserSelectGrid()
+        {
+            return PartialView("_UserSelectGrid", CacheCommonDataModule.GetSystemUser());
+        }
+
+
+
 
         public ActionResult KeepAlive()
         {
