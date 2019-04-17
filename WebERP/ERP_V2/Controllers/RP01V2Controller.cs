@@ -304,7 +304,7 @@ namespace ERP_V2.Controllers
                     + $" where A.PUR_DT >= '{DateBeg}' and A.PUR_DT <= '{DateEnd}'";
             if (!string.IsNullOrWhiteSpace(BA02A_ID))
             {
-                command += $" and B.BA02A_ID = {BA02A_ID}";
+                command += $" and A.BA02A_ID = {BA02A_ID}";
             }
             command += " ) AA"
                + " LEFT JOIN"

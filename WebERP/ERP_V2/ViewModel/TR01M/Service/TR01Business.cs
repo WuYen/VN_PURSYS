@@ -54,9 +54,14 @@ namespace ERP_V2.ViewModels.TR01M
             totalARR_QT = totalARR_QT + model.ARR_QT;
             if (totalARR_QT > PUR_QT)
             {
-                masterErrDic.Add("ARR_QT", "數量錯誤");
+                masterErrDic.Add("ARR_QT", "数量超过");
             }
-     
+
+            if (model.DtARR_DT > DateTime.Now.AddDays(7))
+            {
+                masterErrDic.Add("DtARR_DT", "日期不可超过一周");
+            }
+
             //if (masterErrDic.Where(x => x.Key == "CUS_ID").Count() == 0 && new TR01Service().GetA(x => x.TR01A_ID != model.TR01A_ID && x.CUS_ID == model.CUS_ID).Count() > 0)
             //{
             //    masterErrDic.Add("CUS_ID", string.Format(CommonHelper.GetCodeName("W021"), DDMHelper.GetColName("TR01A", "CUS_ID")));
