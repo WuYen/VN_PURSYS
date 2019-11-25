@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Linq;
 using ERP_V2.Utility;
+using Newtonsoft.Json;
 
 namespace ERP_V2.Controllers
 {
@@ -13,6 +14,15 @@ namespace ERP_V2.Controllers
         // GET: Login
         public ActionResult Index()
         {
+            //var result = JsonConvert.SerializeObject(Account());
+            if (AccountList == null)
+            {
+                var file = Server.MapPath("~/App_Data/Account.txt");
+                string jsonText = System.IO.File.ReadAllText(file);
+                var data = JsonConvert.DeserializeObject<List<AccountModel>>(jsonText);
+                AccountList = data;
+            }
+
             return View();
         }
 
@@ -24,7 +34,7 @@ namespace ERP_V2.Controllers
             //            user.USR_PW = "00000";
             //#endif
             string errMsg = "";
-            var userLogin = Account().FirstOrDefault(x => x.Acc == user.USR_ID && x.Psw == user.USR_PW);
+            var userLogin = AccountList.FirstOrDefault(x => x.Acc == user.USR_ID && x.Psw == user.USR_PW);
             //var model = _LoginService.GetGroup(user.USR_ID, user.USR_PW);
             //if (!(user.USR_ID == "admin" && user.USR_PW == "00000"))
             //{
@@ -64,20 +74,7 @@ namespace ERP_V2.Controllers
             return RedirectToAction("Index", "Login");
         }
 
-        private static List<AccountModel> Account()
-        {
-            List<AccountModel> data = new List<AccountModel>();
-            data.Add(new AccountModel() { Acc = "TV101", Psw = "H4981", Permission = "0" });
-            data.Add(new AccountModel() { Acc = "TV102", Psw = "T1304", Permission = "0" });
-            data.Add(new AccountModel() { Acc = "TV103", Psw = "22890", Permission = "0" });
-            data.Add(new AccountModel() { Acc = "TV104", Psw = "99999", Permission = "0" });
-
-            data.Add(new AccountModel() { Acc = "QL102", Psw = "88888", Permission = "1" });
-            data.Add(new AccountModel() { Acc = "QL103", Psw = "02618", Permission = "1" });
-            data.Add(new AccountModel() { Acc = "admin", Psw = "00000", Permission = "1" });
-
-            return data;
-        }
+        private static List<AccountModel> AccountList { get; set; }
 
         public class AccountModel
         {

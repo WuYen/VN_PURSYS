@@ -8,7 +8,7 @@
         settings.CallbackRouteValues = new { Controller = "RP01V2", Action = "ChartPartial3" };
         settings.BorderOptions.Visibility = DefaultBoolean.False;
         settings.Height = 400;
-        settings.Width = 700;
+        settings.Width = 1000;
         settings.SaveStateOnCallbacks = false;
         settings.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.Center;
         settings.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.TopOutside;
@@ -21,15 +21,15 @@
                 Series seriesLine = new Series(row["TYP_NM"].ToString(), DevExpress.XtraCharts.ViewType.Line);
                 seriesLine.LegendText = row["TYP_NM"].ToString();
 
-                foreach (System.Data.DataColumn colName in Model.Columns)
+                foreach (System.Data.DataColumn col in Model.Columns)
                 {
-                    var month = colName.ColumnName.Substring(4);
-                    if (System.Text.RegularExpressions.Regex.IsMatch(colName.ColumnName, "^[0-9]*$") && int.Parse(month) <= DateTime.Now.Month)
+                    var date = col.ColumnName.Insert(4, "-") + "-01";
+                    if (System.Text.RegularExpressions.Regex.IsMatch(col.ColumnName, "^[0-9]*$") && DateTime.Parse(date) <= DateTime.Now)
                     {
                         DateTime dtParseResult = DateTime.Now;
-                        DateTime.TryParse(colName.ColumnName.Insert(4, "-") + "-01", out dtParseResult);
+                        DateTime.TryParse(col.ColumnName.Insert(4, "-") + "-01", out dtParseResult);
 
-                        var value = row[colName].ToString();
+                        var value = row[col].ToString();
                         if (string.IsNullOrWhiteSpace(value))
                         {
                             value = "0.0";
@@ -56,7 +56,7 @@
                 ((LineSeriesView)seriesLine.View).LineStyle.Thickness = 4;
                 settings.Series.Add(seriesLine);
             }//end of column foreach
-}
+        }
 
 
         XYDiagram diagram = (XYDiagram)settings.Diagram;

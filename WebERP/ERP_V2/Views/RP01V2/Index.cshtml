@@ -46,53 +46,52 @@
     <div style="margin-top:10px;height:30px">
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().ComboBox(settings =>
-                        {
-                            settings.Name = "CboProduct";
-                            settings.Properties.Caption = Resources.Resource.BA02A_ITM_NM;
-                            settings.Properties.TextField = "ITM_NM";
-                            settings.Properties.ValueField = "BA02A_ID";
-                            settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
-                        }).BindList(ERP_V2.CacheCommonDataModule.GetBA02A()).GetHtml()
+                             {
+                                 settings.Name = "CboProduct";
+                                 settings.Properties.Caption = Resources.Resource.BA02A_ITM_NM;
+                                 settings.Properties.TextField = "ITM_NM";
+                                 settings.Properties.ValueField = "BA02A_ID";
+                                 settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
+                             }).BindList(ERP_V2.CacheCommonDataModule.GetBA02A()).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().DateEdit(settings =>
-                        {
-                            settings.Name = "DateBeg";
-                            settings.Properties.Caption = Resources.Resource.DateRangBeg;
-                            settings.Date = DateTime.Now.AddMonths(-1);
-                            settings.Properties.DisplayFormatString = "yyyy/MM/dd";
-                            settings.Properties.EditFormatString = "yyyy/MM/dd";
-                        }).GetHtml()
+                             {
+                                 settings.Name = "DateBeg";
+                                 settings.Properties.Caption = Resources.Resource.DateRangBeg;
+                                 settings.Date = DateTime.Now.AddMonths(-1);
+                                 settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+                                 settings.Properties.EditFormatString = "yyyy/MM/dd";
+                             }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().DateEdit(settings =>
-                        {
-                            settings.Name = "DateEnd";
-                            settings.Properties.Caption = Resources.Resource.DateRangEnd;
-                            settings.Date = DateTime.Now;
-                            settings.Properties.CaptionSettings.ShowColon = false;
-                            settings.Properties.DisplayFormatString = "yyyy/MM/dd";
-                            settings.Properties.EditFormatString = "yyyy/MM/dd";
-                        }).GetHtml()
+                             {
+                                 settings.Name = "DateEnd";
+                                 settings.Properties.Caption = Resources.Resource.DateRangEnd;
+                                 settings.Date = DateTime.Now;
+                                 settings.Properties.CaptionSettings.ShowColon = false;
+                                 settings.Properties.DisplayFormatString = "yyyy/MM/dd";
+                                 settings.Properties.EditFormatString = "yyyy/MM/dd";
+                             }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
             @Html.DevExpress().Button(settings =>
-                        {
-                            settings.Name = "BtnSearch";
-                            settings.Text = "Search";
-                            settings.Images.Image.Url = "~/Content/Icon/search.png";
-                            settings.ClientSideEvents.Click = "BtnSearchClick";
-                        }).GetHtml()
+                             {
+                                 settings.Name = "BtnSearch";
+                                 settings.Text = "Search";
+                                 settings.Images.Image.Url = "~/Content/Icon/search.png";
+                                 settings.ClientSideEvents.Click = "BtnSearchClick";
+                             }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
             @Html.DevExpress().Button(settings =>
-                 {
-                     settings.Name = "BtnExport";
-                     settings.Text = "Export";
-                     settings.ClientSideEvents.Click = "BtnExportClick";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
-            }).GetHtml()
+                      {
+                          settings.Name = "BtnExport";
+                          settings.Text = "Export";
+                          settings.ClientSideEvents.Click = "BtnExportClick";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
+                 }).GetHtml()
         </div>
-
     </div>
     <div>
         @{
@@ -148,60 +147,60 @@
     <div style="margin-top:10px;height:30px">
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().ComboBox(settings =>
-                       {
-                           settings.Name = "TYP_ID";
-                           settings.Properties.Caption = Resources.Resource.TYP_ID;
-                           settings.Properties.ValueField = "value";
-                           settings.Properties.TextField = "key";
-                           settings.SelectedIndex = 0;
-                       }).BindList(ERP_V2.CacheCommonDataModule.GetBA04A(ERP_V2.UserInfo.LanguageType, false).Where(x => x.Value > 0)).GetHtml()
+                            {
+                                settings.Name = "TYP_ID";
+                                settings.Properties.Caption = Resources.Resource.TYP_ID;
+                                settings.Properties.ValueField = "value";
+                                settings.Properties.TextField = "key";
+                                settings.SelectedIndex = 0;
+                            }).BindList(ERP_V2.CacheCommonDataModule.GetBA04A(ERP_V2.UserInfo.LanguageType, false).Where(x => x.Value > 0)).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().ComboBox(settings =>
-                  {
-                      settings.Name = "Year";
-                      settings.Properties.Caption = Resources.Resource.Year;
+            {
+                settings.Name = "Year";
+                settings.Properties.Caption = Resources.Resource.Year;
 
-                      for (int i = 2018; i <= DateTime.Now.Year; i++)
-                      {
-                          settings.Properties.Items.Add(i.ToString(), i);
-                      }
+                for (int i = DateTime.Now.Year; i >= 2018; i--)
+                {
+                    settings.Properties.Items.Add(i.ToString(), i);
+                }
 
-                      settings.SelectedIndex = 0;
+                settings.SelectedIndex = 0;
+            }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-right:5px">
+            @Html.DevExpress().ComboBox(settings =>
+                            {
+                                settings.Name = "Month";
+                                settings.Properties.Caption = Resources.Resource.Month;
+                                for (int i = 1; i < 13; i++)
+                                {
+                                    settings.Properties.Items.Add(i.ToString(), i);
+                                }
+                                settings.SelectedIndex = DateTime.Now.Month - 2;
+                                if (DateTime.Now.Month - 2 <= 0)
+                                {
+                                    settings.SelectedIndex = 0;
+                                }
+                            }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+                            {
+                                settings.Name = "BtnSearch2";
+                                settings.Text = "Search";
+                                settings.Images.Image.Url = "~/Content/Icon/search.png";
+                                settings.ClientSideEvents.Click = "BtnSearch2Click";
+                            }).GetHtml()
+        </div>
+        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
+            @Html.DevExpress().Button(settings =>
+                       {
+                           settings.Name = "BtnExport2";
+                           settings.Text = "Export";
+                           settings.ClientSideEvents.Click = "BtnExportClick2";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
                   }).GetHtml()
-        </div>
-        <div style="float:left;display:inline-block;margin-right:5px">
-            @Html.DevExpress().ComboBox(settings =>
-                       {
-                           settings.Name = "Month";
-                           settings.Properties.Caption = Resources.Resource.Month;
-                           for (int i = 1; i < 13; i++)
-                           {
-                               settings.Properties.Items.Add(i.ToString(), i);
-                           }
-                           settings.SelectedIndex = DateTime.Now.Month - 2;
-                           if (DateTime.Now.Month - 2 <= 0)
-                           {
-                               settings.SelectedIndex = 0;
-                           }
-                       }).GetHtml()
-        </div>
-        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
-            @Html.DevExpress().Button(settings =>
-                       {
-                           settings.Name = "BtnSearch2";
-                           settings.Text = "Search";
-                           settings.Images.Image.Url = "~/Content/Icon/search.png";
-                           settings.ClientSideEvents.Click = "BtnSearch2Click";
-                       }).GetHtml()
-        </div>
-        <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
-            @Html.DevExpress().Button(settings =>
-                  {
-                      settings.Name = "BtnExport2";
-                      settings.Text = "Export";
-                      settings.ClientSideEvents.Click = "BtnExportClick2";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
-             }).GetHtml()
         </div>
     </div>
     <div style="height:520px">
@@ -263,43 +262,41 @@
     <div style="margin-top:10px;height:30px">
         <div style="float:left;display:inline-block;margin-right:5px">
             @Html.DevExpress().ComboBox(settings =>
-                                  {
-                                      settings.Name = "Year3";
-                                      settings.Properties.Caption = Resources.Resource.Year;
+            {
+                settings.Name = "Year3";
+                settings.Properties.Caption = Resources.Resource.Year;
 
-                                      for (int i = 2018; i <= DateTime.Now.Year; i++)
-                                      {
-                                          settings.Properties.Items.Add(i.ToString(), i);
-                                      }
+                for (int i = DateTime.Now.Year; i >= 2018; i--)
+                {
+                    settings.Properties.Items.Add(i.ToString(), i);
+                }
 
-                                      settings.SelectedIndex = 0;
-                                  }).GetHtml()
+                settings.SelectedIndex = 0;
+            }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
             @Html.DevExpress().Button(settings =>
-                                  {
-                                      settings.Name = "BtnSearch3";
-                                      settings.Text = "Search";
-                                      settings.Images.Image.Url = "~/Content/Icon/search.png";
-                                      settings.ClientSideEvents.Click = "BtnSearchClick3";
-                                  }).GetHtml()
+                 {
+                     settings.Name = "BtnSearch3";
+                     settings.Text = "Search";
+                     settings.Images.Image.Url = "~/Content/Icon/search.png";
+                     settings.ClientSideEvents.Click = "BtnSearchClick3";
+                 }).GetHtml()
         </div>
         <div style="float:left;display:inline-block;margin-top:-4px;margin-right:5px">
             @Html.DevExpress().Button(settings =>
-                                  {
-                                      settings.Name = "BtnExport3";
-                                      settings.Text = "Export";
-                                      settings.ClientSideEvents.Click = "BtnExportClick3";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
-                             }).GetHtml()
+                 {
+                     settings.Name = "BtnExport3";
+                     settings.Text = "Export";
+                     settings.ClientSideEvents.Click = "BtnExportClick3";//"function Export(s,e){ GridView.ExportTo('Xlsx');}";
+            }).GetHtml()
         </div>
     </div>
-        @{
-            Html.RenderAction("GridView3");
-        }
-    </div>
-
     @{
-        Html.RenderAction("ChartPartial3");
+        Html.RenderAction("GridView3");
     }
-
-    <br />
+</div>
+@{
+    Html.RenderAction("ChartPartial3");
+}
+<br />

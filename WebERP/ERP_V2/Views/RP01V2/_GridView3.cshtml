@@ -1,11 +1,10 @@
 ﻿@model System.Data.DataTable
-
 @Html.DevExpress().GridView(
     settings =>
     {
         settings.Name = "GridView3";
-        //settings.Width = Unit.Percentage(100);
-        settings.CallbackRouteValues = new { Controller = "RP01V2", Action = "GridView3" };
+//settings.Width = Unit.Percentage(100);
+settings.CallbackRouteValues = new { Controller = "RP01V2", Action = "GridView3" };
         settings.CustomActionRouteValues = new { Controller = "RP01V2", Action = "GridViewRefreshData3" };
         settings.ClientSideEvents.BeginCallback = "GridViewBegCallback3";
         settings.ClientSideEvents.EndCallback = "GridViewEndCallback3";
@@ -19,8 +18,8 @@
             });
         foreach (System.Data.DataColumn item in Model.Columns)
         {
-            var month = item.ColumnName.Substring(4);
-            if (System.Text.RegularExpressions.Regex.IsMatch(item.ColumnName, "^[0-9]*$") && int.Parse(month) <= DateTime.Now.Month)
+            var date = item.ColumnName.Insert(4, "-") + "-01";//DateTime.Parse(date) <= DateTime.Now
+if (System.Text.RegularExpressions.Regex.IsMatch(item.ColumnName, "^[0-9]*$"))
             {
                 settings.Columns.Add(
                     column =>
